@@ -20,6 +20,8 @@ package com.tungsten.fcl.game;
 import android.content.Context;
 import android.util.Log;
 
+import com.mio.data.Renderer;
+import com.mio.manager.RendererManager;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.util.RuntimeUtils;
 import com.tungsten.fclauncher.FCLConfig;

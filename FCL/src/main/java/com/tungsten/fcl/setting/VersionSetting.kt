@@ -28,8 +28,8 @@ import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import com.google.gson.annotations.JsonAdapter
 import com.mio.JavaManager
-import com.tungsten.fclauncher.FCLConfig
-import com.tungsten.fclauncher.plugins.RendererPlugin
+import com.mio.data.Renderer
+import com.mio.manager.RendererManager
 import com.tungsten.fclauncher.utils.FCLPath
 import com.tungsten.fclcore.fakefx.beans.InvalidationListener
 import com.tungsten.fclcore.fakefx.beans.property.BooleanProperty
@@ -211,20 +211,12 @@ class VersionSetting : Cloneable {
             controllerProperty.set(controller)
         }
 
-    val rendererProperty: ObjectProperty<FCLConfig.Renderer> =
-        SimpleObjectProperty(this, "render", FCLConfig.Renderer.entries.toTypedArray()[VersionSettingDefault.getRenderer()])
-    var renderer: FCLConfig.Renderer
+    val rendererProperty: StringProperty =
+        SimpleStringProperty(this, "render", VersionSettingDefault.getRenderer())
+    var renderer: String
         get() = rendererProperty.get()
         set(renderer) {
             rendererProperty.set(renderer)
-        }
-
-    val customRendererProperty: ObjectProperty<String> =
-        SimpleObjectProperty(this, "customRenderer", VersionSettingDefault.getCustomRenderer())
-    var customRenderer: String
-        get() = customRendererProperty.get()
-        set(renderer) {
-            customRendererProperty.set(renderer)
         }
 
     val driverProperty: StringProperty =
@@ -272,7 +264,6 @@ class VersionSetting : Cloneable {
         vkDriverSystemProperty.addListener(listener)
         controllerProperty.addListener(listener)
         rendererProperty.addListener(listener)
-        customRendererProperty.addListener(listener)
         driverProperty.addListener(listener)
         pojavBigCoreProperty.addListener(listener)
     }
@@ -296,7 +287,6 @@ class VersionSetting : Cloneable {
             it.isVKDriverSystem = isVKDriverSystem
             it.controller = controller
             it.renderer = renderer
-            it.customRenderer = customRenderer
             it.driver = driver
             it.isPojavBigCore = isPojavBigCore
         }
@@ -328,10 +318,9 @@ class VersionSetting : Cloneable {
                 addProperty("beGesture", src.isBeGesture)
                 addProperty("vulkanDriverSystem", src.isVKDriverSystem)
                 addProperty("controller", src.controller)
-                addProperty("renderer", src.renderer.ordinal)
+                addProperty("renderer", src.renderer)
                 addProperty("driver", src.driver)
                 addProperty("isolateGameDir", src.isIsolateGameDir)
-                addProperty("customRenderer", src.customRenderer)
                 addProperty("pojavBigCore", src.isPojavBigCore)
             }
         }
@@ -359,27 +348,18 @@ class VersionSetting : Cloneable {
                 vs.permSize = json["permSize"]?.asString ?: VersionSettingDefault.getPermSize()
                 vs.serverIp = json["serverIp"]?.asString ?: VersionSettingDefault.getServerIp()
                 vs.java =
-                    JavaManager.javaList.find { it.name == json["java"]?.asString }?.name
-                        ?: VersionSettingDefault.getJava()
+                    JavaManager.javaList.find { it.name == json["java"]?.asString }?.name ?: VersionSettingDefault.getJava()
                 vs.scaleFactor = json["newScaleFactor"]?.asInt ?: VersionSettingDefault.getNewScaleFactor()
                 vs.isNotCheckGame = json["notCheckGame"]?.asBoolean ?: VersionSettingDefault.getNotCheckGame()
                 vs.isNotCheckJVM = json["notCheckJVM"]?.asBoolean ?: VersionSettingDefault.getNotCheckJVM()
                 vs.isBeGesture = json["beGesture"]?.asBoolean ?: VersionSettingDefault.getBeGesture()
                 vs.isVKDriverSystem = json["vulkanDriverSystem"]?.asBoolean ?: VersionSettingDefault.getVulkanDriverSystem()
-                vs.controller = json["controller"]?.asString ?: (VersionSettingDefault.getController())
-                val renderers = FCLConfig.Renderer.entries.toTypedArray()
+                vs.controller = json["controller"]?.asString ?: VersionSettingDefault.getController()
                 vs.renderer =
-                    renderers[json["renderer"]?.asInt?.coerceIn(0, renderers.size - 1) ?: VersionSettingDefault.getRenderer()]
+                    json["renderer"]?.asString ?: VersionSettingDefault.getRenderer()
                 vs.driver = json["driver"]?.asString ?: VersionSettingDefault.getDriver()
                 vs.isIsolateGameDir = json["isolateGameDir"]?.asBoolean ?: VersionSettingDefault.getIsolateGameDir()
-                vs.customRenderer = json["customRenderer"]?.asString ?: VersionSettingDefault.getCustomRenderer()
                 vs.isPojavBigCore = json["pojavBigCore"]?.asBoolean ?: VersionSettingDefault.getPojavBigCore()
-                if (vs.renderer == FCLConfig.Renderer.RENDERER_CUSTOM) {
-                    if (!RendererPlugin.isAvailable() || RendererPlugin.rendererList.find { it.des == vs.customRenderer } == null) {
-                        vs.renderer = FCLConfig.Renderer.entries.toTypedArray()[0]
-                        vs.customRenderer = ""
-                    }
-                }
             }
         }
 

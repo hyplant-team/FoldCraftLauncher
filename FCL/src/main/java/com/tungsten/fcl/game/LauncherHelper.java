@@ -29,6 +29,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.mio.JavaManager;
+import com.mio.data.Renderer;
+import com.mio.manager.RendererManager;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.activity.JVMActivity;
 import com.tungsten.fcl.control.MenuType;
@@ -66,6 +68,7 @@ import com.tungsten.fclcore.util.LibFilter;
 import com.tungsten.fclcore.util.Logging;
 import com.tungsten.fclcore.util.StringUtils;
 import com.tungsten.fclcore.util.io.ResponseCodeException;
+import com.tungsten.fclcore.util.versioning.VersionNumber;
 import com.tungsten.fcllibrary.component.dialog.FCLAlertDialog;
 import com.tungsten.fcllibrary.component.dialog.FCLDialog;
 import com.tungsten.fcllibrary.component.view.FCLButton;
@@ -167,14 +170,16 @@ public final class LauncherHelper {
                             return launcher;
                         }).thenComposeAsync(launcher -> { // launcher is prev task's result
                             return Task.supplyAsync(launcher::launch);
-                        })
-                        .thenAcceptAsync(fclBridge -> Schedulers.androidUIThread().execute(() -> {
+                        }).thenComposeAsync(fclBridge -> {
+                            Renderer renderer = RendererManager.getRenderer(repository.getVersionSetting(selectedVersion).getRenderer());
+                            fclBridge.setRenderer(renderer.getName());
+                            return Task.completed(fclBridge);
+                        }).thenAcceptAsync(fclBridge -> Schedulers.androidUIThread().execute(() -> {
                             CallbackBridge.nativeSetUseInputStackQueue(version.get().getArguments().isPresent());
                             Intent intent = new Intent(context, JVMActivity.class);
                             fclBridge.setScaleFactor(repository.getVersionSetting(selectedVersion).getScaleFactor() / 100.0);
                             fclBridge.setController(repository.getVersionSetting(selectedVersion).getController());
                             fclBridge.setGameDir(repository.getRunDirectory(selectedVersion).getAbsolutePath());
-                            fclBridge.setRenderer(repository.getVersionSetting(selectedVersion).getRenderer().toString());
                             fclBridge.setJava(Integer.toString(javaVersionRef.get().getVersion()));
                             checkTouchMod(fclBridge, repository.getRunDirectory(selectedVersion).getAbsolutePath());
                             JVMActivity.setFCLBridge(fclBridge, MenuType.GAME);

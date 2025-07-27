@@ -56,14 +56,6 @@ object Profiles {
                 }
                 ConfigHolder.config().selectedProfile = profile.name
                 ConfigHolder.config().selectedProfile = profile.name
-                profile.gameDir.resolve(".nomedia").let {
-                    if (!it.exists()) {
-                        runCatching {
-                            it.parentFile?.mkdirs()
-                            it.createNewFile()
-                        }
-                    }
-                }
                 if (profile.repository.isLoaded) {
                     selectedVersion.bind(profile.selectedVersionProperty())
                 } else {

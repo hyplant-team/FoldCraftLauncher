@@ -12,7 +12,7 @@
   "beGesture": false,
   "vulkanDriverSystem": false,
   "controller": "f9b80a8f2",
-  "renderer": 0,
+  "renderer": "18d93f17-ff53-a319-fa61-58709a77bf87",
   "driver": "Turnip",
   "isolateGameDir": false,
   "customRenderer": "",

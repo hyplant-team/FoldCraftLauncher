@@ -26,10 +26,9 @@ public class VersionSettingDefault {
     private static boolean beGesture = false;
     private static boolean vulkanDriverSystem = false;
     private static String controller = "00000000";
-    private static int renderer = 0;
+    private static String renderer = "18d93f17-ff53-a319-fa61-58709a77bf87";
     private static String driver = "Turnip";
     private static boolean isolateGameDir = false;
-    private static String customRenderer = "";
     private static boolean pojavBigCore = false;
 
     static {
@@ -75,7 +74,7 @@ public class VersionSettingDefault {
     public static String getController() {
         return controller;
     }
-    public static int getRenderer() {
+    public static String getRenderer() {
         return renderer;
     }
     public static String getDriver() {
@@ -83,9 +82,6 @@ public class VersionSettingDefault {
     }
     public static boolean getIsolateGameDir() {
         return isolateGameDir;
-    }
-    public static String getCustomRenderer() {
-        return customRenderer;
     }
     public static boolean getPojavBigCore() {
         return pojavBigCore;
@@ -109,10 +105,9 @@ public class VersionSettingDefault {
             beGesture = defaultConfig.has("beGesture") ? defaultConfig.get("beGesture").getAsBoolean() : beGesture;
             vulkanDriverSystem = defaultConfig.has("vulkanDriverSystem") ? defaultConfig.get("vulkanDriverSystem").getAsBoolean() : vulkanDriverSystem;
             controller = defaultConfig.has("controller") ? defaultConfig.get("controller").getAsString() : controller;
-            renderer = defaultConfig.has("renderer") ? defaultConfig.get("renderer").getAsInt() : renderer;
+            renderer = defaultConfig.has("renderer") ? defaultConfig.get("renderer").getAsString() : renderer;
             driver = defaultConfig.has("driver") ? defaultConfig.get("driver").getAsString() : driver;
             isolateGameDir = defaultConfig.has("isolateGameDir") ? defaultConfig.get("isolateGameDir").getAsBoolean() : isolateGameDir;
-            customRenderer = defaultConfig.has("customRenderer") ? defaultConfig.get("customRenderer").getAsString() : customRenderer;
             pojavBigCore = defaultConfig.has("pojavBigCore") ? defaultConfig.get("pojavBigCore").getAsBoolean() : pojavBigCore;
         } catch (Exception e) {
             Logging.LOG.log(Level.SEVERE, "Failed to load default_config.json", e);
