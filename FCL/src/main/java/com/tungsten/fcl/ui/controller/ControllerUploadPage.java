@@ -115,7 +115,7 @@ public class ControllerUploadPage extends FCLTempPage implements View.OnClickLis
             return FCLPath.CACHE_DIR + "/control/upload/" + controller.getId() + ".zip";
         }).thenAcceptAsync(Schedulers.androidUIThread(), (ExceptionalConsumer<String, Exception>)s -> {
             Intent intent = new Intent(Intent.ACTION_SEND);
-            Uri uri = FileProvider.getUriForFile(getContext(), getContext().getString(com.tungsten.fclauncher.R.string.file_browser_provider), new File(s));
+            Uri uri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".provider", new File(s));
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

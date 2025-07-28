@@ -144,7 +144,7 @@ public class FileBrowserAdapter extends FCLAdapter {
                 builder.setMessage(getContext().getString(R.string.file_browser_share_message));
                 builder.setPositiveButton(() -> {
                     Intent intent = new Intent(Intent.ACTION_SEND);
-                    Uri uri = FileProvider.getUriForFile(getContext(), getContext().getString(com.tungsten.fclauncher.R.string.file_browser_provider), file);
+                    Uri uri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".provider", file);
                     intent.setType("*/*");
                     intent.putExtra(Intent.EXTRA_STREAM, uri);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

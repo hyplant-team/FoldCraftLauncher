@@ -1,12 +1,3 @@
 改为自动识别报名，而不是读取资源字符串。
-FCL/src/main/java/com/tungsten/fcl/activity/JVMCrashActivity.java:                Uri uri = FileProvider.getUriForFile(this, getString(com.tungsten.fclauncher.R.string.file_browser_provider), file);
-FCL/src/main/java/com/tungsten/fcl/activity/MainActivity.kt:                getString(com.tungsten.fclauncher.R.string.file_browser_provider),
-FCL/src/main/java/com/tungsten/fcl/ui/controller/ControllerManagePage.java:            Uri uri = FileProvider.getUriForFile(getContext(), getContext().getString(com.tungsten.fclauncher.R.string.file_browser_provider), new File(FCLPath.CONTROLLER_DIR, getSelectedController().getFileName()));
-FCL/src/main/java/com/tungsten/fcl/ui/controller/ControllerUploadPage.java:            Uri uri = FileProvider.getUriForFile(getContext(), getContext().getString(com.tungsten.fclauncher.R.string.file_browser_provider), new File(s));
-FCL/src/main/java/com/tungsten/fcl/upgrade/UpdateDialog.java:                                Uri apkUri = FileProvider.getUriForFile(getContext(), getContext().getString(com.tungsten.fclauncher.R.string.file_browser_provider), updradeFile);
-FCLLibrary/src/main/java/com/tungsten/fcllibrary/browser/FileBrowserActivity.java:            Uri uri = FileProvider.getUriForFile(this, getString(com.tungsten.fclauncher.R.string.file_browser_provider), currentPath.toFile());
-FCLLibrary/src/main/java/com/tungsten/fcllibrary/browser/adapter/FileBrowserAdapter.java:                    Uri uri = FileProvider.getUriForFile(getContext(), getContext().getString(com.tungsten.fclauncher.R.string.file_browser_provider), file);
-FCLLibrary/src/main/java/com/tungsten/fcllibrary/crash/CrashReportActivity.java:                Uri uri = FileProvider.getUriForFile(this, getString(com.tungsten.fclauncher.R.string.file_browser_provider), file);
 FCLauncher/build.gradle.kts:            resValue("string", "file_browser_provider", "com.tungsten.fcl." + pkgSuffix + ".provider")
-FCLauncher/src/main/java/com/tungsten/fclauncher/bridge/FCLBridge.java:                    uri = FileProvider.getUriForFile(((Activity) context), ((Activity) context).getString(R.string.file_browser_provider), new File(targetLink));
 FCLauncher/src/main/res/values/strings.xml:    <string name="file_browser_provider" translatable="false">com.tungsten.fcl.modpack.provider</string>

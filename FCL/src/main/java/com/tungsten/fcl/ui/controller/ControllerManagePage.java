@@ -237,7 +237,7 @@ public class ControllerManagePage extends FCLCommonPage implements View.OnClickL
         }
         if (view == share) {
             Intent intent = new Intent(Intent.ACTION_SEND);
-            Uri uri = FileProvider.getUriForFile(getContext(), getContext().getString(com.tungsten.fclauncher.R.string.file_browser_provider), new File(FCLPath.CONTROLLER_DIR, getSelectedController().getFileName()));
+            Uri uri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".provider", new File(FCLPath.CONTROLLER_DIR, getSelectedController().getFileName()));
             intent.setType(AndroidUtils.getMimeType(FCLPath.CONTROLLER_DIR + "/" + getSelectedController().getFileName()));
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

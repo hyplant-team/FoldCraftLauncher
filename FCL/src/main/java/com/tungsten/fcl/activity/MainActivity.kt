@@ -385,9 +385,11 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 }
                 FCLBridge.BACKEND_IS_BOAT = binding.backend.position == 1
                 val selectedProfile = Profiles.getSelectedProfile()
-                DriverPlugin.selected = DriverPlugin.driverList.find {
-                    it.driver == selectedProfile.getVersionSetting(selectedProfile.selectedVersion).driver
-                } ?: DriverPlugin.driverList[0]
+                DriverPlugin.selected = runCatching {
+                    DriverPlugin.driverList.find {
+                        it.driver == selectedProfile.getVersionSetting(selectedProfile.selectedVersion).driver
+                    }
+                }.getOrNull() ?: DriverPlugin.driverList[0]
                 Versions.launch(this@MainActivity, selectedProfile)
             }
         }
@@ -647,7 +649,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
 
             val uri = FileProvider.getUriForFile(
                 this,
-                getString(com.tungsten.fclauncher.R.string.file_browser_provider),
+                getPackageName() + ".provider",
                 file
             )
             intent.setType("text/plain")

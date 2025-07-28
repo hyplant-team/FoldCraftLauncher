@@ -297,13 +297,13 @@ public class FCLBridge implements Serializable {
                     } else if (targetLink.startsWith("file:")) {
                         targetLink = targetLink.replaceFirst("file:", "");
                     }
-                    uri = FileProvider.getUriForFile(((Activity) context), ((Activity) context).getString(R.string.file_browser_provider), new File(targetLink));
+                    uri = FileProvider.getUriForFile(((Activity) context), ((Activity) context).getPackageName() + ".provider", new File(targetLink));
                 }
                 else {
                     uri = Uri.parse(targetLink);
                 }
                 intent.setDataAndType(uri, "*/*");
-                context.startActivity(intent);
+                context.startActivity(Intent.createChooser(intent, ""));
             } catch (Exception e) {
                 Log.e("openLink error", "link:" + link + " err:" + e.toString());
             }

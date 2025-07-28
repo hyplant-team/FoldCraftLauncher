@@ -268,7 +268,7 @@ public class FileBrowserActivity extends FCLActivity implements View.OnClickList
                 Toast.makeText(this, getString(R.string.file_browser_positive_alert), Toast.LENGTH_SHORT).show();
                 return;
             }
-            Uri uri = FileProvider.getUriForFile(this, getString(com.tungsten.fclauncher.R.string.file_browser_provider), currentPath.toFile());
+            Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", currentPath.toFile());
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setDataAndType(uri, "*/*");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

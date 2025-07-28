@@ -90,6 +90,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
     private FCLSwitch closeSkinModel;
     private FCLNumberSeekBar animationSpeed;
     private FCLNumberSeekBar vibrationDuration;
+    private FCLSwitch disableFullscreenInput;
     private FCLCheckBox autoSource;
     private FCLSpinner<String> versionList;
     private FCLSpinner<String> downloadType;
@@ -132,6 +133,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
         closeSkinModel = findViewById(R.id.close_skin_model);
         animationSpeed = findViewById(R.id.animation_speed);
         vibrationDuration = findViewById(R.id.vibration_duration);
+        disableFullscreenInput = findViewById(R.id.disable_fullscreen_input);
         autoSource = findViewById(R.id.check_auto_source);
         versionList = findViewById(R.id.source_auto);
         downloadType = findViewById(R.id.source);
@@ -196,6 +198,8 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
         vibrationDuration.progressProperty().addListener(observable -> {
             sharedPreferences.edit().putInt("vibrationDuration", vibrationDuration.getProgress()).apply();
         });
+        disableFullscreenInput.setChecked(sharedPreferences.getBoolean("disableFullscreenInput", true));
+        disableFullscreenInput.setOnCheckedChangeListener(this);
 
         autoSource.setChecked(config().autoChooseDownloadTypeProperty().get());
         autoSource.addCheckedChangeListener();
@@ -514,6 +518,9 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
         } else if (buttonView == closeSkinModel) {
             ThemeEngine.getInstance().getTheme().setiIgnoreSkinContainer(isChecked);
             Theme.saveTheme(getContext(), ThemeEngine.getInstance().getTheme());
+        } else if (buttonView == disableFullscreenInput) {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("launcher", MODE_PRIVATE);
+            sharedPreferences.edit().putBoolean("disableFullscreenInput", isChecked).apply();
         }
     }
 }
