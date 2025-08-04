@@ -4,10 +4,10 @@ plugins {
 }
 
 android {
-    var pkgSuffix = System.getProperty("pkgSuffix", "modpack")
-    if (pkgSuffix.isEmpty()) {
-        pkgSuffix = "modpack"
-    }
+    // var pkgSuffix = System.getProperty("pkgSuffix", "modpack")
+    // if (pkgSuffix.isEmpty()) {
+    //     pkgSuffix = "modpack"
+    // }
 
     namespace = "com.tungsten.fclauncher"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -28,8 +28,8 @@ android {
             initWith(getByName("debug"))
         }
         configureEach {
-            resValue("string", "file_browser_provider", "com.tungsten.fcl." + pkgSuffix + ".provider")
-            resValue("string", "file_browser_document_provider", "com.tungsten.fcl." + pkgSuffix + ".document.provider")
+            // resValue("string", "file_browser_provider", "com.tungsten.fcl." + pkgSuffix + ".provider")
+            // resValue("string", "file_browser_document_provider", "com.tungsten.fcl." + pkgSuffix + ".document.provider")
         }
     }
 

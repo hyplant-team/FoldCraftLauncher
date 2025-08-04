@@ -1,3 +1,2 @@
 改为自动识别报名，而不是读取资源字符串。
 FCLauncher/build.gradle.kts:            resValue("string", "file_browser_provider", "com.tungsten.fcl." + pkgSuffix + ".provider")
-FCLauncher/src/main/res/values/strings.xml:    <string name="file_browser_provider" translatable="false">com.tungsten.fcl.modpack.provider</string>

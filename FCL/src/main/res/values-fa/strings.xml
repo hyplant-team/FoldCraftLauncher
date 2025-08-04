@@ -402,7 +402,6 @@
     <string name="game_crash_reason_unknown">ما نمی توانیم دلیل کرش بازی را بفهمیم، لطفا به لاگ های بازی مراجعه کنید.\n\nوقتی از شخص دیگری کمک می خواهید، لطفا لاگ کامل بازی و فایل لاگ کرش مربوطه را با او به اشتراک بگذارید!</string>
     <string name="game_crash_reason_unsatisfied_link_error">راه اندازی ماینکرفت به دلیل عدم وجود کتابخانه ها امکان پذیر نیست: %1$s.</string>
     <string name="game_crash_title">بازی کرش کرد</string>
-    <string name="game_crash_title_add">به جای گرفتن اسکرین شات باید فایل لاگ کرش کامل را ارسال کنید</string>
 
     <string name="help">راهنما</string>
     <string name="help_category">دسته بندی</string>
