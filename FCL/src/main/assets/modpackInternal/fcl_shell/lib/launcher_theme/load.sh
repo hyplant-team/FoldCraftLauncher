@@ -43,20 +43,11 @@ else
   fullscreen=""
 fi
 
-modified="$(echo -n "${theme_data}" | grep "<boolean name=\"modified\"")"
-if [[ "${modified}" != "" ]]; then
-  modified=${modified/#    <boolean name=\"modified\" value=\"/}
-  modified=${modified/%\" \/>/}
-else
-  modified=""
-fi
-
 export FCL_CONF_THEME_THEME_COLOR="${theme_color}"
 export FCL_CONF_THEME_THEME_COLOR2="${theme_color2}"
 export FCL_CONF_THEME_ANIMATION_SPEED="${animation_speed}"
 export FCL_CONF_THEME_CLOSE_SKIN_MODEL="${close_skin_model}"
 export FCL_CONF_THEME_FULLSCREEN="${fullscreen}"
-export FCL_CONF_THEME_MODIFIED="${modified}"
 
 unset theme_data
 unset theme_color
@@ -64,4 +55,3 @@ unset theme_color2
 unset animation_speed
 unset close_skin_model
 unset fullscreen
-unset modified

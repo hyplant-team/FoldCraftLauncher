@@ -2,11 +2,14 @@ name: Android CI test
 
 on:
   workflow_dispatch:
-    inputs:
-      pkgSuffix:
-        description: 'Package Suffix'
+      pkgName:
+        description: '安装包的包名'
         required: true
-        default: 'modpack'
+        default: 'com.tungsten.fcl.modpack'
+      appName:
+        description: '应用程序名称'
+        required: true
+        default: 'FCL modpack'
 
 jobs:
   DebugBuild:
@@ -32,7 +35,7 @@ jobs:
 
       - name: Build ALL apk
         run: |
-          ./gradlew assembledebug -Darch="all" -DpkgSuffix="${{github.event.inputs.pkgSuffix}}" --stacktrace
+          ./gradlew assembledebug "-Darch=all" "-DpkgName=${{github.event.inputs.pkgName}}" "-DappName=${{github.event.inputs.appName}}" --stacktrace
 
       - name: Upload ALL apk
         uses: actions/upload-artifact@v4
@@ -48,7 +51,7 @@ jobs:
 
       - name: Build ARM64 apk
         run: |
-          ./gradlew assembledebug -Darch="arm64" -DpkgSuffix="${{github.event.inputs.pkgSuffix}}" --stacktrace
+          ./gradlew assembledebug "-Darch=arm64" "-DpkgName=${{github.event.inputs.pkgName}}" "-DappName=${{github.event.inputs.appName}}" --stacktrace
 
       - name: Upload ARM64 apk
         uses: actions/upload-artifact@v4

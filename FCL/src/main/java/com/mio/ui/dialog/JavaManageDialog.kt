@@ -183,7 +183,7 @@ class JavaManageDialog(context: Context, val onSelected: (String) -> Unit) : FCL
                         .setAlertLevel(
                             FCLAlertDialog.AlertLevel.ALERT
                         )
-                        .setPositiveButton(context.getString(R.string.mod_check_continue)) {
+                        .setPositiveButton(context.getString(R.string.launch_error_java_continue)) {
                             JavaManager.addToJavaVersion(
                                 File(
                                     FCLPath.JAVA_PATH,

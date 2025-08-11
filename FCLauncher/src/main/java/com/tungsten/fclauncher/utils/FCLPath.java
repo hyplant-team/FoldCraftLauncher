@@ -74,10 +74,9 @@ public class FCLPath {
 
         EXTERNAL_DIR = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Prop.getProperty("put-directory","FCL-Modpack");
         if (Prop.getProperty("put-directory-suffix","true").equals("true")) {
-            EXTERNAL_DIR = EXTERNAL_DIR + "/" + context.getPackageName().substring("com.tungsten.fcl.".length());
+            EXTERNAL_DIR = EXTERNAL_DIR + "/" + context.getPackageName();
         }
         SHARED_COMMON_DIR = EXTERNAL_DIR + "/.minecraft";
-        CONTROLLER_DIR = EXTERNAL_DIR + "/controllers";
         if (Prop.getProperty("controller-dir","/").equals("/")) {
             CONTROLLER_DIR = EXTERNAL_DIR + "/controllers";
         } else {

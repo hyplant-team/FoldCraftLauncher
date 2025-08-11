@@ -28,9 +28,13 @@ android {
     namespace = "com.tungsten.fcl"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
-    var pkgSuffix = System.getProperty("pkgSuffix", "modpack")
-    if (pkgSuffix.isEmpty()) {
-        pkgSuffix = "modpack"
+    var pkgName = System.getProperty("pkgName", "com.tungsten.fcl")
+    if (pkgName.isEmpty()) {
+        pkgName = "com.tungsten.fcl"
+    }
+    var appName = System.getProperty("appName", "Fold Craft Launcher")
+    if (appName.isEmpty()) {
+        appName = "Fold Craft Launcher"
     }
 
     signingConfigs {
@@ -49,7 +53,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.tungsten.fcl." + pkgSuffix
+        applicationId = pkgName
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1245
@@ -66,7 +70,7 @@ android {
             signingConfig = signingConfigs.getByName("FCLDebugKey")
         }
         configureEach {
-            resValue("string", "app_name", "FCL " + pkgSuffix)
+            resValue("string", "app_name", appName)
             resValue("string", "app_version", android.defaultConfig.versionName.toString())
         }
     }

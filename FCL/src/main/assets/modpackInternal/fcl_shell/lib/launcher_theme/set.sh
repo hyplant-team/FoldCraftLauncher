@@ -1,5 +1,6 @@
 #!/system/bin/sh
 theme_file="${FCL_PATH_INTERNAL}/shared_prefs/theme.xml"
+rm -rf "${theme_file}.bak" >"/dev/null" 2>&1
 
 theme_begin="<?xml version='1.0' encoding='utf-8' standalone='yes' ?>\n<map>\n"
 int_item="    <int name=\""
@@ -47,14 +48,6 @@ if [[ "${FCL_CONF_THEME_FULLSCREEN}" != "" ]]; then
   echo -en "fullscreen" >>"${theme_file}"
   echo -en "${value_begin}" >>"${theme_file}"
   echo -en "${FCL_CONF_THEME_FULLSCREEN}" >>"${theme_file}"
-  echo -en "${value_end}" >>"${theme_file}"
-fi
-
-if [[ "${FCL_CONF_THEME_MODIFIED}" != "" ]]; then
-  echo -en "${boolean_item}" >>"${theme_file}"
-  echo -en "modified" >>"${theme_file}"
-  echo -en "${value_begin}" >>"${theme_file}"
-  echo -en "${FCL_CONF_THEME_MODIFIED}" >>"${theme_file}"
   echo -en "${value_end}" >>"${theme_file}"
 fi
 

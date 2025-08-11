@@ -22,7 +22,7 @@ else
   dirSuffix="$(echo -n "${appCfg}" | grep "put-directory-suffix=")"
   dirSuffix="${dirSuffix/#put-directory-suffix=/}"
   if [[ "${dirSuffix}" == "true" ]]; then
-    export FCL_PATH_EXTERNAL="${FCL_PATH_EXTERNAL}/${FCL_CONF_PKGID/#com.tungsten.fcl./}"
+    export FCL_PATH_EXTERNAL="${FCL_PATH_EXTERNAL}/${FCL_CONF_PKGID}"
   fi
   unset dirSuffix
   unset appCfg

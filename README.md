@@ -102,16 +102,21 @@
 
 #### 🪛 命令行参数
 
-- `-Darch="all"`：编译的架构，会影响libs和内置jre
+- `"-Darch=all"`：编译的架构，会影响libs和内置jre
   - `all`：以下全部保留，安装包体积较大
   - `arm`：仅保留`armeabi-v7a`，适用于较旧的手机
   - `arm64`：仅保留`arm64-v8a`，适用于大多数手机
   - `x86`：仅保留`x86`，适用于装有Android的老电脑
   - `x86_64`：仅保留`x64`，适用于装有Android的大多数电脑
   
-- `-DpkgSuffix="modpack"`：自定义安装包的包名后缀
+- `"-DpkgName=com.tungsten.fcl.modpack"`：自定义安装包的包名
   - 用于实现不同整合包版和官方版/官方调试版共存
-  - 留空时使用的默认值：`modpack`
+  - 在部分手机上，使用某些主流大型游戏的包名，可激发手机的游戏模式，提升性能
+  - 留空时使用的默认值：`com.tungsten.fcl.modpack`
+  
+- `"-DappName=FCL modpack"`：自定义安装包的包名
+  - 自定义应用程序的名称，会在桌面图标、应用程序详情、 FCL主页提示文本中显示
+  - 留空时使用的默认值：`FCL modpack`
 </details>
 
 ---

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Fold Craft Launcher modpack</string>
+    <string name="app_name" translatable="false">Fold Craft Launcher</string>
 
     <string name="splash_agreement">FCL requires storage permission to manage and read game files. FCL is fully open-source on GitHub, so please rest assured about your data security. The permission is solely for the game to operate properly and poses no security risks.</string>
     <string name="splash_permission_msg">No storage permission, please grant Fold Craft Launcher the permission.</string>

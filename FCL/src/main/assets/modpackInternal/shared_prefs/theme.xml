@@ -1,10 +1,9 @@
 <?xml version='1.0' encoding='utf-8' standalone='yes' ?>
 <map>
-    <!-- <string name="comment1" value="强烈建议在assets/local.properties中调整默认主题，不要在这里修改" /> -->
-    <!-- <string name="comment2" value="尤其是两项主题颜色，数值错误将导致主题引擎严重问题" /> -->
-    <!-- <int name="theme_color" value="" /> -->
-    <!-- <int name="theme_color2" value="" /> -->
-    <!-- <boolean name="fullscreen" value="false" /> -->
-    <!-- <int name="animation_speed" value="0" /> -->
-    <!-- <boolean name="close_skin_model" value="false" /> -->
+    <!-- <string name="comment" value="警告：两项主题颜色必须是ARGB16进制颜色值按32位整数转换为10进制，数值错误将导致主题引擎严重问题，可引发启动器循环崩溃。" /> -->
+    <int name="theme_color" value="-449497803" />
+    <int name="theme_color2" value="-6710887" />
+    <boolean name="fullscreen" value="false" />
+    <int name="animation_speed" value="0" />
+    <boolean name="close_skin_model" value="false" />
 </map>

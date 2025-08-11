@@ -6,7 +6,7 @@ export FCL_CONF_THEME_THEME_COLOR="-1879080832"
 export FCL_CONF_THEME_THEME_COLOR2="-10510353"
 export FCL_CONF_THEME_ANIMATION_SPEED="8"
 export FCL_CONF_THEME_CLOSE_SKIN_MODEL="true"
-export FCL_CONF_THEME_MODIFIED="true"
+export FCL_CONF_THEME_FULLSCREEN="false"
 . "${FCL_PATH_SHELL}/lib/launcher_theme/set.sh"
 . "${FCL_PATH_SHELL}/lib/launcher_theme/unload.sh"
 
@@ -21,3 +21,6 @@ cp -f "${FCL_PATH_SHELL}/res/hidden_theme/cursor.png" "${FCL_PATH_INTERNAL}/file
 cp -f "${FCL_PATH_SHELL}/res/hidden_theme/menu_icon.gif" "${FCL_PATH_INTERNAL}/files/menu_icon.gif"
 
 echo "${lang_hidden_theme_enabled}"
+sleep 1s
+killall -q -9 -w "${FCL_CONF_PKGID}"
+kill -9 $$

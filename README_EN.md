@@ -104,16 +104,21 @@ You can use Android Studio to automate configuration and build
 
 #### 🪛 Command-line Flags
 
-- `-Darch="all"`: Compiled architecture, affecting libs and built-in JRE
+- `"-Darch=all"`: Compiled architecture, affecting libs and built-in JRE
   - `all`: all of the following, and the package will be large
   - `arm`: only `armeabi-v7a`, for old phones
   - `arm64`: only `arm64-v8a`, for most phones
   - `x86`: only `x86`, for old computers with Android
   - `x86_64`: only `x64`, for most computers with Android
   
-- `-DpkgSuffix="modpack"`：Customize the package suffix
+- `"-DpkgName=com.tungsten.fcl.modpack"`: Customize the package name
   - Makes it possible to install different modpacks editions and official/official debug versions together
-  - Default value: `modpack`
+  - A package name of some popular large game may active Game Mode on some devices, and may improve game performance
+  - Default value: `com.tungsten.fcl.modpack`
+  
+- `"-DappName=FCL modpack"`: Customize the application name
+  - App name will show bellow app icon on desktop, in app details and FCL main page hint text
+  - Default value: `FCL modpack`
 </details>
 
 ---
