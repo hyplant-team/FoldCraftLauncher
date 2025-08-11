@@ -2,6 +2,7 @@ name: Android CI test
 
 on:
   workflow_dispatch:
+    inputs:
       pkgName:
         description: '安装包的包名'
         required: true
