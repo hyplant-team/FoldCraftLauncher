@@ -133,6 +133,8 @@ Vanilla FCL is licensed under **[GPL-3.0 License](https://www.gnu.org/licenses/g
   - [Boat and related projects](https://github.com/AOF-Dev/Boat)
   - [PojavLauncher and related projects](https://github.com/PojavLauncherTeam/PojavLauncher)
   - [authlib-injector](https://github.com/yushijinhun/authlib-injector)
+  - [NG-GL4ES (Krypton Wrapper)](https://github.com/BZLZHH/NG-GL4ES)
+  - [mesa](https://gitlab.freedesktop.org/mesa/mesa)
 - [root-S7 FCL-Server](https://github.com/root-S7/FoldCraftLauncher)
   - Old commits have been deleted, Some are reserved in [my old repo](https://github.com/hyplant/FoldCraftLauncherModpack-old)
 <details>

@@ -25,8 +25,8 @@ public class VersionSettingDefault {
     private static boolean notCheckJVM = true;
     private static boolean beGesture = false;
     private static boolean vulkanDriverSystem = false;
-    private static String controller = "00000000";
-    private static String renderer = "18d93f17-ff53-a319-fa61-58709a77bf87";
+    private static String controller = "f9b80a8f2";
+    private static String renderer = "e7b90ed6-e518-4d4e-93dc-5c7133cd5b31";
     private static String driver = "Turnip";
     private static boolean isolateGameDir = false;
     private static boolean pojavBigCore = false;

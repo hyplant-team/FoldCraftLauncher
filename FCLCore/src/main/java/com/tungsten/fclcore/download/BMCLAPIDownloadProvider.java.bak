@@ -77,11 +77,11 @@ public final class BMCLAPIDownloadProvider implements DownloadProvider {
                 pair("https://repo1.maven.org/maven2", FCLPath.Prop.getProperty("maven2-download-url", "null://"))
 
                 // https://github.com/mcmod-info-mirror/mcim-rust-api
-//                pair("https://api.modrinth.com", FCLPath.Prop.getProperty("mcim-mirror-url", "null://") + "/modrinth"),
-//                pair("https://cdn.modrinth.com", FCLPath.Prop.getProperty("mcim-mirror-url", "null://")),
-//                pair("https://api.curseforge.com", FCLPath.Prop.getProperty("mcim-mirror-url", "null://") + "/curseforge"),
-//                pair("https://edge.forgecdn.net", FCLPath.Prop.getProperty("mcim-mirror-url", "null://")),
-//                pair("https://mediafilez.forgecdn.net", FCLPath.Prop.getProperty("mcim-mirror-url", "null://"))
+//                pair("https://api.modrinth.com", FCLPath.Prop.getProperty("modrinthApi-mirror-url", "null://")),
+//                pair("https://cdn.modrinth.com", FCLPath.Prop.getProperty("modrinthCdn-mirror-url", "null://")),
+//                pair("https://api.curseforge.com", FCLPath.Prop.getProperty("curseforgeApi-mirror-url", "null://")),
+//                pair("https://edge.forgecdn.net", FCLPath.Prop.getProperty("forgecdnEdge-mirror-url", "null://")),
+//                pair("https://mediafilez.forgecdn.net", FCLPath.Prop.getProperty("forgecdnMfz-mirror-url", "null://"))
         );
     }
 

@@ -809,6 +809,7 @@
     <string name="settings_fcl_pojav_bigcore">强制渲染器在大核上运行(Pojav后端)</string>
     <string name="settings_fcl_renderer_vgpu" >VGPU (OpenGL 2.1+, 仅支持 1.17-)</string>
 
+    <string name="settings_fcl_renderer_nggl4es">Krypton Wrapper (OpenGL 3.0+, 内置的)</string>
     <string name="settings_fcl_driver">Vulkan驱动</string>
 
     <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, 仅支持GPU a616-a660)</string>
@@ -1023,8 +1024,8 @@
     <string name="message_vulkan_driver_system">当前GPU为Adreno,不建议开启此选项。</string>
     <string name="message_loading_controllers">正在加载自定义按键，请等待...</string>
 
-    <string name="wiki_release">https://zh.minecraft.wiki/w/Java版%s?variant=zh-cn</string>
-    <string name="wiki_snapshot">https://zh.minecraft.wiki/w/%s?variant=zh-cn</string>
+    <string name="wiki_game">https://zh.minecraft.wiki/w/Special:Search?search=%s&amp;variant=zh-cn</string>
+    <string name="wiki_game_search">Java版%s</string>
     <string name="installed">已安装</string>
     <string name="message_install_plugin">你可以打开网页获取插件。</string>
     <string name="message_install_java">你可以打开网页获取Java。</string>

@@ -131,6 +131,8 @@
   - [Boat 及其相关项目](https://github.com/AOF-Dev/Boat)
   - [PojavLauncher 及其相关项目](https://github.com/PojavLauncherTeam/PojavLauncher)
   - [authlib-injector](https://github.com/yushijinhun/authlib-injector)
+  - [NG-GL4ES (Krypton Wrapper)](https://github.com/BZLZHH/NG-GL4ES)
+  - [mesa](https://gitlab.freedesktop.org/mesa/mesa)
 - [root-S7 FCL服务器直装版](https://github.com/root-S7/FoldCraftLauncher)
   - 旧的提交已经删除，[我的旧版仓库](https://github.com/hyplant/FoldCraftLauncherModpack-old)保留了部分提交
 <details>

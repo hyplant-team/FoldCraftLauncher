@@ -857,6 +857,7 @@
     <string name="settings_fcl_renderer_zink" translatable="false">Vulkan Zink (OpenGL 4.6)</string>
     <string name="settings_fcl_renderer_freedreno" >Freedreno (OpenGL 4.6, only support GPU a616-a660)</string>
     <string name="settings_fcl_renderer_gl4esp" translatable="false">GL4ES+ (unstable)(OpenGL 2.1)</string>
+    <string name="settings_fcl_renderer_nggl4es">Krypton Wrapper (OpenGL 3.0+, built-in)</string>
 
     <string name="settings_fcl_driver">Vulkan Driver</string>
 
@@ -1082,8 +1083,8 @@
     <string name="mcmod" translatable="false">
         <u>mcmod.cn</u>
     </string>
-    <string name="wiki_release">https://minecraft.wiki/w/Java_Edition_%s</string>
-    <string name="wiki_snapshot">https://minecraft.wiki/w/Java_Edition_%s</string>
+    <string name="wiki_game">https://es.minecraft.wiki/w/Special:Search?search=%s</string>
+    <string name="wiki_game_search">Java_Edition_%s</string>
     <string name="installed">Installed</string>
     <string name="message_install_plugin">You can open the web page to get plugins.</string>
     <string name="message_install_java">You can open the web page to get Java.</string>
