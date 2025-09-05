@@ -68,7 +68,7 @@ public final class BMCLAPIDownloadProvider implements DownloadProvider {
                 pair("http://files.minecraftforge.net/maven", apiRoot + "/maven"),
                 pair("https://files.minecraftforge.net/maven", apiRoot + "/maven"),
                 pair("https://maven.minecraftforge.net", apiRoot + "/maven"),
-                pair("https://maven.neoforged.net/releases", apiRoot + "/maven"),
+                pair("https://maven.neoforged.net/releases/", apiRoot + "/maven/"),
                 pair("http://dl.liteloader.com/versions/versions.json", apiRoot + "/maven/com/mumfrey/liteloader/versions.json"),
                 pair("http://dl.liteloader.com/versions", apiRoot + "/maven"),
                 pair("https://meta.fabricmc.net", apiRoot + "/fabric-meta"),

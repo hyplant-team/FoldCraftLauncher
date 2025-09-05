@@ -809,7 +809,7 @@
     <string name="settings_fcl_pojav_bigcore">强制渲染器在大核上运行(Pojav后端)</string>
     <string name="settings_fcl_renderer_vgpu" >VGPU (OpenGL 2.1+, 仅支持 1.17-)</string>
 
-    <string name="settings_fcl_renderer_nggl4es">Krypton Wrapper (OpenGL 3.0+, 内置的)</string>
+    <string name="settings_fcl_renderer_nggl4es">Krypton Wrapper (OpenGL 3.1+, 内置的)</string>
     <string name="settings_fcl_driver">Vulkan驱动</string>
 
     <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, 仅支持GPU a616-a660)</string>
@@ -911,6 +911,7 @@
 
     <string name="version_game">游戏</string>
     <string name="version_game_old">远古版</string>
+    <string name="version_game_april_fools">愚人节</string>
     <string name="version_game_release">正式版</string>
     <string name="version_game_releases">正式版</string>
     <string name="version_game_snapshot">测试版</string>
@@ -1037,6 +1038,7 @@
     <string name="import_java">导入Java</string>
     <string name="import_java_wrong_file">仅支持导入tar.xz文件。</string>
     <string name="import_java_error">检测到你导入的Java可能不是给当前设备使用的，使用它启动可能会造成程序崩溃，是否继续导入?</string>
+    <string name="import_java_error_not_valid">检测到当前导入的Java文件结构无效，无法使用！</string>
     <string name="import_java_overwrite_wrong">该版本的Java已经导入过了，是否覆盖当前版本？</string>
 
     <string name="manage_version">管理版本</string>

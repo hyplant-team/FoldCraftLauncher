@@ -857,7 +857,7 @@
     <string name="settings_fcl_renderer_zink" translatable="false">Vulkan Zink (OpenGL 4.6)</string>
     <string name="settings_fcl_renderer_freedreno" >Freedreno (OpenGL 4.6, only support GPU a616-a660)</string>
     <string name="settings_fcl_renderer_gl4esp" translatable="false">GL4ES+ (unstable)(OpenGL 2.1)</string>
-    <string name="settings_fcl_renderer_nggl4es">Krypton Wrapper (OpenGL 3.0+, built-in)</string>
+    <string name="settings_fcl_renderer_nggl4es">Krypton Wrapper (OpenGL 3.1+, built-in)</string>
 
     <string name="settings_fcl_driver">Vulkan Driver</string>
 
@@ -969,6 +969,7 @@
 
     <string name="version_game">Games</string>
     <string name="version_game_old">Historical</string>
+    <string name="version_game_april_fools">April Fools</string>
     <string name="version_game_release">Release</string>
     <string name="version_game_releases">Releases</string>
     <string name="version_game_snapshot">Snapshot</string>
@@ -1096,6 +1097,7 @@
     <string name="import_java">Import Java</string>
     <string name="import_java_wrong_file">Only supports importing the tar.xz file.</string>
     <string name="import_java_error">It has been detected that the Java you imported may not be intended for use on the current device. Launching with it may cause the program to crash. Do you wish to continue with the import?</string>
+    <string name="import_java_error_not_valid">It is detected that the currently imported Java file structure is invalid and cannot be used!</string>
     <string name="import_java_overwrite_wrong">This version of Java has already been imported. Overwrite the current version?</string>
 
     <string name="manage_version">Manage Versions</string>
