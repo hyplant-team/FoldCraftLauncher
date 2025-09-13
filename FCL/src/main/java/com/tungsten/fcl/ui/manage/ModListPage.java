@@ -9,8 +9,10 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -49,6 +51,7 @@ import com.tungsten.fcllibrary.browser.options.SelectionMode;
 import com.tungsten.fcllibrary.component.dialog.FCLAlertDialog;
 import com.tungsten.fcllibrary.component.ui.FCLCommonPage;
 import com.tungsten.fcllibrary.component.view.FCLButton;
+import com.tungsten.fcllibrary.component.view.FCLCheckBox;
 import com.tungsten.fcllibrary.component.view.FCLEditText;
 import com.tungsten.fcllibrary.component.view.FCLLinearLayout;
 import com.tungsten.fcllibrary.component.view.FCLProgressBar;
@@ -85,7 +88,7 @@ public class ModListPage extends FCLCommonPage implements ManageUI.VersionLoadab
     private boolean isSearching = false;
 
     private FCLTextView warningText;
-    private LinearLayoutCompat left;
+    private ScrollView left;
     private RelativeLayout right;
     private FCLEditText searchBar;
     private FCLButton searchButton;
@@ -100,6 +103,9 @@ public class ModListPage extends FCLCommonPage implements ManageUI.VersionLoadab
     private FCLButton cancelButton;
     private FCLProgressBar progressBar;
     private ListView listView;
+
+    private FCLCheckBox enabled;
+    private FCLCheckBox disabled;
 
     private final LocalModListAdapter adapter;
 
@@ -133,6 +139,8 @@ public class ModListPage extends FCLCommonPage implements ManageUI.VersionLoadab
         cancelButton = findViewById(R.id.cancel);
         progressBar = findViewById(R.id.progress);
         listView = findViewById(R.id.list);
+        enabled = findViewById(R.id.enabled);
+        disabled = findViewById(R.id.disabled);
 
         searchButton.setOnClickListener(this);
         addButton.setOnClickListener(this);
@@ -142,6 +150,16 @@ public class ModListPage extends FCLCommonPage implements ManageUI.VersionLoadab
         deleteButton.setOnClickListener(this);
         selectAllButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
+        CompoundButton.OnCheckedChangeListener listener = (compoundButton, b) -> {
+            ObservableList<ModInfoObject> modInfoObjects = itemsProperty.get();
+            adapter.listProperty().clear();
+            modInfoObjects.stream().filter(modInfoObject -> {
+                boolean active = modInfoObject.getModInfo().isActive();
+                return (enabled.isChecked() && active) || (disabled.isChecked() && !active);
+            }).forEach(modInfoObject -> adapter.listProperty().add(modInfoObject));
+        };
+        enabled.setOnCheckedChangeListener(listener);
+        disabled.setOnCheckedChangeListener(listener);
     }
 
     @Override
@@ -228,6 +246,8 @@ public class ModListPage extends FCLCommonPage implements ManageUI.VersionLoadab
                 cancelButton.setEnabled(false);
                 listView.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
+                enabled.setVisibility(View.GONE);
+                disabled.setVisibility(View.GONE);
             } else {
                 searchBar.setEnabled(true);
                 searchButton.setEnabled(true);
@@ -240,6 +260,8 @@ public class ModListPage extends FCLCommonPage implements ManageUI.VersionLoadab
                 cancelButton.setEnabled(true);
                 listView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
+                enabled.setVisibility(View.VISIBLE);
+                disabled.setVisibility(View.VISIBLE);
                 cancelSearch();
             }
         });
@@ -274,7 +296,11 @@ public class ModListPage extends FCLCommonPage implements ManageUI.VersionLoadab
         }, Schedulers.defaultScheduler()).whenCompleteAsync((list, exception) -> {
             setLoading(false);
             if (exception == null)
-                itemsProperty.setAll(list.stream().map(it -> new ModInfoObject(getContext(), it)).sorted().collect(Collectors.toList()));
+                try {
+                    itemsProperty.setAll(list.stream().map(it -> new ModInfoObject(getContext(), it)).sorted().collect(Collectors.toList()));
+                } catch (Throwable e) {
+                    LOG.log(Level.SEVERE, "Failed to load local mod list", e);
+                }
             else
                 LOG.log(Level.SEVERE, "Failed to load local mod list", exception);
 

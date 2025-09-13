@@ -28,14 +28,17 @@ import android.opengl.GLES20;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.DisplayCutout;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.widget.Toast;
 
+import com.mio.util.DisplayUtil;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.FCLApplication;
-import com.tungsten.fcl.activity.WebActivity;
+// import com.tungsten.fcl.activity.WebActivity;
 import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fclcore.util.Logging;
 import com.tungsten.fclcore.util.io.FileUtils;
@@ -66,13 +69,13 @@ public class AndroidUtils {
         }
     }
 
-    public static void openLinkWithBuiltinWebView(Context context, String link) {
-        Intent intent = new Intent(context, WebActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("url", link);
-        intent.putExtras(bundle);
-        context.startActivity(intent);
-    }
+    // public static void openLinkWithBuiltinWebView(Context context, String link) {
+        // Intent intent = new Intent(context, WebActivity.class);
+        // Bundle bundle = new Bundle();
+        // bundle.putString("url", link);
+        // intent.putExtras(bundle);
+        // context.startActivity(intent);
+    // }
 
     public static void openLinkWithPopWebView(Context context, String link) {
         Uri uri = Uri.parse(link);
@@ -103,11 +106,11 @@ public class AndroidUtils {
         Toast.makeText(context, context.getString(R.string.message_copy), Toast.LENGTH_SHORT).show();
     }
 
-    public static void clearWebViewCache(Context context) {
-        File cache = context.getDir("webview", 0);
-        FileUtils.deleteDirectoryQuietly(cache);
-        CookieManager.getInstance().removeAllCookies(null);
-    }
+    // public static void clearWebViewCache(Context context) {
+        // File cache = context.getDir("webview", 0);
+        // FileUtils.deleteDirectoryQuietly(cache);
+        // CookieManager.getInstance().removeAllCookies(null);
+    // }
 
     public static String getLocalizedText(Context context, String key, Object... formatArgs) {
         return String.format(getLocalizedText(context, key), formatArgs);
@@ -129,43 +132,11 @@ public class AndroidUtils {
 
 
     public static int getScreenHeight(Context context) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Point point = new Point();
-        wm.getDefaultDisplay().getRealSize(point);
-        return point.y;
+        return DisplayUtil.currentDisplayMetrics.heightPixels;
     }
 
     public static int getScreenWidth(Activity context) {
-        SharedPreferences sharedPreferences;
-        sharedPreferences = context.getSharedPreferences("theme", MODE_PRIVATE);
-        boolean fullscreen = sharedPreferences.getBoolean("fullscreen", FCLApplication.Prop.getProperty("default-fullscreen", "false").equals("true"));
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Point point = new Point();
-        wm.getDefaultDisplay().getRealSize(point);
-        if (fullscreen || SDK_INT < Build.VERSION_CODES.P) {
-            return point.x;
-        } else {
-            return point.x - getSafeInset(context);
-        }
-    }
-
-    public static int getSafeInset(Activity context) {
-        try {
-            if (SDK_INT >= Build.VERSION_CODES.P) {
-                WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-                DisplayCutout cutout;
-                if (SDK_INT >= Build.VERSION_CODES.R) {
-                    cutout = wm.getCurrentWindowMetrics().getWindowInsets().getDisplayCutout();
-                } else {
-                    cutout = context.getWindow().getDecorView().getRootWindowInsets().getDisplayCutout();
-                }
-                int safeInsetLeft = cutout != null ? cutout.getSafeInsetLeft() : 0;
-                int safeInsetRight = cutout != null ? cutout.getSafeInsetRight() : 0;
-                return Math.max(safeInsetLeft, safeInsetRight);
-            }
-        } catch (Throwable ignored) {
-        }
-        return 0;
+        return DisplayUtil.currentDisplayMetrics.widthPixels;
     }
 
     @SuppressWarnings("resource")

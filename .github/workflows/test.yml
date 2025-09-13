@@ -37,8 +37,8 @@ jobs:
 
       - name: Build ALL apk
         run: |
-          ./gradlew assembledebug "-Darch=all" "-DpkgName=${{github.event.inputs.pkgName}}" "-DappName=${{github.event.inputs.appName}}" --stacktrace
-
+          ./
+gradlew assembledebug "-Darch=all" "-DpkgName=${{github.event.inputs.pkgName}}" "-DappName=${{github.event.inputs.appName}}" --stacktrace
       - name: Upload ALL apk
         uses: actions/upload-artifact@v4
         with:

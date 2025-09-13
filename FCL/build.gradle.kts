@@ -56,8 +56,8 @@ android {
         applicationId = pkgName
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1250
-        versionName = "1.2.5.0"
+        versionCode = 1253
+        versionName = "1.2.5.3"
     }
 
     buildTypes {
