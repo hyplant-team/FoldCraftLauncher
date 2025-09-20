@@ -88,6 +88,14 @@ public class UpdateDialog extends FCLDialog implements View.OnClickListener {
         negative.setOnClickListener(this);
         netdisk.setOnClickListener(this);
 
+        positive.setOnLongClickListener(view -> {
+            String upgradeUrl = getTargetArchUrl();
+            if (upgradeUrl != null) {
+                AndroidUtils.openLink(getContext(), upgradeUrl);
+            }
+            return true;
+        });
+
         checkHeight();
     }
 

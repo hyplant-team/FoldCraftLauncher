@@ -14,6 +14,7 @@ import com.mio.data.Renderer
 import com.tungsten.fclauncher.FCLConfig
 import com.tungsten.fclauncher.FCLauncher
 import com.tungsten.fclauncher.bridge.FCLBridgeCallback
+import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fclcore.R
 import com.tungsten.fclcore.util.Logging
 import com.tungsten.fclcore.util.io.FileUtils
@@ -34,6 +35,7 @@ class ProcessService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        FCLPath.loadPaths(applicationContext)
         createNotificationChannel()
         startForeground(1, buildNotification())
         val command = intent.extras!!.getStringArray("command")
@@ -41,9 +43,9 @@ class ProcessService : Service() {
         val jre = "jre$java"
         val config = FCLConfig(
             applicationContext,
-            Environment.getExternalStorageDirectory().absolutePath + "/FCL/log",
-            applicationContext.getDir("runtime", 0).absolutePath + "/java/" + jre,
-            applicationContext.cacheDir.toString() + "/fclauncher",
+            FCLPath.LOG_DIR,
+            FCLPath.RUNTIME_DIR + "/java/" + jre,
+            FCLPath.CACHE_DIR + "/fclauncher",
             Renderer(
                 "Holy-GL4ES",
                 "",
