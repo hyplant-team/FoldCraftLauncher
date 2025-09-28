@@ -110,7 +110,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
     private lateinit var profile: Profile
     private lateinit var theme: IntegerProperty
     var isVersionLoading = false
-    private lateinit var permissionResultLauncher: ActivityResultLauncher<String>
+    lateinit var permissionResultLauncher: ActivityResultLauncher<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -653,7 +653,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 getPackageName() + ".provider",
                 file
             )
-            intent.setType("text/plain")
+            intent.type = "text/plain"
             intent.putExtra(Intent.EXTRA_STREAM, uri)
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             startActivity(
