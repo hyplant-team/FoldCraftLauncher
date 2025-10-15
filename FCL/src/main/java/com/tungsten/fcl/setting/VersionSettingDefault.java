@@ -17,7 +17,6 @@ public class VersionSettingDefault {
     private static String minecraftArgs = "";
     private static int maxMemory = MemoryUtils.findBestRAMAllocation(FCLPath.CONTEXT);
     private static boolean autoMemory = true;
-    private static String permSize = "";
     private static String serverIp = "";
     private static String java = "Auto";
     private static int newScaleFactor = 100;
@@ -30,6 +29,7 @@ public class VersionSettingDefault {
     private static String driver = "Turnip";
     private static boolean isolateGameDir = false;
     private static boolean pojavBigCore = false;
+    private static String uuid = "00000000-0000-0000-0000-000000000000";
 
     static {
         loadDefaultConfig();
@@ -46,9 +46,6 @@ public class VersionSettingDefault {
     }
     public static boolean getAutoMemory() {
         return autoMemory;
-    }
-    public static String getPermSize() {
-        return permSize;
     }
     public static String getServerIp() {
         return serverIp;
@@ -86,6 +83,9 @@ public class VersionSettingDefault {
     public static boolean getPojavBigCore() {
         return pojavBigCore;
     }
+    public static String getUuid() {
+        return uuid;
+    }
 
     private static void loadDefaultConfig() {
         File configFile = new File(FCLPath.FILES_DIR + "/default_config.json");
@@ -96,7 +96,6 @@ public class VersionSettingDefault {
             minecraftArgs = defaultConfig.has("minecraftArgs") ? defaultConfig.get("minecraftArgs").getAsString() : minecraftArgs;
             maxMemory = defaultConfig.has("maxMemory") ? defaultConfig.get("maxMemory").getAsInt() : maxMemory;
             autoMemory = defaultConfig.has("autoMemory") ? defaultConfig.get("autoMemory").getAsBoolean() : autoMemory;
-            permSize = defaultConfig.has("permSize") ? defaultConfig.get("permSize").getAsString() : permSize;
             serverIp = defaultConfig.has("serverIp") ? defaultConfig.get("serverIp").getAsString() : serverIp;
             java = defaultConfig.has("java") ? defaultConfig.get("java").getAsString() : java;
             newScaleFactor = defaultConfig.has("newScaleFactor") ? defaultConfig.get("newScaleFactor").getAsInt() : newScaleFactor;
@@ -109,6 +108,7 @@ public class VersionSettingDefault {
             driver = defaultConfig.has("driver") ? defaultConfig.get("driver").getAsString() : driver;
             isolateGameDir = defaultConfig.has("isolateGameDir") ? defaultConfig.get("isolateGameDir").getAsBoolean() : isolateGameDir;
             pojavBigCore = defaultConfig.has("pojavBigCore") ? defaultConfig.get("pojavBigCore").getAsBoolean() : pojavBigCore;
+            uuid = defaultConfig.has("uuid") ? defaultConfig.get("uuid").getAsString() : uuid;
         } catch (Exception e) {
             Logging.LOG.log(Level.SEVERE, "Failed to load default_config.json", e);
         }

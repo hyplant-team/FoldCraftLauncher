@@ -145,6 +145,7 @@ object Profiles {
 
     @JvmStatic
     fun getSelectedProfile(): Profile {
+        checkProfiles()
         return selectedProfile.get() ?: profiles[0]
     }
 

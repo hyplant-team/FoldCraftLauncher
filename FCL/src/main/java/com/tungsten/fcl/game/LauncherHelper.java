@@ -17,10 +17,12 @@
  */
 package com.tungsten.fcl.game;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.tungsten.fcl.util.AndroidUtils.getLocalizedText;
 import static com.tungsten.fcl.util.AndroidUtils.hasStringId;
 import static com.tungsten.fclcore.util.Logging.LOG;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +33,7 @@ import androidx.annotation.NonNull;
 import com.mio.JavaManager;
 import com.mio.data.Renderer;
 import com.mio.manager.RendererManager;
+import com.tungsten.fcl.FCLApplication;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.activity.JVMActivity;
 import com.tungsten.fcl.control.MenuType;
@@ -177,6 +180,11 @@ public final class LauncherHelper {
                             intent.putExtras(bundle);
                             LOG.log(Level.INFO, "Start JVMActivity!");
                             context.startActivity(intent);
+                            if (context.getSharedPreferences("launcher", MODE_PRIVATE).getBoolean("autoExitLauncher", false)) {
+                                Activity activity = FCLApplication.getCurrentActivity();
+                                if (activity != null)
+                                    activity.finish();
+                            }
                         }))
                         .withStage("launch.state.waiting_launching"))
                 .withStagesHint(Lang.immutableListOf(
@@ -302,13 +310,20 @@ public final class LauncherHelper {
 
                     CompletableFuture<JavaVersion> future = new CompletableFuture<>();
                     Runnable continueAction = () -> future.complete(javaVersion);
-                    Runnable cancelAction = () -> future.completeExceptionally(new CancellationException());
-                    FCLAlertDialog.Builder builder = new FCLAlertDialog.Builder(context);
-                    builder.setCancelable(false);
-                    builder.setMessage(context.getString(R.string.launch_error_java));
-                    builder.setPositiveButton(context.getString(com.tungsten.fcllibrary.R.string.dialog_negative), cancelAction::run);
-                    builder.setNegativeButton(context.getString(R.string.launch_error_java_continue), continueAction::run);
-                    builder.create().show();
+                    new FCLAlertDialog.Builder(context)
+                            .setCancelable(false)
+                            .setMessage(context.getString(R.string.launch_error_java))
+                            .setPositiveButton(context.getString(R.string.launch_error_java_auto), () -> {
+                                setting.setJava(JavaVersion.JAVA_AUTO.getName());
+                                future.complete(suggestedJavaVersion);
+                            })
+                            .setNegativeButton(context.getString(R.string.launch_error_java_continue), continueAction::run)
+                            .setNeutralButton(context.getString(R.string.launch_error_java_continue_disable), () -> {
+                                setting.setNotCheckJVM(true);
+                                continueAction.run();
+                            })
+                            .create()
+                            .show();
                     return Task.fromCompletableFuture(future);
                 }).withStage("launch.state.java");
     }

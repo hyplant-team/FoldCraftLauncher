@@ -28,10 +28,16 @@
     <string name="setting">全局设置</string>
 
     <string name="about">关于</string>
+    <string name="about_desc">FCL Modpack 基于 Fold Craft Launcher（一个 Android Minecraft 启动器，让用户能够在 Android 设备上启动 Minecraft: Java Edition）\nFold Craft Launcher 由 FCL-Team 开发，主要功能基于 HMCLCore 修改而成，借鉴和引用了一些 PojavLauncher 和 Boat 的源码。\n\nModpack Edition 在原版的基础上增加了内置客户端和配置释放、自定义各类下载源的功能，可轻松实现预配置整合包的安装和更新，适用于整合包或服务器专用客户端打包安卓直装版。\n主要功能基于旧版 root-s7 服务器版实现。\n\n如果你要传播分发该软件，请遵循 GPL-v3 协议。</string>
     <string name="about_a">关于 A</string>
     <string name="about_b">关于 B</string>
     <string name="about_c">关于 C</string>
-    <string name="about_desc">Fold Craft Launcher 是一个 Android Minecraft 启动器，让用户能够在 Android 设备上启动 Minecraft: Java Edition。\n\nFold Craft Launcher 由 FCL-Team 开发。\n\nFold Craft Launcher 的主要功能是基于 HMCLCore 修改而成的。\n\n该应用借鉴和引用了一些 PojavLauncher 和 Boat 的源码，所以如果你要传播分发该软件，请遵循 GPL-v3 协议。</string>
+    <string name="community">社区</string>
+    <string name="community_hint">加入社区以获取最新版本，反馈 bug 等。如果你要加入社区，请遵守社区规定。\n注意：当前启动器非官方分支，请勿在官方社区反馈当前版本的问题！</string>
+    <string name="community_a">社区 A</string>
+    <string name="community_b">社区 B</string>
+    <string name="community_c">社区 C</string>
+    <string name="community_controller">控制器交流社区</string>
 
     <string name="account_add_server">添加认证服务器</string>
     <string name="account_add_server_url">服务器地址</string>
@@ -136,13 +142,6 @@
     <string name="button_set">设置</string>
     <string name="button_reset">重置</string>
     <string name="button_overwrite">覆盖</string>
-
-    <string name="community">社区</string>
-    <string name="community_hint">加入社区以获取最新版本，反馈 bug 等。如果你要加入社区，请遵守社区规定。\n注：该启动器为服务器直装版，非官方分支！</string>
-    <string name="community_a">社区 A</string>
-    <string name="community_b">社区 B</string>
-    <string name="community_c">社区 C</string>
-    <string name="community_controller">控制器交流社区</string>
 
     <string name="control_create">创建新布局</string>
     <string name="control_delete">你确定要删除该布局吗？</string>
@@ -480,6 +479,7 @@
     <string name="launch_error_java">你正在使用不推荐的 Java 版本，确定要继续吗？</string>
     <string name="launch_error_java_auto">自动选择</string>
     <string name="launch_error_java_continue">继续</string>
+    <string name="launch_error_java_continue_disable">继续（禁用检查）</string>
     <string name="launch_failed">无法启动</string>
     <string name="launch_failed_download_library">未能下载游戏依赖 %s</string>
 
@@ -794,13 +794,12 @@
     <string name="settings_advanced_dont_check_jvm_validity">不检查 JVM 兼容性</string>
     <string name="settings_advanced_game_dir_default">默认 (.minecraft/)</string>
     <string name="settings_advanced_game_dir_independent">各版本独立 (存放在 .minecraft/versions/&#60;版本名>/，除 assets、libraries 外)</string>
-    <string name="settings_advanced_java_permanent_generation_space">内存永久保存区域</string>
-    <string name="settings_advanced_java_permanent_generation_space_prompt">单位 MB</string>
     <string name="settings_advanced_jvm_args">Java 虚拟机参数</string>
     <string name="settings_advanced_minecraft_arguments">游戏参数</string>
     <string name="settings_advanced_minecraft_arguments_prompt">默认</string>
     <string name="settings_advanced_server_ip">服务器地址</string>
     <string name="settings_advanced_server_ip_prompt">启动游戏后自动加入对应服务器</string>
+    <string name="settings_advanced_custom_uuid">自定义UUID</string>
 
     <string name="settings_fcl_controller">控制</string>
     <string name="settings_fcl_controller_injector">基岩版触控手势</string>
@@ -852,6 +851,7 @@
     <string name="settings_launcher_animation_speed">动画速度</string>
     <string name="settings_launcher_vibrate_duration">震动时长（用于TouchController模组）</string>
     <string name="settings_disable_fullscreen_input">禁用全屏输入（用于TouchController模组）</string>
+    <string name="settings_launcher_exit_after_launching">启动器启动后自动关闭</string>
 
     <string name="settings_memory">游戏内存</string>
     <string name="settings_memory_allocate_auto">最低分配 %1$.1f GB / 实际分配 %2$.1f GB</string>

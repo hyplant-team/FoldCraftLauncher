@@ -32,13 +32,11 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.DisplayCutout;
 import android.view.WindowManager;
-import android.webkit.CookieManager;
 import android.widget.Toast;
 
 import com.mio.util.DisplayUtil;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.FCLApplication;
-// import com.tungsten.fcl.activity.WebActivity;
 import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fclcore.util.Logging;
 import com.tungsten.fclcore.util.io.FileUtils;
@@ -105,12 +103,6 @@ public class AndroidUtils {
         clip.setPrimaryClip(data);
         Toast.makeText(context, context.getString(R.string.message_copy), Toast.LENGTH_SHORT).show();
     }
-
-    // public static void clearWebViewCache(Context context) {
-        // File cache = context.getDir("webview", 0);
-        // FileUtils.deleteDirectoryQuietly(cache);
-        // CookieManager.getInstance().removeAllCookies(null);
-    // }
 
     public static String getLocalizedText(Context context, String key, Object... formatArgs) {
         return String.format(getLocalizedText(context, key), formatArgs);

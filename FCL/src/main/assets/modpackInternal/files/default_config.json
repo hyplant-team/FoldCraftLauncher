@@ -3,7 +3,6 @@
   "minecraftArgs": "",
   "maxMemory": 4096,
   "autoMemory": true,
-  "permSize": "",
   "serverIp": "",
   "java": "Auto",
   "newScaleFactor": 100,
@@ -16,5 +15,6 @@
   "driver": "Turnip",
   "isolateGameDir": false,
   "customRenderer": "",
-  "pojavBigCore": false
+  "pojavBigCore": false,
+  "uuid": ""
 }

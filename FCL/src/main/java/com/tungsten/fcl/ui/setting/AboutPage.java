@@ -18,6 +18,9 @@ public class AboutPage extends FCLCommonPage implements View.OnClickListener {
     private FCLLinearLayout about_a;
     private FCLLinearLayout about_b;
     private FCLLinearLayout about_c;
+    private FCLLinearLayout community_a;
+    private FCLLinearLayout community_b;
+    private FCLLinearLayout community_c;
 
     public AboutPage(Context context, int id, FCLUILayout parent, int resId) {
         super(context, id, parent, resId);
@@ -32,6 +35,12 @@ public class AboutPage extends FCLCommonPage implements View.OnClickListener {
         about_a.setOnClickListener(this);
         about_b.setOnClickListener(this);
         about_c.setOnClickListener(this);
+        community_a = findViewById(R.id.community_a);
+        community_b = findViewById(R.id.community_b);
+        community_c = findViewById(R.id.community_c);
+        community_a.setOnClickListener(this);
+        community_b.setOnClickListener(this);
+        community_c.setOnClickListener(this);
     }
 
     @Override
@@ -51,6 +60,15 @@ public class AboutPage extends FCLCommonPage implements View.OnClickListener {
         }
         if (v == about_c) {
             url = FCLApplication.Prop.getProperty("about-c","null://");
+        }
+        if (v == community_a) {
+            url = FCLApplication.Prop.getProperty("community-a","null://");
+        }
+        if (v == community_b) {
+            url = FCLApplication.Prop.getProperty("community-b","null://");
+        }
+        if (v == community_c) {
+            url = FCLApplication.Prop.getProperty("community-c","null://");
         }
 
         if (url != null) {

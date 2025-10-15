@@ -23,6 +23,8 @@
     
     <string name="about">Sobre</string>
     <string name="about_desc">Fold Craft é um Launcher de Minecraft no Android, que lhe permite jogar Minecraft: Java Edition no seu aparelho Android.\n\nO Fold Craft Launcher é desenvolvido pela FCL-Team.\n\nA maioria das funcionalidades do Fold Craft Launcher são baseadas no HMCLCore.\n\nO aplicativo usa partes do código de PojavLauncher e Boat, então se deseja distribuir este aplicativo, por favor siga as regras da Licença GPL-v3.</string>
+    <string name="community">Comunidade</string>
+    <string name="community_hint">Entre na nossa comunidade para ter as últimas versões, reportar bugs, etc. Por favor seguir as regras da comunidade se entrar!</string>
 
     <string name="account_add_server">Adicionar servidor de autenticação</string>
     <string name="account_add_server_url">Endereço do servidor</string>
@@ -87,6 +89,9 @@
     <string name="action_share">Compartilhar</string>
     <string name="action_skip">Pular</string>
 
+    <string name="announcement">Anúncio: %s</string>
+    <string name="announcement_significant">Este anúncio é importante.</string>
+
     <string name="archive_author">Autor(es)</string>
     <string name="archive_date">Data de publicação</string>
     <string name="archive_game_version">Versão do jogo</string>
@@ -115,9 +120,6 @@
     <string name="button_select_all">Selecionar tudo</string>
     <string name="button_set">Definir</string>
     <string name="button_reset">Redefinir</string>
-
-    <string name="community">Comunidade</string>
-    <string name="community_hint">Entre na nossa comunidade para ter as últimas versões, reportar bugs, etc. Por favor seguir as regras da comunidade se entrar!</string>
 
     <string name="control_create">Criar</string>
     <string name="control_delete">Tem certeza de que deseja excluir este controle?</string>
@@ -718,8 +720,6 @@
     <string name="settings_advanced_dont_check_jvm_validity">Não verificar compatibilidade do Java</string>
     <string name="settings_advanced_game_dir_default">Padrão (.minecraft/)</string>
     <string name="settings_advanced_game_dir_independent">Isolado (.minecraft/versions/&#60;instance name>/, exceto por assets e bibliotecas)</string>
-    <string name="settings_advanced_java_permanent_generation_space">Espaço PermGen</string>
-    <string name="settings_advanced_java_permanent_generation_space_prompt">em MB</string>
     <string name="settings_advanced_jvm_args">Argumentos Java VM</string>
     <string name="settings_advanced_minecraft_arguments">Argumentos de inicialização</string>
     <string name="settings_advanced_minecraft_arguments_prompt">Padrão</string>
