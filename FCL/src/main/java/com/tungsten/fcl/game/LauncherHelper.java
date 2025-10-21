@@ -33,10 +33,13 @@ import androidx.annotation.NonNull;
 import com.mio.JavaManager;
 import com.mio.data.Renderer;
 import com.mio.manager.RendererManager;
+import com.mio.util.ParseUtil;
 import com.tungsten.fcl.FCLApplication;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.activity.JVMActivity;
 import com.tungsten.fcl.control.MenuType;
+import com.tungsten.fcl.game.LauncherHelper.SkipLoginDialog;
+import com.tungsten.fcl.game.LauncherHelper.TipReLoginLoginDialog;
 import com.tungsten.fcl.setting.Profile;
 import com.tungsten.fcl.setting.Profiles;
 import com.tungsten.fcl.setting.VersionSetting;
@@ -61,6 +64,7 @@ import com.tungsten.fclcore.game.Version;
 import com.tungsten.fclcore.mod.ModpackCompletionException;
 import com.tungsten.fclcore.mod.ModpackConfiguration;
 import com.tungsten.fclcore.mod.ModpackProvider;
+import com.tungsten.fclcore.mod.server.ServerModpackProvider;
 import com.tungsten.fclcore.task.DownloadException;
 import com.tungsten.fclcore.task.Schedulers;
 import com.tungsten.fclcore.task.Task;
@@ -140,6 +144,18 @@ public final class LauncherHelper {
                         return null;
                     return Task.allOf(
                             dependencyManager.checkGameCompletionAsync(version.get(), integrityCheck),
+                            Task.composeAsync(() -> {
+                                try {
+                                    ModpackConfiguration<?> configuration = ModpackHelper.readModpackConfiguration(repository.getModpackConfiguration(selectedVersion));
+                                    ModpackProvider provider = ModpackHelper.getProviderByType(configuration.getType());
+                                    if (provider == null)
+                                        return null;
+                                    else if (configuration.getType().equals(ServerModpackProvider.INSTANCE.getName()))
+                                        return provider.createCompletionTask(dependencyManager, selectedVersion);
+                                } catch (IOException ignore) {
+                                }
+                                return null;
+                            }),
                             Task.composeAsync(() -> null)
                     );
                 }).withStage("launch.state.dependencies")
@@ -162,10 +178,11 @@ public final class LauncherHelper {
                             return launcher;
                         }).thenComposeAsync(launcher -> { // launcher is prev task's result
                             return Task.supplyAsync(launcher::launch);
-                        }).thenComposeAsync(fclBridge -> {
+                        }).thenComposeAsync(fclBridge -> checkPathValid(fclBridge, repository))
+                        .thenComposeAsync(fclBridge -> {
                             Renderer renderer = RendererManager.getRenderer(repository.getVersionSetting(selectedVersion).getRenderer());
                             fclBridge.setRenderer(renderer.getName());
-                            return Task.completed(fclBridge);
+                            return checkRenderer(fclBridge, renderer, repository.getGameVersion(selectedVersion).orElse(""));
                         }).thenAcceptAsync(fclBridge -> Schedulers.androidUIThread().execute(() -> {
                             CallbackBridge.nativeSetUseInputStackQueue(version.get().getArguments().isPresent());
                             Intent intent = new Intent(context, JVMActivity.class);
@@ -286,6 +303,61 @@ public final class LauncherHelper {
         } catch (Exception e) {
             LOG.log(Level.WARNING, "CheckTouchMod() failed", e);
         }
+    }
+
+    private Task<FCLBridge> checkPathValid(FCLBridge bridge, FCLGameRepository repository) {
+        return Task.composeAsync(() -> {
+            try {
+                CompletableFuture<Task<FCLBridge>> future = new CompletableFuture<>();
+                String path = repository.getVersionJar(selectedVersion).getAbsolutePath();
+                if (ParseUtil.isValidCharacters(path)) {
+                    return Task.completed(bridge);
+                } else {
+                    Schedulers.androidUIThread().execute(() -> new FCLAlertDialog.Builder(context)
+                            .setCancelable(false)
+                            .setMessage(context.getString(R.string.message_check_path_valid, path))
+                            .setPositiveButton(context.getString(R.string.button_cancel), () -> future.completeExceptionally(new CancellationException()))
+                            .setNegativeButton(context.getString(R.string.launch_error_java_continue), () -> future.complete(Task.completed(bridge))).create().show());
+                    return Task.fromCompletableFuture(future).thenComposeAsync(task -> task);
+                }
+            } catch (Throwable e) {
+                return Task.completed(bridge);
+            }
+        });
+    }
+
+    private Task<FCLBridge> checkRenderer(FCLBridge bridge, Renderer renderer, String version) {
+        return Task.composeAsync(() -> {
+            try {
+                CompletableFuture<Task<FCLBridge>> future = new CompletableFuture<>();
+                if (!version.isEmpty()) {
+                    if (!renderer.getMinMCver().isEmpty()) {
+                        if (VersionNumber.compare(version, renderer.getMinMCver()) < 0) {
+                            Schedulers.androidUIThread().execute(() -> new FCLAlertDialog.Builder(context)
+                                    .setCancelable(false)
+                                    .setMessage(context.getString(R.string.message_check_renderer, renderer.getName()))
+                                    .setPositiveButton(context.getString(R.string.button_cancel), () -> future.completeExceptionally(new CancellationException()))
+                                    .setNegativeButton(context.getString(R.string.launch_error_java_continue), () -> future.complete(Task.completed(bridge))).create().show());
+                            return Task.fromCompletableFuture(future).thenComposeAsync(task -> task);
+                        }
+                    }
+                    if (!renderer.getMaxMCver().isEmpty()) {
+                        if (VersionNumber.compare(version, renderer.getMaxMCver()) > 0) {
+                            Schedulers.androidUIThread().execute(() -> new FCLAlertDialog.Builder(context)
+                                    .setCancelable(false)
+                                    .setMessage(context.getString(R.string.message_check_renderer, renderer.getName()))
+                                    .setPositiveButton(context.getString(R.string.button_cancel), () -> future.completeExceptionally(new CancellationException()))
+                                    .setNegativeButton(context.getString(R.string.launch_error_java_continue), () -> future.complete(Task.completed(bridge))).create().show());
+                            return Task.fromCompletableFuture(future).thenComposeAsync(task -> task);
+                        }
+                    }
+                }
+                return Task.completed(bridge);
+            } catch (Throwable e) {
+                LOG.log(Level.WARNING, "checkRenderer() failed", e);
+                return Task.completed(bridge);
+            }
+        });
     }
 
     private static Task<JavaVersion> checkGameState(Context context, VersionSetting setting, Version version) {
