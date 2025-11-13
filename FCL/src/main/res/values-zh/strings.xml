@@ -554,6 +554,7 @@
     <string name="menu_settings_mouse_size">鼠标尺寸</string>
     <string name="menu_settings_physical_mouse_mode">实体鼠标控制</string>
     <string name="menu_settings_gamepad">手柄</string>
+    <string name="menu_settings_gamepad_disable_mapping">禁用手柄映射</string>
     <string name="menu_settings_gamepad_reset_mapper">重置映射</string>
     <string name="menu_settings_gamepad_reset">重置</string>
     <string name="menu_settings_gamepad_deadzone">调整死区</string>
@@ -840,7 +841,8 @@
     <string name="settings_launcher_launcher_log_export_failed">无法导出日志</string>
     <string name="settings_launcher_launcher_log_export_success">日志已被导出至 %s</string>
     <string name="settings_launcher_theme">主要主题色</string>
-    <string name="settings_launcher_theme2">次要主题色</string>
+    <string name="settings_launcher_theme2">次要主题色（亮色模式）</string>
+    <string name="settings_launcher_theme2_dark">次要主题色（暗色模式）</string>
     <string name="settings_launcher_background_lt">亮色背景图</string>
     <string name="settings_launcher_background_dk">暗色背景图</string>
     <string name="settings_launcher_theme_fetch_background">从背景图片提取</string>
@@ -1057,4 +1059,5 @@
     <string name="disabled">已禁用</string>
     <string name="message_warn_restart_after_change">改动的内容将在重启后生效。</string>
     <string name="message_check_path_valid">当前选择的游戏文件路径（%s）可能包含非法字符，启动后可能会闪退，建议检查游戏目录或是重命名版本，是否继续启动？</string>
+    <string name="message_data_is_loading">数据还未加载完成，无法修改。</string>
 </resources>

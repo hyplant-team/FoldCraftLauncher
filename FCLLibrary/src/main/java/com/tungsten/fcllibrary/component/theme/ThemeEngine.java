@@ -90,6 +90,15 @@ public class ThemeEngine {
         }
     }
 
+    public void applyColor2Dark(int color) {
+        theme.setColor2Dark(color);
+        for (View view : runnables.keySet()) {
+            if (view != null && runnables.get(view) != null) {
+                handler.post(runnables.get(view));
+            }
+        }
+    }
+
     public void applyFullscreen(Window window, boolean fullscreen) {
         theme.setFullscreen(fullscreen);
         if (window != null) {
@@ -144,6 +153,11 @@ public class ThemeEngine {
         Theme.saveTheme(context, theme);
     }
 
+    public void applyAndSave2Dark(Context context, int color) {
+        applyColor2Dark(color);
+        Theme.saveTheme(context, theme);
+    }
+
     public void applyAndSave(Context context, Window window, boolean fullscreen) {
         applyFullscreen(window, fullscreen);
         Theme.saveTheme(context, theme);
@@ -166,6 +180,10 @@ public class ThemeEngine {
     }
     public static int getDefaultColor2(Context context) {
         int color2 = Color.parseColor(FCLPath.Prop.getProperty("default-theme-second-color", "#FF7F7F7F"));
+        return color2;
+    }
+    public static int getDefaultColor2Dark(Context context) {
+        int color2 = Color.parseColor(FCLPath.Prop.getProperty("default-theme-second-color-dark", "#FF7F7F7F"));
         return color2;
     }
 

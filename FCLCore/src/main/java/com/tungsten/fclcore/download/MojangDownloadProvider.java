@@ -17,6 +17,7 @@
  */
 package com.tungsten.fclcore.download;
 
+import com.tungsten.fclcore.download.cleanroom.CleanroomVersionList;
 import com.tungsten.fclcore.download.fabric.FabricAPIVersionList;
 import com.tungsten.fclcore.download.fabric.FabricVersionList;
 import com.tungsten.fclcore.download.forge.ForgeVersionList;
@@ -36,6 +37,7 @@ public class MojangDownloadProvider implements DownloadProvider {
     private final FabricVersionList fabric;
     private final FabricAPIVersionList fabricApi;
     private final ForgeVersionList forge;
+    private final CleanroomVersionList cleanroom;
     private final NeoForgeOfficialVersionList neoforge;
     private final LiteLoaderVersionList liteLoader;
     private final OptiFine302VersionList optifine;
@@ -49,6 +51,7 @@ public class MojangDownloadProvider implements DownloadProvider {
         this.fabric = new FabricVersionList(this);
         this.fabricApi = new FabricAPIVersionList(this);
         this.forge = new ForgeVersionList(this);
+        this.cleanroom = new CleanroomVersionList(this);
         this.neoforge = new NeoForgeOfficialVersionList(this);
         this.liteLoader = new LiteLoaderVersionList(this);
         this.optifine = new OptiFine302VersionList(FCLPath.Prop.getProperty("optifine-download-url", "null://"));
@@ -77,6 +80,8 @@ public class MojangDownloadProvider implements DownloadProvider {
                 return fabricApi;
             case "forge":
                 return forge;
+            case "cleanroom":
+                return cleanroom;
             case "neoforge":
                 return neoforge;
             case "liteloader":

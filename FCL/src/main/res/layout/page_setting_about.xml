@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingStart="10dp"
     android:paddingEnd="10dp"
-    android:paddingTop="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="20dp">
+            android:paddingVertical="10dp">
 
             <com.tungsten.fcllibrary.component.view.FCLTextView
                 android:layout_width="match_parent"
@@ -24,7 +23,6 @@
                 android:text="@string/about_desc"
                 android:background="@drawable/bg_container_white"
                 app:auto_text_tint="true"
-                android:layout_marginTop="10dp"
                 app:auto_text_background_tint="true"/>
 
             <com.tungsten.fcllibrary.component.view.FCLLinearLayout
