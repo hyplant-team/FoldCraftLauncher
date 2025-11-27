@@ -8,6 +8,11 @@
     android:transitionName="background"
     tools:context=".activity.MainActivity">
 
+    <VideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <ScrollView
         android:id="@+id/left_menu_container"
         android:layout_width="wrap_content"

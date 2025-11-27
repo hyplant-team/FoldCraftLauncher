@@ -23,8 +23,10 @@ public class FCLPath {
     public static String BACKGROUND_DIR;
     public static String LT_BACKGROUND_PATH;
     public static String DK_BACKGROUND_PATH;
+    public static String LIVE_BACKGROUND_PATH;
 
     public static String RUNTIME_DIR;
+    public static String MOD_RUNTIME_DIR;
     public static String JAVA_8_PATH;
     public static String JAVA_11_PATH;
     public static String JAVA_17_PATH;
@@ -58,6 +60,7 @@ public class FCLPath {
         BACKGROUND_DIR = FILES_DIR + "/background";
         LT_BACKGROUND_PATH = BACKGROUND_DIR + "/lt.png";
         DK_BACKGROUND_PATH = BACKGROUND_DIR + "/dk.png";
+        LIVE_BACKGROUND_PATH = BACKGROUND_DIR + "/live.mp4";
 
         RUNTIME_DIR = context.getDir("runtime", 0).getAbsolutePath();
         JAVA_PATH = RUNTIME_DIR + "/java";
@@ -69,6 +72,7 @@ public class FCLPath {
         LWJGL_DIR = RUNTIME_DIR + "/lwjgl";
         CACIOCAVALLO_8_DIR = RUNTIME_DIR + "/caciocavallo";
         CACIOCAVALLO_17_DIR = RUNTIME_DIR + "/caciocavallo17";
+        MOD_RUNTIME_DIR = context.getDir("runtime_mod", 0).getAbsolutePath();
 
         EXTERNAL_DIR = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Prop.getProperty("put-directory","FCL-Modpack");
         if (Prop.getProperty("put-directory-suffix","true").equals("true")) {
@@ -82,7 +86,6 @@ public class FCLPath {
         }
         LOG_DIR = EXTERNAL_DIR + "/logs";
 
-        init(INTERNAL_DIR);
         init(FILES_DIR);
         init(CACHE_DIR);
         init(PLUGIN_DIR);
@@ -96,6 +99,7 @@ public class FCLPath {
         init(LWJGL_DIR);
         init(CACIOCAVALLO_8_DIR);
         init(CACIOCAVALLO_17_DIR);
+        init(MOD_RUNTIME_DIR);
         init(EXTERNAL_DIR);
         init(SHARED_COMMON_DIR);
         init(CONTROLLER_DIR);

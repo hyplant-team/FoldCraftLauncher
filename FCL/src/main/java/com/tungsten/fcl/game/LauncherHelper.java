@@ -37,6 +37,7 @@ import com.mio.util.ParseUtil;
 import com.tungsten.fcl.FCLApplication;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.activity.JVMActivity;
+import com.tungsten.fcl.activity.MainActivity;
 import com.tungsten.fcl.control.MenuType;
 import com.tungsten.fcl.game.LauncherHelper.SkipLoginDialog;
 import com.tungsten.fcl.game.LauncherHelper.TipReLoginLoginDialog;
@@ -197,6 +198,9 @@ public final class LauncherHelper {
                             intent.putExtras(bundle);
                             LOG.log(Level.INFO, "Start JVMActivity!");
                             context.startActivity(intent);
+                            if (MainActivity.getInstance().shouldPlayVideo()) {
+                                MainActivity.getInstance().binding.videoView.stopPlayback();
+                            }
                             if (context.getSharedPreferences("launcher", MODE_PRIVATE).getBoolean("autoExitLauncher", false)) {
                                 Activity activity = FCLApplication.getCurrentActivity();
                                 if (activity != null)

@@ -274,6 +274,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
         permissionResultLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             }
+        setupLiveBackground()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -287,11 +288,24 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
     override fun onPause() {
         super.onPause()
         _uiManager?.onPause()
+        if (shouldPlayVideo() && binding.videoView.isPlaying) {
+            binding.videoView.pause()
+        }
     }
 
     override fun onResume() {
         super.onResume()
         _uiManager?.onResume()
+        if (shouldPlayVideo() && !binding.videoView.isPlaying) {
+            binding.videoView.start()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (shouldPlayVideo()) {
+            binding.videoView.stopPlayback()
+        }
     }
 
     override fun onSelect(view: FCLMenuView) {
@@ -568,6 +582,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
         }
 
     }
+
     private fun initBackground() {
         theme = object : IntegerPropertyBase() {
             override fun invalidated() {
@@ -733,6 +748,31 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
             }
         } else {
             permissionResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
+
+    fun shouldPlayVideo(): Boolean {
+        return File(FCLPath.LIVE_BACKGROUND_PATH).exists()
+    }
+
+    fun setupLiveBackground() {
+        if (shouldPlayVideo()) {
+            binding.videoView.visibility = View.VISIBLE
+            binding.videoView.setVideoPath(FCLPath.LIVE_BACKGROUND_PATH)
+            binding.videoView.setOnPreparedListener {
+                it.isLooping = true
+                binding.videoView.start()
+            }
+            binding.videoView.setOnCompletionListener {
+                binding.videoView.seekTo(0)
+                binding.videoView.start()
+            }
+            binding.videoView.setOnErrorListener { mp, what, extra ->
+                return@setOnErrorListener true
+            }
+        } else {
+            binding.videoView.visibility = View.GONE
+            binding.videoView.stopPlayback()
         }
     }
 }

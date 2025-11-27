@@ -85,6 +85,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
     private FCLButton theme2Dark;
     private FCLButton ltBackground;
     private FCLButton dkBackground;
+    private FCLButton liveBackground;
     private FCLButton cursor;
     private FCLButton menuIcon;
     private FCLButton resetTheme;
@@ -95,6 +96,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
     private FCLButton fetchBackgroundColor2Dark;
     private FCLButton resetLtBackground;
     private FCLButton resetDkBackground;
+    private FCLButton resetLiveBackground;
     private FCLButton resetCursor;
     private FCLButton resetMenuIcon;
     private FCLSwitch ignoreNotch;
@@ -136,6 +138,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
         theme2Dark = findViewById(R.id.theme2_dark);
         ltBackground = findViewById(R.id.background_lt);
         dkBackground = findViewById(R.id.background_dk);
+        liveBackground = findViewById(R.id.background_live);
         cursor = findViewById(R.id.cursor);
         menuIcon = findViewById(R.id.menu_icon);
         resetTheme = findViewById(R.id.reset_theme);
@@ -146,6 +149,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
         fetchBackgroundColor2Dark = findViewById(R.id.fetch_background_color2_dark);
         resetLtBackground = findViewById(R.id.reset_background_lt);
         resetDkBackground = findViewById(R.id.reset_background_dk);
+        resetLiveBackground = findViewById(R.id.reset_background_live);
         resetCursor = findViewById(R.id.reset_cursor);
         resetMenuIcon = findViewById(R.id.reset_menu_icon);
         ignoreNotch = findViewById(R.id.ignore_notch);
@@ -168,6 +172,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
         theme2Dark.setOnClickListener(this);
         ltBackground.setOnClickListener(this);
         dkBackground.setOnClickListener(this);
+        liveBackground.setOnClickListener(this);
         cursor.setOnClickListener(this);
         menuIcon.setOnClickListener(this);
         resetTheme.setOnClickListener(this);
@@ -176,6 +181,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
         fetchBackgroundColor2.setOnClickListener(this);
         resetLtBackground.setOnClickListener(this);
         resetDkBackground.setOnClickListener(this);
+        resetLiveBackground.setOnClickListener(this);
         resetCursor.setOnClickListener(this);
         resetMenuIcon.setOnClickListener(this);
 
@@ -449,6 +455,29 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
                 }
             }));
         }
+        if (v == liveBackground) {
+            FileBrowser.Builder builder = new FileBrowser.Builder(getContext());
+            builder.setLibMode(LibMode.FILE_CHOOSER);
+            builder.setSelectionMode(SelectionMode.SINGLE_SELECTION);
+            ArrayList<String> suffix = new ArrayList<>();
+            suffix.add(".mp4");
+            builder.setSuffix(suffix);
+            builder.create().browse(getActivity(), RequestCodes.SELECT_LAUNCHER_BACKGROUND_CODE, ((requestCode, resultCode, data) -> {
+                if (requestCode == RequestCodes.SELECT_LAUNCHER_BACKGROUND_CODE && resultCode == Activity.RESULT_OK && data != null) {
+                    String path = FileBrowser.getSelectedFiles(data).get(0);
+                    Uri uri = Uri.parse(path);
+                    if (AndroidUtils.isDocUri(uri)) {
+                        AndroidUtils.copyFile(getActivity(), uri, new File(FCLPath.LIVE_BACKGROUND_PATH));
+                    } else {
+                        try {
+                            FileUtils.copyFile(new File(path), new File(FCLPath.LIVE_BACKGROUND_PATH));
+                        } catch (IOException ignore) {
+                        }
+                    }
+                    MainActivity.getInstance().setupLiveBackground();
+                }
+            }));
+        }
         if (v == cursor) {
             FileBrowser.Builder builder = new FileBrowser.Builder(getContext());
             builder.setLibMode(LibMode.FILE_CHOOSER);
@@ -513,6 +542,13 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
         if (v == resetTheme2Dark) {
             ThemeEngine.getInstance().applyAndSave2Dark(getContext(), ThemeEngine.getDefaultColor2Dark(getContext()));
         }
+        if (v == resetLiveBackground) {
+            try {
+                FileUtils.forceDelete(new File(FCLPath.LIVE_BACKGROUND_PATH));
+                MainActivity.getInstance().setupLiveBackground();
+            } catch (IOException ignore) {
+            }
+        }
         if (v == fetchBackgroundColor || v == fetchBackgroundColor2 || v == fetchBackgroundColor2Dark) {
             boolean isDarkMode = (getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
 
@@ -530,7 +566,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
                         color = palette.getLightVibrantColor(dominantColor);
                     }
                     ThemeEngine.getInstance().applyAndSave(getContext(), color);
-                } else if (v == fetchBackgroundColor2){
+                } else if (v == fetchBackgroundColor2) {
                     ThemeEngine.getInstance().applyAndSave2(getContext(), palette.getVibrantColor(dominantColor));
                 } else {
                     ThemeEngine.getInstance().applyAndSave2Dark(getContext(), palette.getVibrantColor(dominantColor));

@@ -906,6 +906,7 @@
     <string name="settings_launcher_background_lt">Light Background</string>
     <string name="settings_launcher_background_dk">Dark Background</string>
     <string name="settings_launcher_theme_fetch_background">Extract from background image</string>
+    <string name="settings_launcher_background_video">Video Background</string>
     <string name="settings_launcher_cursor">Cursor Picture</string>
     <string name="settings_launcher_menu_icon">Menu View Icon</string>
     <string name="settings_launcher_ignore_notch">Ignore Notch</string>
