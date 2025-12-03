@@ -222,6 +222,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                     manage.setOnSelectListener(this@MainActivity)
                     download.setOnSelectListener(this@MainActivity)
                     controller.setOnSelectListener(this@MainActivity)
+                    multiplayer.setOnSelectListener(this@MainActivity)
                     setting.setOnSelectListener(this@MainActivity)
                     home.setSelected(true)
                     back.setOnClickListener(this@MainActivity)
@@ -345,6 +346,11 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 controller -> {
                     title.setTextWithAnim(getString(R.string.controller))
                     uiManager.switchUI(uiManager.controllerUI)
+                }
+
+                multiplayer -> {
+                    title.setTextWithAnim(getString(R.string.terracotta))
+                    uiManager.switchUI(uiManager.multiplayerUI)
                 }
 
                 setting -> {
@@ -674,7 +680,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 objectAnimator.interpolator(BounceInterpolator()).startAfter((index + 1) * 100L)
             }
             AnimUtil.playTranslationY(
-                listOf(home, manage, download, controller, setting, back),
+                listOf(home, manage, download, controller, multiplayer, setting, back),
                 speed * 100L,
                 -300f,
                 0f
@@ -682,7 +688,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 objectAnimator.interpolator(BounceInterpolator()).startAfter((index + 1) * 100L)
             }
             AnimUtil.playTranslationX(
-                listOf(home, manage, download, controller, setting, back),
+                listOf(home, manage, download, controller, multiplayer, setting, back),
                 speed * 100L,
                 -100f,
                 0f
@@ -717,7 +723,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
         }
     }
 
-    private fun checkNotificationPermission(): Boolean {
+    public fun checkNotificationPermission(): Boolean {
         return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             true
         } else {
@@ -728,7 +734,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
         }
     }
 
-    private fun requestNotificationPermission() {
+    public fun requestNotificationPermission() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || !ActivityCompat.shouldShowRequestPermissionRationale(
                 this,
                 Manifest.permission.POST_NOTIFICATIONS

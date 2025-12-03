@@ -56,8 +56,8 @@ android {
         applicationId = pkgName
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1269
-        versionName = "1.2.6.9"
+        versionCode = 1270
+        versionName = "1.2.7.0"
     }
 
     buildTypes {
@@ -158,6 +158,7 @@ dependencies {
     implementation(project(":FCLCore"))
     implementation(project(":FCLLibrary"))
     implementation(project(":FCLauncher"))
+    implementation(project(":Terracotta"))
     implementation("com.getkeepsafe.taptargetview:taptargetview:1.14.0")
     implementation("org.nanohttpd:nanohttpd:2.3.1")
     implementation("org.apache.commons:commons-compress:1.26.0")
