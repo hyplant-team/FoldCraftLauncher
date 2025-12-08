@@ -25,10 +25,11 @@
         tools:ignore="HighSamplingRate" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <permission
-        android:name="com.tungsten.fcl.modpack_aa9bf311.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:name="${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature|development"
-        tools:replace="android:protectionLevel" />
-    <uses-permission android:name="com.tungsten.fcl.modpack_aa9bf311.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+        tools:replace="android:name, android:protectionLevel" />
+    <uses-permission android:name="${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        tools:replace="android:name" />
 
     <application
         android:name=".FCLApplication"
