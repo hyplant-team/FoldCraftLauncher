@@ -67,29 +67,27 @@ public class AndroidUtils {
         }
     }
 
-    // public static void openLinkWithBuiltinWebView(Context context, String link) {
-        // Intent intent = new Intent(context, WebActivity.class);
-        // Bundle bundle = new Bundle();
-        // bundle.putString("url", link);
-        // intent.putExtras(bundle);
-        // context.startActivity(intent);
-    // }
-
     public static void openLinkWithPopWebView(Context context, String link) {
         Uri uri = Uri.parse(link);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             try {
                 ActivityOptions options = ActivityOptions.makeBasic();
-                Class<?> windowConfigurationClass = Class.forName("android.app.WindowConfiguration");
-                Field FreeformField = windowConfigurationClass.getField("WINDOWING_MODE_FREEFORM");
-                int Freeform = FreeformField.getInt(null);
+                int freeformValue = 5;
+                try {
+                    Class<?> windowConfigurationClass = Class.forName("android.app.WindowConfiguration");
+                    Field freeformField = windowConfigurationClass.getDeclaredField("WINDOWING_MODE_FREEFORM");
+                    freeformField.setAccessible(true);
+                    freeformValue = freeformField.getInt(null);
+                } catch (Exception e) {
+                    Logging.LOG.log(Level.WARNING, "WINDOWING_MODE_FREEFORM field not found, using default value 5");
+                }
                 Method setLaunchWindowingModeMethod = ActivityOptions.class.getMethod("setLaunchWindowingMode", int.class);
-                setLaunchWindowingModeMethod.invoke(options, Freeform);
-                Method setLaunchBoundsMethod = ActivityOptions.class.getMethod("setLaunchBounds", Rect.class);
+                setLaunchWindowingModeMethod.invoke(options, freeformValue);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 context.startActivity(intent, options.toBundle());
-            } catch (Exception ignore) {
+            } catch (Exception e) {
+                Logging.LOG.log(Level.SEVERE, "Failed to open popup window.", e);
                 context.startActivity(intent);
             }
         } else {

@@ -3,10 +3,12 @@ package com.tungsten.fcl.activity
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -113,11 +115,14 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
     private lateinit var theme2Dark: IntegerProperty
     var isVersionLoading = false
     lateinit var permissionResultLauncher: ActivityResultLauncher<String>
+    private lateinit var sharedPreferences: SharedPreferences
+    var mediaPlayer: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         instance = WeakReference(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        sharedPreferences = getSharedPreferences("launcher", MODE_PRIVATE)
         setContentView(binding.root)
         ImageUtil.loadInto(
             binding.background,
@@ -305,6 +310,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
     override fun onDestroy() {
         super.onDestroy()
         if (shouldPlayVideo()) {
+            mediaPlayer = null
             binding.videoView.stopPlayback()
         }
     }
@@ -766,7 +772,9 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
             binding.videoView.visibility = View.VISIBLE
             binding.videoView.setVideoPath(FCLPath.LIVE_BACKGROUND_PATH)
             binding.videoView.setOnPreparedListener {
+                mediaPlayer = it
                 it.isLooping = true
+                setLiveBackgroundVolume()
                 binding.videoView.start()
             }
             binding.videoView.setOnCompletionListener {
@@ -774,11 +782,20 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 binding.videoView.start()
             }
             binding.videoView.setOnErrorListener { mp, what, extra ->
+                mediaPlayer = null
                 return@setOnErrorListener true
             }
         } else {
+            mediaPlayer = null
             binding.videoView.visibility = View.GONE
             binding.videoView.stopPlayback()
+        }
+    }
+
+    fun setLiveBackgroundVolume() {
+        mediaPlayer?.let {
+            val volume = sharedPreferences.getInt("videoBackgroundVolume", 100) / 100f
+            it.setVolume(volume, volume)
         }
     }
 }
