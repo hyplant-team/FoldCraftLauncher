@@ -40,13 +40,13 @@ import java.util.stream.Collectors;
  * @see <a href="https://www.mcmod.cn">mcmod.cn</a>
  */
 public enum ModTranslations {
-    MOD("/assets/mod_data.txt") {
+    MOD("/assets/version_data/mod_data.txt") {
         @Override
         public String getMcmodUrl(Mod mod) {
             return String.format("https://www.mcmod.cn/class/%s.html", mod.getMcmod());
         }
     },
-    MODPACK("/assets/modpack_data.txt") {
+    MODPACK("/assets/version_data/modpack_data.txt") {
         @Override
         public String getMcmodUrl(Mod mod) {
             return String.format("https://www.mcmod.cn/modpack/%s.html", mod.getMcmod());

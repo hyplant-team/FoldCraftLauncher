@@ -25,6 +25,7 @@ import android.content.Context;
 import android.os.Build;
 
 import com.google.gson.GsonBuilder;
+import com.mio.JavaManager;
 import com.mio.data.Renderer;
 import com.tungsten.fclauncher.FCLConfig;
 import com.tungsten.fclauncher.FCLauncher;
@@ -67,7 +68,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -152,7 +152,7 @@ public class DefaultLauncher extends Launcher {
         // res.addDefault("-Dorg.lwjgl.util.DebugFunctions=", "true");
 
         // FCL specific args
-        JavaVersion javaVersion = options.getJava().isAuto() ? JavaVersion.getSuitableJavaVersion(version) : options.getJava();
+        JavaVersion javaVersion = options.getJava().isAuto() ? JavaManager.getSuitableJavaVersion(version) : options.getJava();
         res.addDefault("-Dext.net.resolvPath=", FCLPath.JAVA_PATH + "/resolv.conf");
         res.addDefault("-Djava.io.tmpdir=", FCLPath.CACHE_DIR);
         res.addDefault("-Dorg.lwjgl.opengl.libname=", "${gl_lib_name}");
@@ -271,7 +271,7 @@ public class DefaultLauncher extends Launcher {
     public static void getCacioJavaArgs(CommandBuilder res, Version version, LaunchOptions options) {
         JavaVersion javaVersion;
         if (options.getJava().isAuto()) {
-            javaVersion = JavaVersion.getSuitableJavaVersion(version);
+            javaVersion = JavaManager.getSuitableJavaVersion(version);
         } else {
             javaVersion = options.getJava();
         }
@@ -323,7 +323,7 @@ public class DefaultLauncher extends Launcher {
 
     public String getInjectorArg() {
         try {
-            String map = IOUtils.readFullyAsString(DefaultLauncher.class.getResourceAsStream("/assets/map.json"));
+            String map = IOUtils.readFullyAsString(DefaultLauncher.class.getResourceAsStream("/assets/version_data/map.json"));
             InjectorMap injectorMap = new GsonBuilder()
                     .setPrettyPrinting()
                     .create()
