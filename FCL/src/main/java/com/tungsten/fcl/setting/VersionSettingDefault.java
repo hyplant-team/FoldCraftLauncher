@@ -29,7 +29,8 @@ public class VersionSettingDefault {
     private static String driver = "Turnip";
     private static boolean isolateGameDir = false;
     private static boolean pojavBigCore = false;
-    private static String uuid = "00000000-0000-0000-0000-000000000000";
+    private static String uuid = "";
+    private static boolean debugLog = false;
 
     static {
         loadDefaultConfig();
@@ -86,6 +87,9 @@ public class VersionSettingDefault {
     public static String getUuid() {
         return uuid;
     }
+    public static boolean getDebugLog() {
+        return debugLog;
+    }
 
     private static void loadDefaultConfig() {
         File configFile = new File(FCLPath.FILES_DIR + "/default_config.json");
@@ -109,6 +113,7 @@ public class VersionSettingDefault {
             isolateGameDir = defaultConfig.has("isolateGameDir") ? defaultConfig.get("isolateGameDir").getAsBoolean() : isolateGameDir;
             pojavBigCore = defaultConfig.has("pojavBigCore") ? defaultConfig.get("pojavBigCore").getAsBoolean() : pojavBigCore;
             uuid = defaultConfig.has("uuid") ? defaultConfig.get("uuid").getAsString() : uuid;
+            debugLog = defaultConfig.has("debugLog") ? defaultConfig.get("debugLog").getAsBoolean() : debugLog;
         } catch (Exception e) {
             Logging.LOG.log(Level.SEVERE, "Failed to load default_config.json", e);
         }

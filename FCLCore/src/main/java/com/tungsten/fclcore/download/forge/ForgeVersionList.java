@@ -22,6 +22,7 @@ import com.tungsten.fclcore.download.VersionList;
 import com.tungsten.fclcore.util.StringUtils;
 import com.tungsten.fclcore.util.io.HttpRequest;
 import com.tungsten.fclcore.util.versioning.VersionNumber;
+import com.tungsten.fclauncher.utils.FCLPath;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -101,5 +102,5 @@ public final class ForgeVersionList extends VersionList<ForgeRemoteVersion> {
                 });
     }
 
-    public static final String FORGE_LIST = "https://hmcl-dev.github.io/metadata/forge/";
+    public static final String FORGE_LIST = FCLPath.Prop.getProperty("forge-list-url", "null://");
 }

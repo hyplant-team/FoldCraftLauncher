@@ -77,7 +77,7 @@ import com.tungsten.fclcore.util.LibFilter;
 import com.tungsten.fclcore.util.Logging;
 import com.tungsten.fclcore.util.StringUtils;
 import com.tungsten.fclcore.util.io.ResponseCodeException;
-import com.tungsten.fclcore.util.versioning.VersionNumber;
+import com.tungsten.fclcore.util.versioning.GameVersionNumber;
 import com.tungsten.fcllibrary.component.dialog.FCLAlertDialog;
 import com.tungsten.fcllibrary.component.dialog.FCLDialog;
 import com.tungsten.fcllibrary.component.view.FCLButton;
@@ -339,7 +339,7 @@ public final class LauncherHelper {
                 CompletableFuture<Task<FCLBridge>> future = new CompletableFuture<>();
                 if (!version.isEmpty()) {
                     if (!renderer.getMinMCver().isEmpty()) {
-                        if (VersionNumber.compare(version, renderer.getMinMCver()) < 0) {
+                        if (GameVersionNumber.compare(version, renderer.getMinMCver()) < 0) {
                             Schedulers.androidUIThread().execute(() -> new FCLAlertDialog.Builder(context)
                                     .setCancelable(false)
                                     .setMessage(context.getString(R.string.message_check_renderer, renderer.getName()))
@@ -349,7 +349,7 @@ public final class LauncherHelper {
                         }
                     }
                     if (!renderer.getMaxMCver().isEmpty()) {
-                        if (VersionNumber.compare(version, renderer.getMaxMCver()) > 0) {
+                        if (GameVersionNumber.compare(version, renderer.getMaxMCver()) > 0) {
                             Schedulers.androidUIThread().execute(() -> new FCLAlertDialog.Builder(context)
                                     .setCancelable(false)
                                     .setMessage(context.getString(R.string.message_check_renderer, renderer.getName()))

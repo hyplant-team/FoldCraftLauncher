@@ -16,5 +16,6 @@
   "isolateGameDir": false,
   "customRenderer": "",
   "pojavBigCore": false,
-  "uuid": ""
+  "uuid": "",
+  "debugLog": false
 }

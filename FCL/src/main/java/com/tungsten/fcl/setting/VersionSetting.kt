@@ -231,6 +231,14 @@ class VersionSetting : Cloneable {
             pojavBigCoreProperty.set(pojavBigCore)
         }
 
+    var debugLogProperty: BooleanProperty =
+        SimpleBooleanProperty(this, "debugLog", VersionSettingDefault.getDebugLog())
+    var isDebugLog: Boolean
+        get() = debugLogProperty.get()
+        set(value) {
+            debugLogProperty.set(value)
+        }
+
     fun checkController() {
         Controllers.addCallback {
             Controllers.checkControllers()
@@ -262,6 +270,7 @@ class VersionSetting : Cloneable {
         driverProperty.addListener(listener)
         pojavBigCoreProperty.addListener(listener)
         uuidProperty.addListener(listener)
+        debugLogProperty.addListener(listener)
     }
 
     public override fun clone(): VersionSetting {
@@ -285,6 +294,7 @@ class VersionSetting : Cloneable {
             it.driver = driver
             it.isPojavBigCore = isPojavBigCore
             it.uuid = uuid
+            it.isDebugLog = isDebugLog
         }
     }
 
@@ -318,6 +328,7 @@ class VersionSetting : Cloneable {
                 addProperty("isolateGameDir", src.isIsolateGameDir)
                 addProperty("pojavBigCore", src.isPojavBigCore)
                 addProperty("uuid", src.uuid)
+                addProperty("debugLog", src.isDebugLog)
             }
         }
 
@@ -356,6 +367,7 @@ class VersionSetting : Cloneable {
                 vs.isIsolateGameDir = json["isolateGameDir"]?.asBoolean ?: VersionSettingDefault.getIsolateGameDir()
                 vs.isPojavBigCore = json["pojavBigCore"]?.asBoolean ?: VersionSettingDefault.getPojavBigCore()
                 vs.uuid = json["uuid"]?.asString ?: VersionSettingDefault.getUuid()
+                vs.isDebugLog = json["debugLog"]?.asBoolean ?: VersionSettingDefault.getDebugLog()
             }
         }
 

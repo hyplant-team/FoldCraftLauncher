@@ -24,6 +24,7 @@ import com.tungsten.fclcore.download.DownloadProvider;
 import com.tungsten.fclcore.download.VersionList;
 import com.tungsten.fclcore.task.GetTask;
 import com.tungsten.fclcore.util.gson.JsonUtils;
+import com.tungsten.fclauncher.utils.FCLPath;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -31,8 +32,8 @@ import java.util.concurrent.CompletableFuture;
 
 public final class CleanroomVersionList extends VersionList<CleanroomRemoteVersion> {
     private final DownloadProvider downloadProvider;
-    private static final String LOADER_LIST_URL = "https://hmcl-dev.github.io/metadata/cleanroom/index.json";
-    private static final String INSTALLER_URL = "https://hmcl-dev.github.io/metadata/cleanroom/files/cleanroom-%s-installer.jar";
+    private static final String LOADER_LIST_URL = FCLPath.Prop.getProperty("cleanroom-list-url", "null://");
+    private static final String INSTALLER_URL = FCLPath.Prop.getProperty("cleanroom-installer-url", "null://");
 
     public CleanroomVersionList(DownloadProvider downloadProvider) {
         this.downloadProvider = downloadProvider;
