@@ -346,7 +346,7 @@ public class FCLGameRepository extends DefaultGameRepository {
             vs.setUsesGlobal(true);
     }
 
-    public LaunchOptions getLaunchOptions(String version, JavaVersion javaVersion, File gameDir, List<String> javaAgents) {
+    public LaunchOptions getLaunchOptions(String version, JavaVersion javaVersion, File gameDir) {
         VersionSetting vs = getVersionSetting(version);
         String profileName = (gameDir.getParentFile() != null) ? gameDir.getParentFile().getName() : "Minecraft";
 
@@ -357,7 +357,7 @@ public class FCLGameRepository extends DefaultGameRepository {
                 .setVersionName(version)
                 .setProfileName(profileName)
                 .setGameArguments(StringUtils.tokenize(vs.getMinecraftArgs()))
-                .setOverrideJavaArguments(StringUtils.tokenize(vs.getJavaArgs()))
+                .setJavaArguments(StringUtils.tokenize(vs.getJavaArgs()))
                 .setMaxMemory((int) (getAllocatedMemory(
                         vs.getMaxMemory() * 1024L * 1024L,
                         MemoryUtils.getFreeDeviceMemory(FCLPath.CONTEXT),
@@ -368,7 +368,6 @@ public class FCLGameRepository extends DefaultGameRepository {
                 .setWidth((int) (AndroidUtils.getScreenWidth(FCLApplication.getCurrentActivity()) * vs.getScaleFactor() / 100.0))
                 .setHeight((int) (AndroidUtils.getScreenHeight(FCLApplication.getCurrentActivity()) * vs.getScaleFactor() / 100.0))
                 .setServerIp(vs.getServerIp())
-                .setJavaAgents(javaAgents)
                 .setBEGesture(vs.isBeGesture())
                 .setVkDriverSystem(vs.isVKDriverSystem())
                 .setPojavBigCore(vs.isPojavBigCore())

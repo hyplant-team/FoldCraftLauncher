@@ -84,17 +84,14 @@ public class DefaultLauncher extends Launcher {
 
         getCacioJavaArgs(res, version, options);
 
-        res.addAllWithoutParsing(options.getOverrideJavaArguments().stream().filter(arg -> !arg.equals("noXmx")).collect(Collectors.toList()));
+        res.addAllWithoutParsing(options.getJavaArguments().stream().filter(arg -> !arg.equals("noXmx")).collect(Collectors.toList()));
 
-        if (options.getMaxMemory() != null && options.getMaxMemory() > 0 && !options.getOverrideJavaArguments().contains("noXmx"))
-            if (options.getOverrideJavaArguments().stream().noneMatch(arg -> arg.contains("-Xmx")))
-                res.addDefault("-Xmx", options.getMaxMemory() + "m");
+        if (options.getMaxMemory() != null && options.getMaxMemory() > 0)
+            res.addDefault("-Xmx", options.getMaxMemory() + "m");
 
         if (options.getMinMemory() != null && options.getMinMemory() > 0
                 && (options.getMaxMemory() == null || options.getMinMemory() <= options.getMaxMemory()))
             res.addDefault("-Xms", options.getMinMemory() + "m");
-
-        res.addAllDefaultWithoutParsing(options.getJavaArguments());
 
         Charset encoding = OperatingSystem.NATIVE_CHARSET;
         String fileEncoding = res.addDefault("-Dfile.encoding=", encoding.name());
@@ -195,7 +192,7 @@ public class DefaultLauncher extends Launcher {
         File jar = repository.getVersionJar(version);
         if (!jar.exists() || !jar.isFile()) {
             String inherits = version.getInheritsFrom();
-            if (!inherits.isEmpty()) {
+            if (inherits != null && !inherits.isEmpty()) {
                 jar = repository.getVersionJar(inherits);
             }
         }
@@ -220,10 +217,6 @@ public class DefaultLauncher extends Launcher {
         Arguments argumentsFromAuthInfo = authInfo.getLaunchArguments(options);
         if (argumentsFromAuthInfo != null && argumentsFromAuthInfo.getJvm() != null && !argumentsFromAuthInfo.getJvm().isEmpty())
             res.addAll(Arguments.parseArguments(argumentsFromAuthInfo.getJvm(), configuration));
-
-        for (String javaAgent : options.getJavaAgents()) {
-            res.add("-javaagent:" + javaAgent);
-        }
 
         if (javaVersion.getVersion() != JavaVersion.JAVA_VERSION_8) {
             res.add("--add-exports");

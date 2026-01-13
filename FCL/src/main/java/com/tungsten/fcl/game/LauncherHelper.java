@@ -134,7 +134,6 @@ public final class LauncherHelper {
         AtomicReference<Version> version = new AtomicReference<>(MaintainTask.maintain(repository, repository.getResolvedVersion(selectedVersion)));
         Optional<String> gameVersion = repository.getGameVersion(version.get());
         boolean integrityCheck = repository.unmarkVersionLaunchedAbnormally(selectedVersion);
-        List<String> javaAgents = new ArrayList<>(0);
 
         AtomicReference<JavaVersion> javaVersionRef = new AtomicReference<>();
 
@@ -164,7 +163,7 @@ public final class LauncherHelper {
                 .thenComposeAsync(() -> gameVersion.map(s -> new GameVerificationFixTask(dependencyManager, s, version.get())).orElse(null))
                 .thenComposeAsync(() -> logIn(context, account).withStage("launch.state.logging_in"))
                 .thenComposeAsync(authInfo -> Task.supplyAsync(() -> {
-                            LaunchOptions launchOptions = repository.getLaunchOptions(selectedVersion, javaVersionRef.get(), profile.getGameDir(), javaAgents);
+                            LaunchOptions launchOptions = repository.getLaunchOptions(selectedVersion, javaVersionRef.get(), profile.getGameDir());
                             FCLGameLauncher launcher = new FCLGameLauncher(
                                     context,
                                     repository,
