@@ -20,6 +20,7 @@ import com.tungsten.fclcore.mod.curse.CurseForgeRemoteModRepository;
 import com.tungsten.fclcore.mod.modrinth.ModrinthRemoteModRepository;
 import com.tungsten.fclcore.util.io.IOUtils;
 import com.tungsten.fcllibrary.component.dialog.FCLAlertDialog;
+import com.tungsten.fcllibrary.component.view.FCLImageView;
 import com.tungsten.fcllibrary.component.view.FCLUILayout;
 import com.tungsten.fclauncher.utils.FCLPath;
 
@@ -56,6 +57,16 @@ public class ModDownloadPage extends DownloadPage {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        });
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        FCLImageView translate = findViewById(R.id.translate);
+        translate.setVisibility(View.VISIBLE);
+        translate.setOnClickListener(v -> {
+            showTranslationDialog();
         });
     }
 

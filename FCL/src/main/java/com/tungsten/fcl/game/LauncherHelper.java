@@ -45,6 +45,8 @@ import com.tungsten.fcl.setting.Profile;
 import com.tungsten.fcl.setting.Profiles;
 import com.tungsten.fcl.setting.VersionSetting;
 import com.tungsten.fcl.ui.TaskDialog;
+import com.tungsten.fcl.ui.UIManager;
+import com.tungsten.fcl.ui.manage.ManagePageManager;
 import com.tungsten.fcl.util.TaskCancellationAction;
 import com.tungsten.fclauncher.bridge.FCLBridge;
 import com.tungsten.fclauncher.utils.FCLPath;
@@ -81,6 +83,7 @@ import com.tungsten.fclcore.util.versioning.GameVersionNumber;
 import com.tungsten.fcllibrary.component.dialog.FCLAlertDialog;
 import com.tungsten.fcllibrary.component.dialog.FCLDialog;
 import com.tungsten.fcllibrary.component.view.FCLButton;
+import com.tungsten.fcllibrary.component.view.FCLTabLayout;
 
 import org.lwjgl.glfw.CallbackBridge;
 
