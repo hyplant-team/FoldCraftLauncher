@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
@@ -91,26 +92,14 @@ public class TouchCharInput extends androidx.appcompat.widget.AppCompatEditText 
      */
     public void switchKeyboardState() {
         InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
-        if (hasFocus()) {
-            inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
-            clear();
-            disable();
-            if (menu != null && menu.getInput().getFocusableView() != null) {
-                if (!menu.getMenuSetting().isPhysicalMouseMode()) {
-                    menu.getInput().getFocusableView().requestFocus();
-                    menu.getInput().getFocusableView().requestPointerCapture();
-                }
+        if (menu != null && menu.getInput().getFocusableView() != null) {
+            if (!menu.getMenuSetting().isPhysicalMouseMode()) {
+                menu.getInput().getFocusableView().requestFocus();
+                menu.getInput().getFocusableView().requestPointerCapture();
             }
-        } else {
-            if (menu != null && menu.getInput().getFocusableView() != null) {
-                if (!menu.getMenuSetting().isPhysicalMouseMode()) {
-                    menu.getInput().getFocusableView().releasePointerCapture();
-                    menu.getInput().getFocusableView().clearFocus();
-                }
-            }
-            enable();
-            inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT);
         }
+        enable();
+        inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT);
     }
 
 
@@ -167,11 +156,8 @@ public class TouchCharInput extends androidx.appcompat.widget.AppCompatEditText 
      */
     private void setup() {
         setOnEditorActionListener((textView, i, keyEvent) -> {
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getWindowToken(), 0);
             sendEnter();
             clear();
-            disable();
             if (menu != null && menu.getInput().getFocusableView() != null) {
                 if (!menu.getMenuSetting().isPhysicalMouseMode()) {
                     menu.getInput().getFocusableView().requestFocus();
@@ -180,6 +166,9 @@ public class TouchCharInput extends androidx.appcompat.widget.AppCompatEditText 
             }
             return false;
         });
+        setInputType(EditorInfo.TYPE_CLASS_TEXT);
+        // setImeOptions(EditorInfo.IME_ACTION_NONE);
+        // setSingleLine(true);
         clear();
         disable();
     }

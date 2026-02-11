@@ -12,10 +12,12 @@ captures/
 release
 *.apk
 output.json
+android-ndk-r26d/
 
 # IntelliJ
 *.iml
 .idea/
+.trae/
 
 # VSCode
 .vscode/

@@ -21,6 +21,7 @@ import com.tungsten.fclcore.util.Logging
 import com.tungsten.fcllibrary.component.FCLFragment
 import com.tungsten.fcllibrary.component.theme.Theme
 import com.tungsten.fcllibrary.component.theme.ThemeEngine
+import com.tungsten.fcllibrary.component.dialog.FCLAlertDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -137,9 +138,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                             RuntimeUtils.reloadConfiguration(context)
                             RuntimeUtils.copyAssetsDirToLocalDir(context, "modpackInternal", FCLPath.INTERNAL_DIR)
                             others = true
-                        }.onFailure { e ->
-                            Logging.LOG.log(Level.SEVERE, "Failed to install internal resource", e)
-                        }
+                        }.exceptionOrNull()?.let { showErrorDialog(it) }
                     }
                     othersState.visibility = View.VISIBLE
                     othersProgress.visibility = View.GONE
@@ -164,9 +163,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                             RuntimeUtils.deleteOldFiles(context)
                             RuntimeUtils.copyAssetsDirToLocalDir(context, "modpackExternal", FCLPath.EXTERNAL_DIR)
                             gameResource = true
-                        }.onFailure { e ->
-                            Logging.LOG.log(Level.SEVERE, "Failed to install game resource", e)
-                        }
+                        }.exceptionOrNull()?.let { showErrorDialog(it) }
                     }
                     gameResourceState.visibility = View.VISIBLE
                     gameResourceProgress.visibility = View.GONE
@@ -183,9 +180,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                             RuntimeUtils.install(context, FCLPath.LWJGL_DIR, "app_runtime/lwjgl")
                             RuntimeUtils.install(context, FCLPath.LWJGL_DIR + "-boat", "app_runtime/lwjgl-boat")
                             lwjgl = true
-                        }.onFailure { e ->
-                            Logging.LOG.log(Level.SEVERE, "Failed to install lwjgl", e)
-                        }
+                        }.exceptionOrNull()?.let { showErrorDialog(it) }
                     }
                     lwjglState.visibility = View.VISIBLE
                     lwjglProgress.visibility = View.GONE
@@ -201,9 +196,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.install(context, FCLPath.CACIOCAVALLO_8_DIR, "app_runtime/caciocavallo")
                             cacio = true
-                        }.onFailure { e ->
-                            Logging.LOG.log(Level.SEVERE, "Failed to install caciocavallo", e)
-                        }
+                        }.exceptionOrNull()?.let { showErrorDialog(it) }
                     }
                     cacioState.visibility = View.VISIBLE
                     cacioProgress.visibility = View.GONE
@@ -219,9 +212,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.install(context, FCLPath.CACIOCAVALLO_17_DIR, "app_runtime/caciocavallo17")
                             cacio17 = true
-                        }.onFailure { e ->
-                            Logging.LOG.log(Level.SEVERE, "Failed to install caciocavallo17", e)
-                        }
+                        }.exceptionOrNull()?.let { showErrorDialog(it) }
                     }
                     cacio17State.visibility = View.VISIBLE
                     cacio17Progress.visibility = View.GONE
@@ -237,9 +228,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.installJava(context, FCLPath.JAVA_8_PATH, "app_runtime/java/jre8")
                             java8 = true
-                        }.onFailure { e ->
-                            Logging.LOG.log(Level.SEVERE, "Failed to install java8", e)
-                        }
+                        }.exceptionOrNull()?.let { showErrorDialog(it) }
                     }
                     java8State.visibility = View.VISIBLE
                     java8Progress.visibility = View.GONE
@@ -255,9 +244,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.installJava(context, FCLPath.JAVA_11_PATH, "app_runtime/java/jre11")
                             java11 = true
-                        }.onFailure { e ->
-                            Logging.LOG.log(Level.SEVERE, "Failed to install java11", e)
-                        }
+                        }.exceptionOrNull()?.let { showErrorDialog(it) }
                     }
                     java11State.visibility = View.VISIBLE
                     java11Progress.visibility = View.GONE
@@ -273,9 +260,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.installJava(context, FCLPath.JAVA_17_PATH, "app_runtime/java/jre17")
                             java17 = true
-                        }.onFailure { e ->
-                            Logging.LOG.log(Level.SEVERE, "Failed to install java17", e)
-                        }
+                        }.exceptionOrNull()?.let { showErrorDialog(it) }
                     }
                     java17State.visibility = View.VISIBLE
                     java17Progress.visibility = View.GONE
@@ -291,9 +276,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.installJava(context, FCLPath.JAVA_21_PATH, "app_runtime/java/jre21")
                             java21 = true
-                        }.onFailure { e ->
-                            Logging.LOG.log(Level.SEVERE, "Failed to install java21", e)
-                        }
+                        }.exceptionOrNull()?.let { showErrorDialog(it) }
                     }
                     java21State.visibility = View.VISIBLE
                     java21Progress.visibility = View.GONE
@@ -309,9 +292,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.installJna(context, FCLPath.JNA_PATH, "app_runtime/jna")
                             jna = true
-                        }.onFailure { e ->
-                            Logging.LOG.log(Level.SEVERE, "Failed to install jna", e)
-                        }
+                        }.exceptionOrNull()?.let { showErrorDialog(it) }
                     }
                     jnaState.visibility = View.VISIBLE
                     jnaProgress.visibility = View.GONE
@@ -329,6 +310,19 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
     override fun onClick(view: View) {
         if (view === bind.install) {
             install()
+        }
+    }
+
+    private fun showErrorDialog(e: Throwable) {
+        Logging.LOG.log(Level.SEVERE, "Failed to install assets", e)
+        installing = false
+        lifecycleScope.launch(Dispatchers.Main){
+            FCLAlertDialog.Builder(requireContext())
+                .setMessage(e.toString())
+                .setPositiveButton{
+                }
+                .create()
+                .show()
         }
     }
 }

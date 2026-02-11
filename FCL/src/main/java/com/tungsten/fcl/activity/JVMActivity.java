@@ -23,7 +23,6 @@ import com.tungsten.fcl.control.JarExecutorMenu;
 import com.tungsten.fcl.control.MenuCallback;
 import com.tungsten.fcl.control.MenuType;
 import com.tungsten.fcl.control.view.MenuView;
-import com.tungsten.fcl.setting.GameOption;
 import com.tungsten.fcl.terracotta.Terracotta;
 import com.tungsten.fclauncher.bridge.FCLBridge;
 import com.tungsten.fclauncher.keycodes.FCLKeycodes;
@@ -56,7 +55,6 @@ public class JVMActivity extends FCLActivity implements TextureView.SurfaceTextu
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jvm);
-
         if (menuType == null || fclBridge == null) {
             Logging.LOG.log(Level.WARNING, "Failed to get ControllerType or FCLBridge, task canceled.");
             return;
@@ -106,11 +104,6 @@ public class JVMActivity extends FCLActivity implements TextureView.SurfaceTextu
         int height = menuType == MenuType.GAME ? (int) (i1 * fclBridge.getScaleFactor()) : FCLBridge.DEFAULT_HEIGHT;
         if (menuType == MenuType.GAME) {
             menu.getInput().initExternalController(textureView);
-            GameOption gameOption = new GameOption(Objects.requireNonNull(menu.getBridge()).getGameDir());
-            // gameOption.set("fullscreen", "false");
-            // gameOption.set("overrideWidth", String.valueOf(width));
-            // gameOption.set("overrideHeight", String.valueOf(height));
-            // gameOption.save();
         }
         surfaceTexture.setDefaultBufferSize(width, height);
         fclBridge.execute(new Surface(surfaceTexture), menu.getCallbackBridge());

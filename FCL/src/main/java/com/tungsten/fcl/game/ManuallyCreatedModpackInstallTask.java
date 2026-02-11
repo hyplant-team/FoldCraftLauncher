@@ -23,6 +23,7 @@ import com.tungsten.fcl.setting.Profile;
 import com.tungsten.fclcore.task.Task;
 import com.tungsten.fclcore.util.io.CompressingUtils;
 import com.tungsten.fclcore.util.io.Unzipper;
+import com.tungsten.fclauncher.utils.FCLPath;
 
 import java.nio.charset.Charset;
 import java.nio.file.FileSystem;
@@ -45,14 +46,18 @@ public class ManuallyCreatedModpackInstallTask extends Task<Path> {
 
     @Override
     public void execute() throws Exception {
+        Path dest = Paths.get(FCLPath.EXTERNAL_DIR).resolve(name);
+        setResult(dest);
+
+        if (zipFile.getFileName().toString().toLowerCase().endsWith(".7z")) {
+            CompressingUtils.extract7z(zipFile.toFile(), dest.toFile());
+            return;
+        }
+
         Path subdirectory;
         try (FileSystem fs = CompressingUtils.readonly(zipFile).setEncoding(charset).build()) {
             subdirectory = ModpackHelper.findMinecraftDirectoryInManuallyCreatedModpack(zipFile.toString(), fs);
         }
-
-        Path dest = Paths.get(Environment.getExternalStorageDirectory().getAbsolutePath() + "/FCL").resolve(name);
-
-        setResult(dest);
 
         new Unzipper(zipFile, dest)
                 .setSubDirectory(subdirectory.toString())
