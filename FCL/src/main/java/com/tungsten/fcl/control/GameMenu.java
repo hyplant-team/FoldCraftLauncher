@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.InputDevice;
 import android.view.LayoutInflater;
@@ -23,6 +24,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.target.CustomViewTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.GsonBuilder;
 import com.mio.touchcontroller.TouchController;
 import com.mio.touchcontroller.TouchControllerInputView;
@@ -74,6 +79,7 @@ import com.tungsten.fcllibrary.component.theme.ThemeEngine;
 import com.tungsten.fcllibrary.component.view.FCLButton;
 import com.tungsten.fcllibrary.component.view.FCLImageView;
 import com.tungsten.fcllibrary.component.view.FCLLinearLayout;
+import com.tungsten.fcllibrary.component.view.FCLMenuView;
 import com.tungsten.fcllibrary.component.view.FCLNumberSeekBar;
 import com.tungsten.fcllibrary.component.view.FCLProgressBar;
 import com.tungsten.fcllibrary.component.view.FCLSpinner;
@@ -136,13 +142,12 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
 
     private MultiplayerDialog multiplayerDialog;
 
-    private long time = 0;
-
     private MenuView menuView;
 
     private TouchController touchController;
 
     private boolean gamepadDisabled = false;
+    private Thread fpsThread;
 
     public void setMenuView(MenuView menuView) {
         this.menuView = menuView;
@@ -298,7 +303,7 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
         return viewGroupProperty.get();
     }
 
-    public boolean isGamepadDisabled(){
+    public boolean isGamepadDisabled() {
         return gamepadDisabled;
     }
 
@@ -445,16 +450,23 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
                 return;
             }
             if (isChecked) {
-                Schedulers.io().execute(() -> {
+                fpsThread = new Thread(() -> {
                     FCLBridge.getFps();
-                    while (showFps.isChecked()) {
-                        if (System.currentTimeMillis() - time >= 1000) {
-                            Schedulers.androidUIThread().execute(() -> fpsText.setText("FPS:" + FCLBridge.getFps()));
-                            time = System.currentTimeMillis();
+                    while (showFps.isChecked() && !Thread.currentThread().isInterrupted()) {
+                        Schedulers.androidUIThread().execute(() -> fpsText.setText("FPS:" + FCLBridge.getFps()));
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ignored) {
                         }
                     }
                 });
+                fpsThread.setName("FCL FPS Thread");
+                fpsThread.start();
             } else {
+                if (fpsThread != null) {
+                    fpsThread.interrupt();
+                    fpsThread = null;
+                }
                 fpsText.setText("");
             }
         });
@@ -634,19 +646,36 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
 
         viewManager.setup();
 
-        Bitmap bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
-        if (new File(FCLPath.FILES_DIR, "cursor.png").exists()) {
-            bitmap = BitmapFactory.decodeFile(new File(FCLPath.FILES_DIR, "cursor.png").getAbsolutePath());
+        if (new File(FCLPath.FILES_DIR, "cursor.gif").exists()) {
+            Glide.with(getCursor()).asGif().skipMemoryCache(true).load(new File(FCLPath.FILES_DIR, "cursor.gif")).into(new CustomViewTarget<FCLImageView, GifDrawable>(getCursor()) {
+                @Override
+                public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                }
+
+                @Override
+                public void onResourceReady(@NonNull GifDrawable resource, @Nullable Transition<? super GifDrawable> transition) {
+                    getCursor().setImageDrawable(resource);
+                    resource.start();
+                }
+
+                @Override
+                protected void onResourceCleared(@Nullable Drawable placeholder) {
+                }
+            });
+        } else if (new File(FCLPath.FILES_DIR, "cursor.png").exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(new File(FCLPath.FILES_DIR, "cursor.png").getAbsolutePath());
+            BitmapDrawable drawable = new BitmapDrawable(getActivity().getResources(), bitmap);
+            getCursor().setImageDrawable(drawable);
         } else {
             AssetManager assetManager = getActivity().getAssets();
             try (InputStream inputStream = assetManager.open("img/game_menu/cursor.png")) {
-                bitmap = BitmapFactory.decodeStream(inputStream);
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                BitmapDrawable drawable = new BitmapDrawable(getActivity().getResources(), bitmap);
+                getCursor().setImageDrawable(drawable);
             } catch (Exception e) {
-                e.printStackTrace();
+                Logging.LOG.log(Level.SEVERE, "Failed to load menu icon", e);
             }
         }
-        BitmapDrawable drawable = new BitmapDrawable(getActivity().getResources(), bitmap);
-        getCursor().setImageDrawable(drawable);
 
         if (getBridge() != null && getBridge().hasTouchController()) {
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("launcher", MODE_PRIVATE);
