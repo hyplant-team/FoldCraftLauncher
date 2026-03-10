@@ -122,6 +122,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
     lateinit var permissionResultLauncher: ActivityResultLauncher<String>
     private lateinit var sharedPreferences: SharedPreferences
     var mediaPlayer: MediaPlayer? = null
+    private var videoPosition = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -310,6 +311,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
         super.onPause()
         _uiManager?.onPause()
         if (shouldPlayVideo() && binding.videoView.isPlaying) {
+            videoPosition = binding.videoView.currentPosition
             binding.videoView.pause()
         }
     }
@@ -318,6 +320,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
         super.onResume()
         _uiManager?.onResume()
         if (shouldPlayVideo() && !binding.videoView.isPlaying) {
+            binding.videoView.seekTo(videoPosition)
             binding.videoView.start()
         }
     }
@@ -617,11 +620,11 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 updateColor()
             }
 
-            override fun getBean(): Any? {
+            override fun getBean(): Any {
                 return this
             }
 
-            override fun getName(): String? {
+            override fun getName(): String {
                 return "theme"
             }
         }
@@ -631,11 +634,11 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 updateColor()
             }
 
-            override fun getBean(): Any? {
+            override fun getBean(): Any {
                 return this
             }
 
-            override fun getName(): String? {
+            override fun getName(): String {
                 return "theme2"
             }
         }
@@ -645,11 +648,11 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 updateColor()
             }
 
-            override fun getBean(): Any? {
+            override fun getBean(): Any {
                 return this
             }
 
-            override fun getName(): String? {
+            override fun getName(): String {
                 return "theme2Dark"
             }
         }

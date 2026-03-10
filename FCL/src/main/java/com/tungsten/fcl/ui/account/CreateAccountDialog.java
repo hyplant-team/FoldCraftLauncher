@@ -94,6 +94,13 @@ public class CreateAccountDialog extends FCLDialog implements View.OnClickListen
         cancel = findViewById(R.id.cancel);
         login.setOnClickListener(this);
         cancel.setOnClickListener(this);
+        login.setOnLongClickListener(view -> {
+            if (details instanceof MicrosoftDetails) {
+                ((MicrosoftDetails) details).setUseExternalBrowser(true);
+                login();
+            }
+            return true;
+        });
         init(factory);
     }
 
@@ -319,6 +326,8 @@ public class CreateAccountDialog extends FCLDialog implements View.OnClickListen
 
         private final WeakListenerHolder holder = new WeakListenerHolder();
 
+        private boolean useExternalBrowser = false;
+
         public MicrosoftDetails(Context context) {
             this.context = context;
             this.view = LayoutInflater.from(context).inflate(R.layout.view_create_account_microsoft, null);
@@ -330,6 +339,13 @@ public class CreateAccountDialog extends FCLDialog implements View.OnClickListen
                 }
             }));
             holder.add(Accounts.OAUTH_CALLBACK.onGrantDeviceCode.registerWeak(value -> CreateAccountDialog.getInstance().deviceCode.set(value)));
+            holder.add(Accounts.OAUTH_CALLBACK.onOpenBrowser.registerWeak(event -> {
+                if (useExternalBrowser) {
+                    AndroidUtils.openLink(context, event.getUrl());
+                } else {
+                    AndroidUtils.openLinkWithPopWebView(context, event.getUrl());
+                }
+            }));
         }
 
         @Override
@@ -350,6 +366,10 @@ public class CreateAccountDialog extends FCLDialog implements View.OnClickListen
         @Override
         public View getView() throws IllegalStateException {
             return view;
+        }
+
+        public void setUseExternalBrowser(boolean useExternalBrowser) {
+            this.useExternalBrowser = useExternalBrowser;
         }
     }
 

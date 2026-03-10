@@ -29,6 +29,11 @@ import java.io.File;
 import java.io.Serializable;
 
 public class FCLBridge implements Serializable {
+    public static boolean FORCE_RESOLUTION = false;
+    public static float FORCE_RESOLUTION_SCALE = -1;
+    public static int FORCE_RESOLUTION_WIDTH = 1920;
+    public static int FORCE_RESOLUTION_HEIGHT = 1080;
+    public static int FORCE_RESOLUTION_START_SIZE = -1;
 
     public static final int DEFAULT_WIDTH = 1280;
     public static final int DEFAULT_HEIGHT = 720;
@@ -206,6 +211,10 @@ public class FCLBridge implements Serializable {
     }
 
     public void pushEventPointer(int x, int y) {
+        if (FORCE_RESOLUTION) {
+            x = (int) ((x - FORCE_RESOLUTION_START_SIZE) / FORCE_RESOLUTION_SCALE);
+            y = (int) (y / FORCE_RESOLUTION_SCALE);
+        }
         if (BACKEND_IS_BOAT) {
             pushEvent(System.nanoTime(), MotionNotify, x, y, CallbackBridge.getCurrentMods());
         } else {
@@ -284,23 +293,30 @@ public class FCLBridge implements Serializable {
         return item.getText().toString();
     }
 
+    private static OpenFolderCallback folderCallback = null;
+
+    public static void setOpenFolderCallback(OpenFolderCallback callback) {
+        folderCallback = callback;
+    }
+
     public static void openLink(final String link) {
         Context context = FCLPath.CONTEXT;
         ((Activity) context).runOnUiThread(() -> {
             try {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
                 String targetLink = link;
-                Uri uri;
-                if (targetLink.startsWith("file")) {
-                    if (targetLink.startsWith("file://")) {
-                        targetLink = targetLink.replaceFirst("file://", "");
-                    } else if (targetLink.startsWith("file:")) {
-                        targetLink = targetLink.replaceFirst("file:", "");
+                if (link.startsWith("file:")) {
+                    targetLink = link.replaceFirst("^file:/+", "/");
+                    if (targetLink.endsWith("/")) {
+                        folderCallback.onBrowse(targetLink);
+                        return;
                     }
-                    uri = FileProvider.getUriForFile(((Activity) context), ((Activity) context).getPackageName() + ".provider", new File(targetLink));
                 }
-                else {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri uri;
+                if (targetLink.startsWith("http")) {
                     uri = Uri.parse(targetLink);
+                } else {
+                    uri = FileProvider.getUriForFile(context, ((Activity) context).getApplication().getPackageName() + ".provider", new File(targetLink));
                 }
                 intent.setDataAndType(uri, "*/*");
                 context.startActivity(Intent.createChooser(intent, ""));

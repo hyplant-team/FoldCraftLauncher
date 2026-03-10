@@ -79,7 +79,6 @@ import com.tungsten.fcllibrary.component.theme.ThemeEngine;
 import com.tungsten.fcllibrary.component.view.FCLButton;
 import com.tungsten.fcllibrary.component.view.FCLImageView;
 import com.tungsten.fcllibrary.component.view.FCLLinearLayout;
-import com.tungsten.fcllibrary.component.view.FCLMenuView;
 import com.tungsten.fcllibrary.component.view.FCLNumberSeekBar;
 import com.tungsten.fcllibrary.component.view.FCLProgressBar;
 import com.tungsten.fcllibrary.component.view.FCLSpinner;
@@ -513,7 +512,7 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
             menuSetting.setItemBarScale(itemBarScaleSeekbar.progressProperty().get());
             GameOption.GameOptionListener optionListener = gameItemBar.getOptionListener();
             if (optionListener != null) {
-                optionListener.onOptionChanged();
+                optionListener.onOptionChanged(true);
             }
         });
 
@@ -525,14 +524,8 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
 
         initSeekbar(cursorOffsetSeekbar, (int) (menuSetting.getCursorOffset()), observable -> {
             menuSetting.setCursorOffset(cursorOffsetSeekbar.progressProperty().get());
-            int screenWidth = AndroidUtils.getScreenWidth();
-            int screenHeight = AndroidUtils.getScreenHeight();
             if (fclBridge != null) {
-                double scaleFactor = fclBridge.getScaleFactor();
-                int width = (int) ((screenWidth + cursorOffsetSeekbar.progressProperty().get()) * scaleFactor);
-                int height = (int) (screenHeight * scaleFactor);
-                fclBridge.getSurfaceTexture().setDefaultBufferSize(width, height);
-                fclBridge.pushEventWindow(width, height);
+                refreshWindowsSize(menuSetting.getWindowScale());
             }
         });
 
@@ -679,7 +672,7 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
 
         if (getBridge() != null && getBridge().hasTouchController()) {
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("launcher", MODE_PRIVATE);
-            touchController = new TouchController(getActivity(), AndroidUtils.getScreenWidth(), AndroidUtils.getScreenHeight(), (int) sharedPreferences.getInt("vibrationDuration", 100));
+            touchController = new TouchController(getActivity(), AndroidUtils.getScreenWidth(), AndroidUtils.getScreenHeight(), sharedPreferences.getInt("vibrationDuration", 100));
 
             touchControllerInputView.setClient(touchController.getClient());
             touchControllerInputView.setFclInput(fclInput);
@@ -932,6 +925,10 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
             fclBridge.setScaleFactor(factor);
             int width = (int) ((screenWidth + menuSetting.getCursorOffset()) * factor);
             int height = (int) (screenHeight * factor);
+            if (FCLBridge.FORCE_RESOLUTION) {
+                width = FCLBridge.FORCE_RESOLUTION_WIDTH;
+                height = FCLBridge.FORCE_RESOLUTION_HEIGHT;
+            }
             fclBridge.getSurfaceTexture().setDefaultBufferSize(width, height);
             fclBridge.pushEventWindow(width, height);
         }

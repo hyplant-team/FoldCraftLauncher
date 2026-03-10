@@ -31,6 +31,7 @@ public class VersionSettingDefault {
     private static boolean pojavBigCore = false;
     private static String uuid = "";
     private static boolean debugLog = false;
+    private static boolean forceResolution = false;
 
     static {
         loadDefaultConfig();
@@ -90,6 +91,9 @@ public class VersionSettingDefault {
     public static boolean getDebugLog() {
         return debugLog;
     }
+    public static boolean getForceResolution() {
+        return forceResolution;
+    }
 
     private static void loadDefaultConfig() {
         File configFile = new File(FCLPath.FILES_DIR + "/default_config.json");
@@ -114,6 +118,7 @@ public class VersionSettingDefault {
             pojavBigCore = defaultConfig.has("pojavBigCore") ? defaultConfig.get("pojavBigCore").getAsBoolean() : pojavBigCore;
             uuid = defaultConfig.has("uuid") ? defaultConfig.get("uuid").getAsString() : uuid;
             debugLog = defaultConfig.has("debugLog") ? defaultConfig.get("debugLog").getAsBoolean() : debugLog;
+            forceResolution = defaultConfig.has("forceResolution") ? defaultConfig.get("forceResolution").getAsBoolean() : forceResolution;
         } catch (Exception e) {
             Logging.LOG.log(Level.SEVERE, "Failed to load default_config.json", e);
         }

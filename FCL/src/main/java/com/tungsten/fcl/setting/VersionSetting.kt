@@ -239,6 +239,14 @@ class VersionSetting : Cloneable {
             debugLogProperty.set(value)
         }
 
+    var forceResolutionProperty: BooleanProperty =
+        SimpleBooleanProperty(this, "forceResolution", VersionSettingDefault.getForceResolution())
+    var isForceResolution: Boolean
+        get() = forceResolutionProperty.get()
+        set(value) {
+            forceResolutionProperty.set(value)
+        }
+
     fun checkController() {
         Controllers.addCallback {
             Controllers.checkControllers()
@@ -271,6 +279,7 @@ class VersionSetting : Cloneable {
         pojavBigCoreProperty.addListener(listener)
         uuidProperty.addListener(listener)
         debugLogProperty.addListener(listener)
+        forceResolutionProperty.addListener(listener)
     }
 
     public override fun clone(): VersionSetting {
@@ -295,6 +304,7 @@ class VersionSetting : Cloneable {
             it.isPojavBigCore = isPojavBigCore
             it.uuid = uuid
             it.isDebugLog = isDebugLog
+            it.isForceResolution = isForceResolution
         }
     }
 
@@ -329,6 +339,7 @@ class VersionSetting : Cloneable {
                 addProperty("pojavBigCore", src.isPojavBigCore)
                 addProperty("uuid", src.uuid)
                 addProperty("debugLog", src.isDebugLog)
+                addProperty("forceResolution", src.isForceResolution)
             }
         }
 
@@ -368,6 +379,7 @@ class VersionSetting : Cloneable {
                 vs.isPojavBigCore = json["pojavBigCore"]?.asBoolean ?: VersionSettingDefault.getPojavBigCore()
                 vs.uuid = json["uuid"]?.asString ?: VersionSettingDefault.getUuid()
                 vs.isDebugLog = json["debugLog"]?.asBoolean ?: VersionSettingDefault.getDebugLog()
+                vs.isForceResolution = json["forceResolution"]?.asBoolean ?: VersionSettingDefault.getForceResolution()
             }
         }
 
