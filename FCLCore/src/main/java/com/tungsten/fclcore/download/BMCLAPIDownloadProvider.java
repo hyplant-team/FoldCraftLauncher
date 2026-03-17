@@ -81,12 +81,12 @@ public final class BMCLAPIDownloadProvider implements DownloadProvider {
                 pair("https://repo.maven.apache.org/maven2", FCLPath.Prop.getProperty("maven2-download-url", "null://")),
                 pair("https://hmcl-dev.github.io/metadata/cleanroom", FCLPath.Prop.getProperty("maven2-download-url", "null://")),
                 pair("https://hmcl.glavo.site/metadata/cleanroom", FCLPath.Prop.getProperty("cleanroom-download-url", "null://")),
-                pair("https://zkitefly.github.io/unlisted-versions-of-minecraft", FCLPath.Prop.getProperty("unlistedMc-download-url", "null://"))
+                pair("https://zkitefly.github.io/unlisted-versions-of-minecraft", FCLPath.Prop.getProperty("unlistedMc-download-url", "null://")),
                 // https://github.com/mcmod-info-mirror/mcim-rust-api
-//                pair("https://api.modrinth.com", FCLPath.Prop.getProperty("mcim-mirror-url", "null://") + "/modrinth"),
-//                pair("https://cdn.modrinth.com", FCLPath.Prop.getProperty("mcim-mirror-url", "null://")),
-//                pair("https://api.curseforge.com", FCLPath.Prop.getProperty("mcim-mirror-url", "null://") + "/curseforge"),
-//                pair("https://edge.forgecdn.net", FCLPath.Prop.getProperty("mcim-mirror-url", "null://")),
+               pair("https://api.modrinth.com", FCLPath.Prop.getProperty("mcim-mirror-url", "null://") + "/modrinth"),
+               pair("https://cdn.modrinth.com", FCLPath.Prop.getProperty("mcim-mirror-url", "null://")),
+               pair("https://api.curseforge.com", FCLPath.Prop.getProperty("mcim-mirror-url", "null://") + "/curseforge"),
+               pair("https://edge.forgecdn.net", FCLPath.Prop.getProperty("mcim-mirror-url", "null://"))
 //                pair("https://mediafilez.forgecdn.net", FCLPath.Prop.getProperty("mcim-mirror-url", "null://"))
         );
     }
