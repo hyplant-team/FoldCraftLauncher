@@ -159,7 +159,7 @@ public class FCLGameRepository extends DefaultGameRepository {
     }
 
     public boolean switchTouchMod(String id) throws IOException {
-        File touchModEnableFile = new File(getRunDirectory(id), "/config/enableTouchMod");
+        File touchModEnableFile = new File(getRunDirectory(id), "TOUCH_MOD_ENABLED");
         if (touchModEnableFile.exists()) {
             FileUtils.forceDelete(touchModEnableFile);
             return false;

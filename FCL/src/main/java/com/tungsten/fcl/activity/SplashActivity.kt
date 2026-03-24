@@ -54,9 +54,9 @@ class SplashActivity : FCLActivity() {
     var cacio: Boolean = false
     var cacio17: Boolean = false
     var java8: Boolean = false
-    var java11: Boolean = false
     var java17: Boolean = false
     var java21: Boolean = false
+    var java25: Boolean = false
     var jna: Boolean = false
     var gameResource: Boolean = false
     var others: Boolean = false
@@ -135,7 +135,7 @@ class SplashActivity : FCLActivity() {
     }
 
     fun checkRuntime() {
-        if (lwjgl && cacio && cacio17 && java8 && java11 && java17 && java21 && jna && gameResource && others) {
+        if (lwjgl && cacio && cacio17 && java8 && java17 && java21 && java25 && jna && gameResource && others) {
             enterLauncher()
         } else {
             supportFragmentManager.beginTransaction()
@@ -250,9 +250,9 @@ class SplashActivity : FCLActivity() {
                 "/assets/app_runtime/caciocavallo17"
             )
             java8 = RuntimeUtils.isLatest(FCLPath.JAVA_8_PATH, "/assets/app_runtime/java/jre8")
-            java11 = RuntimeUtils.isLatest(FCLPath.JAVA_11_PATH, "/assets/app_runtime/java/jre11")
             java17 = RuntimeUtils.isLatest(FCLPath.JAVA_17_PATH, "/assets/app_runtime/java/jre17")
             java21 = RuntimeUtils.isLatest(FCLPath.JAVA_21_PATH, "/assets/app_runtime/java/jre21")
+            java25 = RuntimeUtils.isLatest(FCLPath.JAVA_25_PATH, "/assets/app_runtime/java/jre25")
             jna = RuntimeUtils.isLatest(FCLPath.JNA_PATH, "/assets/app_runtime/jna")
             gameResource = RuntimeUtils.isLatest(FCLPath.EXTERNAL_DIR, "/assets/modpackExternal")
             others = RuntimeUtils.isLatest(FCLPath.INTERNAL_DIR, "/assets/modpackInternal")

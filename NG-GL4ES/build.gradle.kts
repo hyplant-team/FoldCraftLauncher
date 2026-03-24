@@ -23,6 +23,12 @@ android {
         }
     }
 
+    libraryVariants.all {
+        packageLibraryProvider.get().let {
+            it.destinationDirectory.set(file("${rootDir}/FCL/libs"))
+        }
+    }
+
     externalNativeBuild {
         cmake {
             path = file("NG-GL4ES/CMakeLists.txt")
