@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="@string/enabled"
-                app:auto_hint_tint="true" />
+                app:use_theme_color="true" />
 
             <com.tungsten.fcllibrary.component.view.FCLCheckBox
                 android:id="@+id/disabled"
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="@string/disabled"
-                app:auto_hint_tint="true" />
+                app:use_theme_color="true" />
 
             <View
                 android:layout_width="0dp"

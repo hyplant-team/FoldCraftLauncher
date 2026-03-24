@@ -479,8 +479,8 @@
     <string name="jar_execute_custom_args">使用自定义参数执行</string>
     <string name="jar_executor_crash_title">Jar Executor 意外退出</string>
     <string name="jar_executor_crash_reason">尚不支持 Jar Executor 崩溃原因分析。</string>
-    <string name="view_fcl_logs">FCL 日志</string>
-    <string name="launch_fcl_shell">FCL 终端</string>
+    <string name="view_fcl_logs">日志</string>
+    <string name="launch_fcl_shell">终端</string>
     <string name="fcl_shell_warn">警告：高级功能，仅限专业用户使用\n长按来打开</string>
 
     <string name="launch_pojav">Pojav</string>

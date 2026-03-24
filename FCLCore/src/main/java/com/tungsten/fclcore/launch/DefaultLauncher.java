@@ -154,13 +154,8 @@ public class DefaultLauncher extends Launcher {
         res.addDefault("-Djava.io.tmpdir=", FCLPath.CACHE_DIR);
         res.addDefault("-Dorg.lwjgl.opengl.libname=", "${gl_lib_name}");
         res.addDefault("-Dorg.lwjgl.freetype.libname=", context.getApplicationInfo().nativeLibraryDir + "/libfreetype.so");
-        if (FCLBridge.BACKEND_IS_BOAT) {
-            res.addDefault("-Dwindow.width=", options.getWidth() + "");
-            res.addDefault("-Dwindow.height=", options.getHeight() + "");
-        } else {
-            res.addDefault("-Dglfwstub.windowWidth=", options.getWidth() + "");
-            res.addDefault("-Dglfwstub.windowHeight=", options.getHeight() + "");
-        }
+        res.addDefault("-Dglfwstub.windowWidth=", options.getWidth() + "");
+        res.addDefault("-Dglfwstub.windowHeight=", options.getHeight() + "");
         res.addDefault("-Dglfwstub.initEgl=", "false");
         res.addDefault("-Duser.home=", options.getGameDir().getAbsolutePath());
         res.addDefault("-Dorg.lwjgl.vulkan.libname=", "libvulkan.so");

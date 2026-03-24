@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.ui.TaskDialog;
 import com.tungsten.fcl.util.TaskCancellationAction;
+import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fclcore.fakefx.beans.property.BooleanProperty;
 import com.tungsten.fclcore.fakefx.beans.property.SimpleBooleanProperty;
 import com.tungsten.fclcore.fakefx.beans.property.SimpleStringProperty;
@@ -147,7 +148,7 @@ public class ModUpdatesPage extends FCLTempPage implements View.OnClickListener 
     }
 
     private void exportList() {
-        Path path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/FCL", "fcl-mod-update-list-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm-ss")) + ".csv").toPath();
+        Path path = new File(FCLPath.LOG_DIR, "mods_update_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm-ss")) + ".csv").toPath();
 
         TaskDialog taskDialog = new TaskDialog(getContext(), TaskCancellationAction.NORMAL);
         taskDialog.setTitle(getContext().getString(R.string.button_export));

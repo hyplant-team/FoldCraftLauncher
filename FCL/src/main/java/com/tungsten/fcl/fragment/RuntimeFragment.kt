@@ -15,18 +15,14 @@ import com.tungsten.fcl.databinding.FragmentRuntimeBinding
 import com.tungsten.fcl.util.ReadTools
 import com.tungsten.fcl.util.RuntimeUtils
 import com.tungsten.fclauncher.utils.FCLPath
-import com.tungsten.fclcore.task.Schedulers
-import com.tungsten.fclcore.util.io.FileUtils
 import com.tungsten.fclcore.util.Logging
 import com.tungsten.fcllibrary.component.FCLFragment
 import com.tungsten.fcllibrary.component.theme.Theme
 import com.tungsten.fcllibrary.component.theme.ThemeEngine
 import com.tungsten.fcllibrary.component.dialog.FCLAlertDialog
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.IOException
 import java.util.logging.Level
 
 class RuntimeFragment : FCLFragment(), View.OnClickListener {
@@ -178,7 +174,6 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                     withContext(Dispatchers.IO) {
                         runCatching {
                             RuntimeUtils.install(context, FCLPath.LWJGL_DIR, "app_runtime/lwjgl")
-                            RuntimeUtils.install(context, FCLPath.LWJGL_DIR + "-boat", "app_runtime/lwjgl-boat")
                             lwjgl = true
                         }.exceptionOrNull()?.let { showErrorDialog(it) }
                     }
