@@ -46,17 +46,17 @@
 
 ###  ✨ Vanilla FCL Features
 
-> ~~I agree with what you say, but「FCL」is a Minecraft Java Edition launcher made by FCL-Team, built upon the core functionalities of [HMCL](https://github.com/HMCL-dev/HMCL) and integrating the [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) and [Boat](https://github.com/AOF-Dev/Boat) backends. The launcher is used in a system called「Android」, where the person selected by the system will be authorized to use 「JVM」, operating the power of 「Java」. You are going to act a mysterious user called「Greenhand」. During the freely use of the launcher, you can install different versions, make various mods work together and find out the reason of crash, discover the truth of「xxException:」.~~  
+> ~~I agree with what you say, but「FCL」is a Minecraft Java Edition launcher made by FCL-Team, built upon the core functionalities of [HMCL](https://github.com/HMCL-dev/HMCL) and integrating the [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) backends. The launcher is used in a system called「Android」, where the person selected by the system will be authorized to use 「JVM」, operating the power of 「Java」. You are going to act a mysterious user called「Greenhand」. During the freely use of the launcher, you can install different versions, make various mods work together and find out the reason of crash, discover the truth of「xxException:」.~~  
 
 > **Project Introduction**  
-> 「Fold Craft Launcher」 is a Minecraft: Java Edition launcher for Android platforms developed by the FCL Team. Built upon the core functionalities of [HMCL](https://github.com/HMCL-dev/HMCL) and integrating the [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) and [Boat](https://github.com/AOF-Dev/Boat) backends, it enables users to enjoy Java Edition MC on mobile devices, supporting mod loading and operation across all versions.
+> 「Fold Craft Launcher」 is a Minecraft: Java Edition launcher for Android platforms developed by the FCL Team. Built upon the core functionalities of [HMCL](https://github.com/HMCL-dev/HMCL) and integrating the [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) backends, it enables users to enjoy Java Edition MC on mobile devices, supporting mod loading and operation across all versions.
 
 #### ✅ Full Version Support
 - Native support for all Minecraft versions (including latest snapshots)
-- Mod loader support: Forge/NeoForge/LiteLoader/OptiFine/Fabric/Quilt...
+- Mod loader support: Forge/NeoForge/LiteLoader/OptiFine/Fabric/Quilt/Cleanroom...
 
 #### ⚙️ Key Highlights
-- Built-in multi-version Java runtimes (Java 8/11/17/21) with custom Java import support
+- Built-in multi-version Java runtimes (Java 8/17/21/25) with custom Java import support
 - Virtual mouse and customizable key mapping
 - Shaders support (requires VirGL/Zink/MG renderers)
 - Dynamic resource management (mods/modpacks/textures/shaders/saves)
@@ -130,7 +130,7 @@ Vanilla FCL is licensed under **[GPL-3.0 License](https://www.gnu.org/licenses/g
 ### 🔗 Related Projects
 - [Vanilla FCL](https://github.com/FCL-Team/FoldCraftLauncher)
   - [HMCL](https://github.com/HMCL-dev/HMCL)
-  - [Boat and related projects](https://github.com/AOF-Dev/Boat)
+  - ~~[Boat and related projects](https://github.com/AOF-Dev/Boat)~~ (Deprecated)
   - [PojavLauncher and related projects](https://github.com/PojavLauncherTeam/PojavLauncher)
   - [authlib-injector](https://github.com/yushijinhun/authlib-injector)
   - [NG-GL4ES (Krypton Wrapper)](https://github.com/BZLZHH/NG-GL4ES)

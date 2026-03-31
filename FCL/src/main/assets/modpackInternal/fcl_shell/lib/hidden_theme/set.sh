@@ -22,5 +22,4 @@ cp -f "${FCL_PATH_SHELL}/res/hidden_theme/menu_icon.gif" "${FCL_PATH_INTERNAL}/f
 
 echo "${lang_hidden_theme_enabled}"
 sleep 1s
-killall -q -9 -w "${FCL_CONF_PKGID}"
-kill -9 $$
+exec killall -q -2 "${FCL_CONF_PKGID}"

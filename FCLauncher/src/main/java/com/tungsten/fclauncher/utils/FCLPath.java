@@ -40,6 +40,7 @@ public class FCLPath {
     public static String EXTERNAL_DIR;
     public static String SHARED_COMMON_DIR;
     public static String CONTROLLER_DIR;
+    public static String ACCOUNTS_DIR;
     public static String LOG_DIR;
 
     public static Properties Prop;
@@ -84,6 +85,11 @@ public class FCLPath {
         } else {
             CONTROLLER_DIR = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Prop.getProperty("controller-dir","FCL/control");
         }
+        if (Prop.getProperty("accounts-dir","/").equals("/")) {
+            ACCOUNTS_DIR = EXTERNAL_DIR;
+        } else {
+            ACCOUNTS_DIR = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Prop.getProperty("accounts-dir","FCL");
+        }
         LOG_DIR = EXTERNAL_DIR + "/logs";
 
         init(FILES_DIR);
@@ -103,6 +109,7 @@ public class FCLPath {
         init(EXTERNAL_DIR);
         init(SHARED_COMMON_DIR);
         init(CONTROLLER_DIR);
+        init(ACCOUNTS_DIR);
         init(LOG_DIR);
     }
 

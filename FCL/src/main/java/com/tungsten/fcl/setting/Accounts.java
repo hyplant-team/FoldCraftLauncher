@@ -195,7 +195,7 @@ public final class Accounts {
 
     @SuppressWarnings("unchecked")
     private static void loadGlobalAccountStorages() {
-        Path globalAccountsFile = new File(FCLPath.EXTERNAL_DIR, "accounts.json").toPath();
+        Path globalAccountsFile = new File(FCLPath.ACCOUNTS_DIR, "accounts.json").toPath();
         if (Files.exists(globalAccountsFile)) {
             try (Reader reader = Files.newBufferedReader(globalAccountsFile)) {
                 globalAccountStorages.setAll((List<Map<Object, Object>>)

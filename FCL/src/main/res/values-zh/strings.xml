@@ -29,7 +29,7 @@
     <string name="setting">全局设置</string>
 
     <string name="about">关于</string>
-    <string name="about_desc">FCL Modpack 基于 Fold Craft Launcher（一个 Android Minecraft 启动器，让用户能够在 Android 设备上启动 Minecraft: Java Edition）\nFold Craft Launcher 由 FCL-Team 开发，主要功能基于 HMCLCore 修改而成，借鉴和引用了一些 PojavLauncher 和 Boat 的源码。\n\nModpack Edition 在原版的基础上增加了内置客户端和配置释放、自定义各类下载源的功能，可轻松实现预配置整合包的安装和更新，适用于整合包或服务器专用客户端打包安卓直装版。\n主要功能基于旧版 root-s7 服务器版实现。\n\n如果你要传播分发该软件，请遵循 GPL-v3 协议。</string>
+    <string name="about_desc">FCL Modpack 基于 Fold Craft Launcher（一个 Android Minecraft 启动器，让用户能够在 Android 设备上启动 Minecraft: Java Edition）\nFold Craft Launcher 由 FCL-Team 开发，主要功能基于 HMCLCore 修改而成，借鉴和引用了一些 PojavLauncher 的源码。\n\nModpack Edition 在原版的基础上增加了内置客户端和配置释放、自定义各类下载源的功能，可轻松实现预配置整合包的安装和更新，适用于整合包或服务器专用客户端打包安卓直装版。\n主要功能基于旧版 root-s7 服务器版实现。\n\n如果你要传播分发该软件，请遵循 GPL-v3 协议。</string>
     <string name="about_a">关于 A</string>
     <string name="about_b">关于 B</string>
     <string name="about_c">关于 C</string>
@@ -816,9 +816,9 @@
 
     <string name="settings_fcl_controller">控制</string>
     <string name="settings_fcl_controller_injector">基岩版触控手势</string>
-    <string name="settings_fcl_vulkan_driver_system">允许Zink使用系统Vulkan驱动</string>
+    <string name="settings_fcl_vulkan_driver_system">使用系统Vulkan驱动</string>
     <string name="settings_fcl_renderer">渲染器</string>
-    <string name="settings_fcl_pojav_bigcore">强制渲染器在大核上运行(Pojav后端)</string>
+    <string name="settings_fcl_pojav_bigcore">强制渲染器在大核上运行</string>
     <string name="settings_fcl_renderer_vgpu" >VGPU (OpenGL 2.1+, 仅支持 1.17-)</string>
 
     <string name="settings_fcl_renderer_nggl4es">Krypton Wrapper (OpenGL 3.1+, 内置的)</string>

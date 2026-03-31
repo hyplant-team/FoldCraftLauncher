@@ -98,7 +98,7 @@ public class AccountListAdapter extends FCLAdapter {
             Accounts.setSelectedAccount(account.getAccount());
             UIManager.getInstance().getAccountUI().refresh().start();
         });
-        viewHolder.move.imageProperty().bind(Bindings.createObjectBinding(() -> account.getAccount().isPortable() ? getContext().getDrawable(R.drawable.ic_baseline_earth_24) : getContext().getDrawable(R.drawable.ic_baseline_output_24), account.getAccount().portableProperty()));
+        viewHolder.move.imageProperty().bind(Bindings.createObjectBinding(() -> account.getAccount().isPortable() ? getContext().getDrawable(R.drawable.ic_baseline_earth_24) : getContext().getDrawable(R.drawable.ic_baseline_input_24), account.getAccount().portableProperty()));
         viewHolder.move.setOnClickListener(v -> {
             Account acc = account.getAccount();
             Accounts.getAccounts().remove(acc);
