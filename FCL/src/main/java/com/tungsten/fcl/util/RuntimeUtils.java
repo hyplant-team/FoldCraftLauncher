@@ -32,7 +32,9 @@ public class RuntimeUtils {
             }
         }
         long version = Long.parseLong(IOUtils.readFullyAsString(RuntimeUtils.class.getResourceAsStream(srcDir + "/version")));
-        return targetFile.exists() && Long.parseLong(FileUtils.readText(targetFile)) == version;
+        String installedVersion = FileUtils.readText(targetFile);
+        if (installedVersion.isEmpty()) return false;
+        return targetFile.exists() && Long.parseLong(installedVersion) == version;
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

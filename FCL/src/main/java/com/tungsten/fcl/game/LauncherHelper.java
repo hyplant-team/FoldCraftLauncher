@@ -21,6 +21,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.tungsten.fcl.util.AndroidUtils.getLocalizedText;
 import static com.tungsten.fcl.util.AndroidUtils.hasStringId;
 import static com.tungsten.fclcore.util.Logging.LOG;
+import static java.util.stream.Collectors.toList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -48,6 +49,7 @@ import com.tungsten.fcl.ui.TaskDialog;
 import com.tungsten.fcl.ui.UIManager;
 import com.tungsten.fcl.util.TaskCancellationAction;
 import com.tungsten.fclauncher.bridge.FCLBridge;
+import com.tungsten.fclauncher.plugins.NativeLibPlugin;
 import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fclcore.auth.Account;
 import com.tungsten.fclcore.auth.AuthInfo;
@@ -84,6 +86,7 @@ import com.tungsten.fcllibrary.component.dialog.FCLDialog;
 import com.tungsten.fcllibrary.component.view.FCLButton;
 import com.tungsten.fcllibrary.component.view.FCLTabLayout;
 
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
@@ -185,7 +188,8 @@ public final class LauncherHelper {
                             Renderer renderer = RendererManager.getRenderer(repository.getVersionSetting(selectedVersion).getRenderer());
                             fclBridge.setRenderer(renderer.getName());
                             return checkRenderer(fclBridge, renderer, repository.getGameVersion(selectedVersion).orElse(""));
-                        }).thenAcceptAsync(fclBridge -> Schedulers.androidUIThread().execute(() -> {
+                        })
+                        .thenAcceptAsync(fclBridge -> Schedulers.androidUIThread().execute(() -> {
                             CallbackBridge.nativeSetUseInputStackQueue(version.get().getArguments().isPresent());
                             Intent intent = new Intent(context, JVMActivity.class);
                             fclBridge.setScaleFactor(repository.getVersionSetting(selectedVersion).getScaleFactor() / 100.0);
@@ -357,6 +361,40 @@ public final class LauncherHelper {
                 return Task.completed(bridge);
             } catch (Throwable e) {
                 LOG.log(Level.WARNING, "checkRenderer() failed", e);
+                return Task.completed(bridge);
+            }
+        });
+    }
+
+    private Task<FCLBridge> checkNativeLibPlugin(FCLBridge bridge, String version) {
+        return Task.composeAsync(() -> {
+            try {
+                CompletableFuture<Task<FCLBridge>> future = new CompletableFuture<>();
+                List<NativeLibPlugin.@NotNull NativePlugin> pluginList = NativeLibPlugin.getPluginList();
+                List<String> unsupportedPlugins = pluginList.stream().filter(plugin -> {
+                    String minVer = plugin.getMinMCVer();
+                    String maxVer = plugin.getMaxMCVer();
+                    if (!minVer.isEmpty() && GameVersionNumber.compare(version, minVer) < 0) {
+                        return true;
+                    }
+                    if (!maxVer.isEmpty() && GameVersionNumber.compare(version, maxVer) > 0) {
+                        return true;
+                    }
+                    return false;
+                }).map(NativeLibPlugin.NativePlugin::getAppName)
+                        .collect(toList());
+                if (!unsupportedPlugins.isEmpty()) {
+                    String fullString = org.apache.commons.lang3.StringUtils.join(unsupportedPlugins, ", ");
+                    Schedulers.androidUIThread().execute(() -> new FCLAlertDialog.Builder(context)
+                            .setCancelable(false)
+                            .setMessage(context.getString(R.string.message_check_plugin, fullString))
+                            .setPositiveButton(context.getString(R.string.button_cancel), () -> future.completeExceptionally(new CancellationException()))
+                            .setNegativeButton(context.getString(R.string.launch_error_java_continue), () -> future.complete(Task.completed(bridge))).create().show());
+                    return Task.fromCompletableFuture(future).thenComposeAsync(task -> task);
+                }
+                return Task.completed(bridge);
+            } catch (Throwable e) {
+                LOG.log(Level.WARNING, "checkNativeLibPlugin() failed", e);
                 return Task.completed(bridge);
             }
         });

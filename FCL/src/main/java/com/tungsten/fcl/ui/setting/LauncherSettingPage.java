@@ -621,49 +621,21 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
     }
 
     private static void deleteMenuIconFile() {
-        new Thread(() -> {
-            Path menu_icon_png = Paths.get(FCLPath.FILES_DIR, "menu_icon.png");
-            if (menu_icon_png.toFile().exists()) {
-                try {
-                    Files.delete(menu_icon_png);
-                } catch (IOException e) {
-                    LOG.log(Level.WARNING, "Failed to delete menu_icon.png", e);
-                }
-            }
-        }).start();
-        new Thread(() -> {
-            Path menu_icon_gif = Paths.get(FCLPath.FILES_DIR, "menu_icon.gif");
-            if (menu_icon_gif.toFile().exists()) {
-                try {
-                    Files.delete(menu_icon_gif);
-                } catch (IOException e) {
-                    LOG.log(Level.WARNING, "Failed to delete menu_icon.gif", e);
-                }
-            }
-        }).start();
+        try {
+            Files.deleteIfExists(Paths.get(FCLPath.FILES_DIR, "menu_icon.png"));
+            Files.deleteIfExists(Paths.get(FCLPath.FILES_DIR, "menu_icon.gif"));
+        } catch (IOException e) {
+            LOG.log(Level.WARNING, "Failed to delete menu icon", e);
+        }
     }
 
     private void deleteCursorFile() {
-        new Thread(() -> {
-            Path cursor_png = Paths.get(FCLPath.FILES_DIR, "cursor.png");
-            if (cursor_png.toFile().exists()) {
-                try {
-                    Files.delete(cursor_png);
-                } catch (IOException e) {
-                    LOG.log(Level.WARNING, "Failed to delete cursor.png", e);
-                }
-            }
-        }).start();
-        new Thread(() -> {
-            Path cursor_gif = Paths.get(FCLPath.FILES_DIR, "cursor.gif");
-            if (cursor_gif.toFile().exists()) {
-                try {
-                    Files.delete(cursor_gif);
-                } catch (IOException e) {
-                    LOG.log(Level.WARNING, "Failed to delete cursor.gif", e);
-                }
-            }
-        }).start();
+        try {
+            Files.deleteIfExists(Paths.get(FCLPath.FILES_DIR, "cursor.png"));
+            Files.deleteIfExists(Paths.get(FCLPath.FILES_DIR, "cursor.gif"));
+        } catch (IOException e) {
+            LOG.log(Level.WARNING, "Failed to delete cursor", e);
+        }
     }
 
     @Override
