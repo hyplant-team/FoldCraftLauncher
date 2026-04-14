@@ -42,6 +42,7 @@ import com.tungsten.fcl.activity.MainActivity;
 import com.tungsten.fcl.control.MenuType;
 import com.tungsten.fcl.game.LauncherHelper.SkipLoginDialog;
 import com.tungsten.fcl.game.LauncherHelper.TipReLoginLoginDialog;
+import com.tungsten.fcl.setting.GameOption;
 import com.tungsten.fcl.setting.Profile;
 import com.tungsten.fcl.setting.Profiles;
 import com.tungsten.fcl.setting.VersionSetting;
@@ -188,6 +189,12 @@ public final class LauncherHelper {
                             Renderer renderer = RendererManager.getRenderer(repository.getVersionSetting(selectedVersion).getRenderer());
                             fclBridge.setRenderer(renderer.getName());
                             return checkRenderer(fclBridge, renderer, repository.getGameVersion(selectedVersion).orElse(""));
+                        }).thenComposeAsync(fclBridge -> checkNativeLibPlugin(fclBridge, repository.getGameVersion(selectedVersion).orElse("")))
+                        .thenComposeAsync(fclBridge -> {
+                            GameOption gameOption = new GameOption(repository.getRunDirectory(selectedVersion).getAbsolutePath());
+                            gameOption.set("preferredGraphicsBackend", setting.isUseOpengl() ? "opengl" : "default");
+                            gameOption.save();
+                            return Task.supplyAsync(() -> fclBridge);
                         })
                         .thenAcceptAsync(fclBridge -> Schedulers.androidUIThread().execute(() -> {
                             CallbackBridge.nativeSetUseInputStackQueue(version.get().getArguments().isPresent());
@@ -372,16 +379,16 @@ public final class LauncherHelper {
                 CompletableFuture<Task<FCLBridge>> future = new CompletableFuture<>();
                 List<NativeLibPlugin.@NotNull NativePlugin> pluginList = NativeLibPlugin.getPluginList();
                 List<String> unsupportedPlugins = pluginList.stream().filter(plugin -> {
-                    String minVer = plugin.getMinMCVer();
-                    String maxVer = plugin.getMaxMCVer();
-                    if (!minVer.isEmpty() && GameVersionNumber.compare(version, minVer) < 0) {
-                        return true;
-                    }
-                    if (!maxVer.isEmpty() && GameVersionNumber.compare(version, maxVer) > 0) {
-                        return true;
-                    }
-                    return false;
-                }).map(NativeLibPlugin.NativePlugin::getAppName)
+                            String minVer = plugin.getMinMCVer();
+                            String maxVer = plugin.getMaxMCVer();
+                            if (!minVer.isEmpty() && GameVersionNumber.compare(version, minVer) < 0) {
+                                return true;
+                            }
+                            if (!maxVer.isEmpty() && GameVersionNumber.compare(version, maxVer) > 0) {
+                                return true;
+                            }
+                            return false;
+                        }).map(NativeLibPlugin.NativePlugin::getAppName)
                         .collect(toList());
                 if (!unsupportedPlugins.isEmpty()) {
                     String fullString = org.apache.commons.lang3.StringUtils.join(unsupportedPlugins, ", ");

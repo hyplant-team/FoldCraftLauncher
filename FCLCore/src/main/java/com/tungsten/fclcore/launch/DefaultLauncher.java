@@ -62,6 +62,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -153,13 +154,17 @@ public class DefaultLauncher extends Launcher {
         JavaVersion javaVersion = options.getJava().isAuto() ? JavaManager.getSuitableJavaVersion(version) : options.getJava();
         res.addDefault("-Dext.net.resolvPath=", FCLPath.JAVA_PATH + "/resolv.conf");
         res.addDefault("-Djava.io.tmpdir=", FCLPath.CACHE_DIR);
+        res.addDefault("-Dos.name=", "Linux");
+        res.addDefault("-Dos.version=Android-", Build.VERSION.RELEASE);
         res.addDefault("-Dorg.lwjgl.opengl.libname=", "${gl_lib_name}");
         res.addDefault("-Dorg.lwjgl.freetype.libname=", context.getApplicationInfo().nativeLibraryDir + "/libfreetype.so");
         res.addDefault("-Dglfwstub.windowWidth=", options.getWidth() + "");
         res.addDefault("-Dglfwstub.windowHeight=", options.getHeight() + "");
         res.addDefault("-Dglfwstub.initEgl=", "false");
         res.addDefault("-Duser.home=", options.getGameDir().getAbsolutePath());
+        res.addDefault("-Duser.timezone=", TimeZone.getDefault().getID());
         res.addDefault("-Dorg.lwjgl.vulkan.libname=", "libvulkan.so");
+        res.addDefault("-Dorg.lwjgl.spvc.libname=", "spirv-cross-c-shared");
         res.addDefault("-Djdk.lang.Process.launchMechanism=", "FORK");
         res.addDefault("-Dcpu.name=", FCLauncher.getSocName());
         NativeLibPlugin.getJVMEnv().forEach((k, v) -> res.addDefault(k + "=", v));
@@ -185,6 +190,7 @@ public class DefaultLauncher extends Launcher {
         res.add("-javaagent:" + FCLPath.LIB_PATCHER_PATH);
 
         Set<String> classpath = repository.getClasspath(version);
+        addLWJGLClassPath(classpath);
         classpath.add(FCLPath.MIO_LAUNCH_WRAPPER);
         File jar = repository.getVersionJar(version);
         if (!jar.exists() || !jar.isFile()) {
@@ -256,6 +262,14 @@ public class DefaultLauncher extends Launcher {
 
         res.removeIf(it -> getForbiddens().containsKey(it) && getForbiddens().get(it).get());
         return res;
+    }
+
+    private void addLWJGLClassPath(Set<String> classpath) {
+        Set<String> temp = new LinkedHashSet<>();
+        temp.add(FCLPath.LWJGL_DIR + "/lwjgl.jar");
+        temp.addAll(classpath);
+        classpath.clear();
+        classpath.addAll(temp);
     }
 
     public static void getCacioJavaArgs(CommandBuilder res, Version version, LaunchOptions options) {

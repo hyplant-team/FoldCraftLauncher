@@ -191,6 +191,13 @@ class VersionSetting : Cloneable {
             beGestureProperty.set(beGesture)
         }
 
+    val useOpenglProperty: BooleanProperty = SimpleBooleanProperty(this, "useOpengl", VersionSettingDefault.getUseOpengl())
+    var isUseOpengl: Boolean
+        get() = useOpenglProperty.get()
+        set(v) {
+            useOpenglProperty.set(v)
+        }
+
     val vkDriverSystemProperty: BooleanProperty =
         SimpleBooleanProperty(this, "vulkanDriverSystem", VersionSettingDefault.getVulkanDriverSystem())
     var isVKDriverSystem: Boolean
@@ -272,6 +279,7 @@ class VersionSetting : Cloneable {
         scaleFactorProperty.addListener(listener)
         isolateGameDirProperty.addListener(listener)
         beGestureProperty.addListener(listener)
+        useOpenglProperty.addListener(listener)
         vkDriverSystemProperty.addListener(listener)
         controllerProperty.addListener(listener)
         rendererProperty.addListener(listener)
@@ -297,6 +305,7 @@ class VersionSetting : Cloneable {
             it.scaleFactor = scaleFactor
             it.isIsolateGameDir = isIsolateGameDir
             it.isBeGesture = isBeGesture
+            it.isUseOpengl = isUseOpengl
             it.isVKDriverSystem = isVKDriverSystem
             it.controller = controller
             it.renderer = renderer
@@ -331,6 +340,7 @@ class VersionSetting : Cloneable {
                 addProperty("notCheckGame", src.isNotCheckGame)
                 addProperty("notCheckJVM", src.isNotCheckJVM)
                 addProperty("beGesture", src.isBeGesture)
+                addProperty("useOpengl", src.isUseOpengl)
                 addProperty("vulkanDriverSystem", src.isVKDriverSystem)
                 addProperty("controller", src.controller)
                 addProperty("renderer", src.renderer)
@@ -365,11 +375,13 @@ class VersionSetting : Cloneable {
                 vs.isAutoMemory = json["autoMemory"]?.asBoolean ?: VersionSettingDefault.getAutoMemory()
                 vs.serverIp = json["serverIp"]?.asString ?: VersionSettingDefault.getServerIp()
                 vs.java =
-                    JavaManager.javaList.find { it.name == json["java"]?.asString }?.name ?: VersionSettingDefault.getJava()
+                    JavaManager.javaList.find { it.name == json["java"]?.asString }?.name
+                        ?: VersionSettingDefault.getJava()
                 vs.scaleFactor = json["newScaleFactor"]?.asInt ?: VersionSettingDefault.getNewScaleFactor()
                 vs.isNotCheckGame = json["notCheckGame"]?.asBoolean ?: VersionSettingDefault.getNotCheckGame()
                 vs.isNotCheckJVM = json["notCheckJVM"]?.asBoolean ?: VersionSettingDefault.getNotCheckJVM()
                 vs.isBeGesture = json["beGesture"]?.asBoolean ?: VersionSettingDefault.getBeGesture()
+                vs.isUseOpengl = json["useOpengl"]?.asBoolean ?: VersionSettingDefault.getUseOpengl()
                 vs.isVKDriverSystem = json["vulkanDriverSystem"]?.asBoolean ?: VersionSettingDefault.getVulkanDriverSystem()
                 vs.controller = json["controller"]?.asString ?: VersionSettingDefault.getController()
                 vs.renderer =
