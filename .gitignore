@@ -1,2 +1,9 @@
 # controllerRepo Git Index Backup
 controllerRepo/.git_bak/
+
+# build output
+build/
+*/build/
+*/bin/
+*/.cxx/
+.gradle/
