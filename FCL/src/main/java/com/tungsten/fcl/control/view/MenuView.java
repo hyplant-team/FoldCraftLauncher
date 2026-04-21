@@ -45,6 +45,7 @@ public class MenuView extends View {
     private GameMenu gameMenu;
 
     private boolean isGif = false;
+
     public MenuView(Context context) {
         super(context);
         this.screenWidth = AndroidUtils.getScreenWidth();
@@ -119,7 +120,8 @@ public class MenuView extends View {
                 protected void onResourceCleared(@Nullable Drawable placeholder) {
                 }
             });
-        } else {
+        }
+        if (!isGif && icon == null) {
             AssetManager assetManager = FCLApplication.getCurrentActivity().getAssets();
             try (InputStream inputStream = assetManager.open("img/game_menu/menu_icon.png")) {
                 icon = BitmapFactory.decodeStream(inputStream);
