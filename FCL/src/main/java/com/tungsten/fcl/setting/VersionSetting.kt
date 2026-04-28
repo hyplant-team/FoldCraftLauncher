@@ -167,11 +167,6 @@ class VersionSetting : Cloneable {
             serverIpProperty.set(serverIp)
         }
 
-    val scaleFactorProperty: IntegerProperty = SimpleIntegerProperty(this, "newScaleFactor", VersionSettingDefault.getNewScaleFactor())
-    var scaleFactor: Int
-        get() = scaleFactorProperty.get()
-        set(v) = scaleFactorProperty.set(v)
-
     /**
      * 0 - .minecraft<br></br>
      * 1 - .minecraft/versions/&lt;version&gt;/<br></br>
@@ -276,7 +271,6 @@ class VersionSetting : Cloneable {
         notCheckGameProperty.addListener(listener)
         notCheckJVMProperty.addListener(listener)
         serverIpProperty.addListener(listener)
-        scaleFactorProperty.addListener(listener)
         isolateGameDirProperty.addListener(listener)
         beGestureProperty.addListener(listener)
         useOpenglProperty.addListener(listener)
@@ -302,7 +296,6 @@ class VersionSetting : Cloneable {
             it.isNotCheckGame = isNotCheckGame
             it.isNotCheckJVM = isNotCheckJVM
             it.serverIp = serverIp
-            it.scaleFactor = scaleFactor
             it.isIsolateGameDir = isIsolateGameDir
             it.isBeGesture = isBeGesture
             it.isUseOpengl = isUseOpengl
@@ -336,7 +329,6 @@ class VersionSetting : Cloneable {
                 addProperty("autoMemory", src.isAutoMemory)
                 addProperty("serverIp", src.serverIp)
                 addProperty("java", src.java)
-                addProperty("newScaleFactor", src.scaleFactor)
                 addProperty("notCheckGame", src.isNotCheckGame)
                 addProperty("notCheckJVM", src.isNotCheckJVM)
                 addProperty("beGesture", src.isBeGesture)
@@ -377,7 +369,6 @@ class VersionSetting : Cloneable {
                 vs.java =
                     JavaManager.javaList.find { it.name == json["java"]?.asString }?.name
                         ?: VersionSettingDefault.getJava()
-                vs.scaleFactor = json["newScaleFactor"]?.asInt ?: VersionSettingDefault.getNewScaleFactor()
                 vs.isNotCheckGame = json["notCheckGame"]?.asBoolean ?: VersionSettingDefault.getNotCheckGame()
                 vs.isNotCheckJVM = json["notCheckJVM"]?.asBoolean ?: VersionSettingDefault.getNotCheckJVM()
                 vs.isBeGesture = json["beGesture"]?.asBoolean ?: VersionSettingDefault.getBeGesture()

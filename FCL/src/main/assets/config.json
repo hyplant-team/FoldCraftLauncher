@@ -21,7 +21,6 @@
         "permSize": "",
         "serverIp": "",
         "java": "Auto",
-        "scaleFactor": 1.0,
         "notCheckGame": false,
         "notCheckJVM": false,
         "beGesture": false,

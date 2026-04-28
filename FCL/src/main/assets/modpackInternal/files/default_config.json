@@ -5,7 +5,6 @@
   "autoMemory": true,
   "serverIp": "",
   "java": "Auto",
-  "newScaleFactor": 100,
   "notCheckGame": false,
   "notCheckJVM": false,
   "beGesture": false,

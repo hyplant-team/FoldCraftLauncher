@@ -19,7 +19,6 @@ public class VersionSettingDefault {
     private static boolean autoMemory = true;
     private static String serverIp = "";
     private static String java = "Auto";
-    private static int newScaleFactor = 100;
     private static boolean notCheckGame = false;
     private static boolean notCheckJVM = true;
     private static boolean beGesture = false;
@@ -55,9 +54,6 @@ public class VersionSettingDefault {
     }
     public static String getJava() {
         return java;
-    }
-    public static int getNewScaleFactor() {
-        return newScaleFactor;
     }
     public static boolean getNotCheckGame() {
         return notCheckGame;
@@ -110,7 +106,6 @@ public class VersionSettingDefault {
             autoMemory = defaultConfig.has("autoMemory") ? defaultConfig.get("autoMemory").getAsBoolean() : autoMemory;
             serverIp = defaultConfig.has("serverIp") ? defaultConfig.get("serverIp").getAsString() : serverIp;
             java = defaultConfig.has("java") ? defaultConfig.get("java").getAsString() : java;
-            newScaleFactor = defaultConfig.has("newScaleFactor") ? defaultConfig.get("newScaleFactor").getAsInt() : newScaleFactor;
             notCheckGame = defaultConfig.has("notCheckGame") ? defaultConfig.get("notCheckGame").getAsBoolean() : notCheckGame;
             notCheckJVM = defaultConfig.has("notCheckJVM") ? defaultConfig.get("notCheckJVM").getAsBoolean() : notCheckJVM;
             beGesture = defaultConfig.has("beGesture") ? defaultConfig.get("beGesture").getAsBoolean() : beGesture;
