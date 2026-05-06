@@ -440,7 +440,7 @@ public class DefaultLauncher extends Launcher {
                 pair("${auth_access_token}", authInfo.getAccessToken()),
                 pair("${auth_uuid}", customUuid ? options.getUuid() : UUIDTypeAdapter.fromUUID(authInfo.getUUID())),
                 pair("${version_name}", Optional.ofNullable(options.getVersionName()).orElse(version.getId())),
-                pair("${version_type}", version.getType().getId()),
+                pair("${version_type}", Optional.ofNullable(options.getVersionType()).orElse(version.getType().getId())),
                 pair("${profile_name}", Optional.ofNullable(options.getProfileName()).orElse("Minecraft")),
                 pair("${game_directory}", repository.getRunDirectory(version.getId()).getAbsolutePath()),
                 pair("${user_type}", "msa"),

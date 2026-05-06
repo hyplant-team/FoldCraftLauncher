@@ -17,6 +17,7 @@
  */
 package com.tungsten.fcl.game;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.tungsten.fclcore.util.Logging.LOG;
 
 import android.annotation.SuppressLint;
@@ -357,14 +358,14 @@ public class FCLGameRepository extends DefaultGameRepository {
             vs.setUsesGlobal(true);
     }
 
-    public LaunchOptions getLaunchOptions(String version, JavaVersion javaVersion, File gameDir) {
+    public LaunchOptions getLaunchOptions(String version, JavaVersion javaVersion, File gameDir, double scaleFactor) {
         VersionSetting vs = getVersionSetting(version);
         String profileName = (gameDir.getParentFile() != null) ? gameDir.getParentFile().getName() : "Minecraft";
-
+        String versionType = FCLPath.CONTEXT.getSharedPreferences("launcher", MODE_PRIVATE).getString("custom_launcher_name", "");
         LaunchOptions.Builder builder = new LaunchOptions.Builder()
                 .setGameDir(gameDir)
                 .setJava(javaVersion)
-                .setVersionType("error")    // Please use version.getType().getId()
+                .setVersionType(versionType.equals("") ? null : versionType)
                 .setVersionName(version)
                 .setProfileName(profileName)
                 .setGameArguments(StringUtils.tokenize(vs.getMinecraftArgs()))
@@ -376,8 +377,8 @@ public class FCLGameRepository extends DefaultGameRepository {
                 ) / 1024 / 1024))
                 .setMinMemory(vs.getMaxMemory())
                 .setUUid(vs.getUuid())
-                .setWidth(AndroidUtils.getScreenWidth())
-                .setHeight(AndroidUtils.getScreenHeight())
+                .setWidth((int) (AndroidUtils.getScreenWidth() * scaleFactor))
+                .setHeight((int) (AndroidUtils.getScreenHeight() * scaleFactor))
                 .setServerIp(vs.getServerIp())
                 .setBEGesture(vs.isBeGesture())
                 .setVkDriverSystem(vs.isVKDriverSystem())
@@ -482,7 +483,7 @@ public class FCLGameRepository extends DefaultGameRepository {
         FCLBridge.FORCE_RESOLUTION = vs.isForceResolution();
         if (FCLBridge.FORCE_RESOLUTION) {
             try {
-                SharedPreferences preferences = Objects.requireNonNull(FCLApplication.getCurrentActivity()).getSharedPreferences("launcher", Context.MODE_PRIVATE);
+                SharedPreferences preferences = Objects.requireNonNull(FCLApplication.getCurrentActivity()).getSharedPreferences("launcher", MODE_PRIVATE);
                 String[] split = preferences.getString("force_resolution", "1920x1080").toLowerCase().split("x");
                 if (split.length == 2) {
                     int w = Integer.parseInt(split[0]);

@@ -3,7 +3,7 @@
     <int name="ignore_update" value="-1" />
     <int name="ignore_announcement" value="-1" />
     <int name="lang" value="0" />
-    <boolean name="backend" value="false" />
     <boolean name="is_first_launch" value="true" />
     <boolean name="is_agree" value="false" />
+    <string name="custom_launcher_name" value="" />
 </map>

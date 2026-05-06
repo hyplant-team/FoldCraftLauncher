@@ -398,7 +398,8 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
         FCLSpinner<GestureMode> gestureModeSpinner = findViewById(R.id.gesture_mode_spinner);
         FCLSpinner<MouseMoveMode> mouseMoveModeSpinner = findViewById(R.id.mouse_mode_spinner);
 
-        FCLNumberSeekBar itemBarScaleSeekbar = findViewById(R.id.item_bar_scale);
+        FCLNumberSeekBar itemBarWidthSeekbar = findViewById(R.id.item_bar_width);
+        FCLNumberSeekBar itemBarHeightSeekbar = findViewById(R.id.item_bar_height);
         FCLNumberSeekBar windowScaleSeekbar = findViewById(R.id.window_scale);
         FCLNumberSeekBar cursorOffsetSeekbar = findViewById(R.id.cursor_offset);
         FCLNumberSeekBar mouseSensitivitySeekbar = findViewById(R.id.mouse_sensitivity);
@@ -547,8 +548,17 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
         FXUtils.bindSelection(gestureModeSpinner, menuSetting.getGestureModeProperty());
         FXUtils.bindSelection(mouseMoveModeSpinner, menuSetting.getMouseMoveModeProperty());
 
-        initSeekbar(itemBarScaleSeekbar, menuSetting.getItemBarScale(), observable -> {
-            menuSetting.setItemBarScale(itemBarScaleSeekbar.progressProperty().get());
+        int screenWidth = AndroidUtils.getScreenWidth();
+        initSeekbar(itemBarWidthSeekbar, (int) (menuSetting.getItemBarWidth() * 100f / screenWidth), observable -> {
+            menuSetting.setItemBarWidth((int) (screenWidth / 100f * itemBarWidthSeekbar.progressProperty().get()));
+            GameOption.GameOptionListener optionListener = gameItemBar.getOptionListener();
+            if (optionListener != null) {
+                optionListener.onOptionChanged(true);
+            }
+        });
+        int screenHeight = AndroidUtils.getScreenHeight();
+        initSeekbar(itemBarHeightSeekbar, (int) (menuSetting.getItemBarHeight() * 100f / screenHeight), observable -> {
+            menuSetting.setItemBarHeight((int) (screenHeight / 100f * itemBarHeightSeekbar.progressProperty().get()));
             GameOption.GameOptionListener optionListener = gameItemBar.getOptionListener();
             if (optionListener != null) {
                 optionListener.onOptionChanged(true);
@@ -792,7 +802,6 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
         if (!menuSetting.isShowLog() && menuSetting.isAutoShowLog()) {
             logWindow.setVisibility(false);
         }
-        refreshWindowsSize(menuSetting.getWindowScale());
     }
 
     @Override
