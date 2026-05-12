@@ -430,9 +430,26 @@ public class DefaultLauncher extends Launcher {
         }
     }
 
-    protected Map<String, String> getConfigurations() {
+    protected Map<String, String> getConfigurations() throws IllegalArgumentException {
         String uuid = options.getUuid().replace("-", "");
         boolean customUuid = uuid.length() == 32;
+        
+        String options_version = options.getVersionType();
+        String version_type = version.getType().getId();
+        String launcher_name = "", launcher_version = "";
+        if (options_version != null && !options_version.isEmpty()) {
+            version_type = options_version;
+            int splash_index = options_version.indexOf("/");
+            if (splash_index != -1 && splash_index == options_version.lastIndexOf("/")) {
+                launcher_name = options_version.substring(0, splash_index);
+                launcher_version = options_version.substring(splash_index + 1);
+                if (launcher_name.isEmpty() || launcher_version.isEmpty()) {
+                    throw new IllegalArgumentException("exception_invalid_custom_info: Invalid custom launcher info: " + options_version);
+                }
+            } else {
+                throw new IllegalArgumentException("exception_invalid_custom_info: Invalid custom launcher info: " + options_version);
+            }
+        }
         return mapOf(
                 // defined by Minecraft official launcher
                 pair("${auth_player_name}", authInfo.getUsername()),
@@ -440,7 +457,7 @@ public class DefaultLauncher extends Launcher {
                 pair("${auth_access_token}", authInfo.getAccessToken()),
                 pair("${auth_uuid}", customUuid ? options.getUuid() : UUIDTypeAdapter.fromUUID(authInfo.getUUID())),
                 pair("${version_name}", Optional.ofNullable(options.getVersionName()).orElse(version.getId())),
-                pair("${version_type}", Optional.ofNullable(options.getVersionType()).orElse(version.getType().getId())),
+                pair("${version_type}", version_type),
                 pair("${profile_name}", Optional.ofNullable(options.getProfileName()).orElse("Minecraft")),
                 pair("${game_directory}", repository.getRunDirectory(version.getId()).getAbsolutePath()),
                 pair("${user_type}", "msa"),
@@ -452,8 +469,8 @@ public class DefaultLauncher extends Launcher {
                 pair("${classpath_separator}", File.pathSeparator),
                 pair("${primary_jar}", repository.getVersionJar(version).getAbsolutePath()),
                 pair("${language}", Locale.getDefault().toString()),
-                pair("${launcher_name}", ""),
-                pair("${launcher_version}", ""),
+                pair("${launcher_name}", launcher_name),
+                pair("${launcher_version}", launcher_version),
 
                 // file_separator is used in -DignoreList
                 pair("${file_separator}", File.pathSeparator),

@@ -11,12 +11,12 @@
     <TextureView
         android:id="@+id/texture_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <VideoView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <ScrollView
         android:id="@+id/left_menu_container"
@@ -102,7 +102,7 @@
         <com.tungsten.fcllibrary.component.view.FCLView
             android:id="@+id/padding1"
             android:layout_width="0dp"
-            android:layout_height="24dp"
+            android:layout_height="10dp"
             android:background="@android:color/transparent"
             app:layout_constraintBottom_toTopOf="@id/back"
             app:layout_constraintStart_toStartOf="parent"
@@ -314,6 +314,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <com.tungsten.fcllibrary.component.view.FCLImageButton
+                android:id="@+id/go_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_settings_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:no_padding="true"
+                app:use_theme_color="true" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -22,6 +22,7 @@ import android.util.Log;
 
 import com.mio.data.Renderer;
 import com.mio.manager.RendererManager;
+import com.mio.util.LauncherUtilKt;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.util.RuntimeUtils;
 import com.tungsten.fclauncher.bridge.FCLBridge;
@@ -53,6 +54,8 @@ public final class FCLGameLauncher extends DefaultLauncher {
     @Override
     protected Map<String, String> getConfigurations() {
         Map<String, String> res = super.getConfigurations();
+        res.put("${launcher_name}", "");
+        res.put("${launcher_version}", "");
         return res;
     }
 

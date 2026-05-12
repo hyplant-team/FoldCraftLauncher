@@ -32,6 +32,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.mio.manager.RendererManager;
+import com.mio.util.LauncherUtilKt;
 import com.tungsten.fcl.FCLApplication;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.setting.Profile;
@@ -361,11 +362,10 @@ public class FCLGameRepository extends DefaultGameRepository {
     public LaunchOptions getLaunchOptions(String version, JavaVersion javaVersion, File gameDir, double scaleFactor) {
         VersionSetting vs = getVersionSetting(version);
         String profileName = (gameDir.getParentFile() != null) ? gameDir.getParentFile().getName() : "Minecraft";
-        String versionType = FCLPath.CONTEXT.getSharedPreferences("launcher", MODE_PRIVATE).getString("custom_launcher_name", "");
         LaunchOptions.Builder builder = new LaunchOptions.Builder()
                 .setGameDir(gameDir)
                 .setJava(javaVersion)
-                .setVersionType(versionType.equals("") ? null : versionType)
+                .setVersionType(LauncherUtilKt.getLauncherName(FCLPath.CONTEXT))
                 .setVersionName(version)
                 .setProfileName(profileName)
                 .setGameArguments(StringUtils.tokenize(vs.getMinecraftArgs()))

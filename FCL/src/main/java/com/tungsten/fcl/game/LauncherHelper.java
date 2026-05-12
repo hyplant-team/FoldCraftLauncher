@@ -298,7 +298,13 @@ public final class LauncherHelper {
                             } else if (ex instanceof AccessDeniedException) {
                                 message = getLocalizedText(context, "exception_access_denied", ((AccessDeniedException) ex).getFile());
                             } else if (ex instanceof IllegalArgumentException) {
-                                message = getLocalizedText(context, "exception_no_suitable_java");
+                                if (ex.getMessage().startsWith("exception_no_suitable_java")) {
+                                    message = getLocalizedText(context, "exception_no_suitable_java");
+                                } else if (ex.getMessage().startsWith("exception_invalid_custom_info")) {
+                                    message = getLocalizedText(context, "exception_invalid_custom_info");
+                                } else {
+                                    message = StringUtils.getStackTrace(ex);
+                                }
                             } else {
                                 message = StringUtils.getStackTrace(ex);
                             }
@@ -472,7 +478,7 @@ public final class LauncherHelper {
                     .setPositiveButton(context.getString(R.string.launch_error_java_auto), () -> {
                         setting.setJava(JavaVersion.JAVA_AUTO.getName());
                         if (suggestedJavaVersion == JavaManager.NO_JAVA_FOUND) {
-                            future.completeExceptionally(new IllegalArgumentException("Failed to find a suitable Java!"));
+                            future.completeExceptionally(new IllegalArgumentException("exception_no_suitable_java: Failed to find a suitable Java!"));
                         } else {
                             future.complete(suggestedJavaVersion);
                         }
