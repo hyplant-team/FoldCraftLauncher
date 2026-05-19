@@ -361,6 +361,7 @@ public class FCLGameRepository extends DefaultGameRepository {
 
     public LaunchOptions getLaunchOptions(String version, JavaVersion javaVersion, File gameDir, double scaleFactor) {
         VersionSetting vs = getVersionSetting(version);
+        initForceResolution(vs);
         String profileName = (gameDir.getParentFile() != null) ? gameDir.getParentFile().getName() : "Minecraft";
         LaunchOptions.Builder builder = new LaunchOptions.Builder()
                 .setGameDir(gameDir)
@@ -377,15 +378,14 @@ public class FCLGameRepository extends DefaultGameRepository {
                 ) / 1024 / 1024))
                 .setMinMemory(vs.getMaxMemory())
                 .setUUid(vs.getUuid())
-                .setWidth((int) (AndroidUtils.getScreenWidth() * scaleFactor))
-                .setHeight((int) (AndroidUtils.getScreenHeight() * scaleFactor))
+                .setWidth(vs.isForceResolution() ? FCLBridge.FORCE_RESOLUTION_WIDTH : (int) (AndroidUtils.getScreenWidth() * scaleFactor))
+                .setHeight(vs.isForceResolution() ? FCLBridge.FORCE_RESOLUTION_HEIGHT : (int) (AndroidUtils.getScreenHeight() * scaleFactor))
                 .setServerIp(vs.getServerIp())
                 .setBEGesture(vs.isBeGesture())
                 .setVkDriverSystem(vs.isVKDriverSystem())
                 .setPojavBigCore(vs.isPojavBigCore())
                 .setRenderer(RendererManager.getRenderer(vs.getRenderer()))
                 .setDebugLog(vs.isDebugLog());
-        initForceResolution(vs);
 
         File json = getModpackConfiguration(version);
         if (json.exists()) {
