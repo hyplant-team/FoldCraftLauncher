@@ -19,6 +19,8 @@
   "mouseSensitivity": 1.0,
   "mouseSensitivityCursor": 2.0,
   "mouseSize": 20,
+  "mouseOffsetX": 0,
+  "mouseOffsetY": 0,
   "physicalMouseMode": false,
   "itemBarScale": 0,
   "windowScale": 1.0,

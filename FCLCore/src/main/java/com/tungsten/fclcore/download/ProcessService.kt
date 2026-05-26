@@ -123,7 +123,7 @@ class ProcessService : Service() {
 
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
-            "fcl-process",
+            "fcl_process",
             "FCL Process",
             NotificationManager.IMPORTANCE_HIGH
         )
@@ -132,7 +132,7 @@ class ProcessService : Service() {
     }
 
     private fun buildNotification(): Notification {
-        return NotificationCompat.Builder(this, "fcl-process")
+        return NotificationCompat.Builder(this, "fcl_process")
             .setContentTitle(getString(R.string.notification_title))
             .setSmallIcon(R.mipmap.ic_launcher)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
