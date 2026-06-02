@@ -206,7 +206,7 @@ public final class LauncherHelper {
                         }).thenComposeAsync(fclBridge -> checkNativeLibPlugin(fclBridge, repository.getGameVersion(selectedVersion).orElse("")))
                         .thenComposeAsync(fclBridge -> {
                             GameOption gameOption = new GameOption(repository.getRunDirectory(selectedVersion).getAbsolutePath());
-                            gameOption.set("preferredGraphicsBackend", setting.isUseOpengl() ? "opengl" : "default");
+                            gameOption.set("preferredGraphicsBackend", setting.getGraphicsBackend());
                             gameOption.save();
                             return Task.completed(fclBridge);
                         }).thenAcceptAsync(fclBridge -> Schedulers.androidUIThread().execute(() -> {

@@ -6,4 +6,5 @@
     <boolean name="is_first_launch" value="true" />
     <boolean name="is_agree" value="false" />
     <string name="custom_launcher_name" value="" />
+    <string name="env" value="" />
 </map>
