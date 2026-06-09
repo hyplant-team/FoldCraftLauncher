@@ -86,9 +86,9 @@ You can download the automatic builds from Actions in the repository
 You can use Android Studio to automate configuration and build
 
 #### 🛠️ Setup the Environment
-- Gradle: `gradle-8.9-bin`
-  - android-application: `8.7.2`
-  - android-library: `8.7.2`
+- Gradle: `gradle-8.13-bin`
+  - android-application: `8.13.2`
+  - android-library: `8.13.2`
   - kotlin-android: `2.0.21`
 - Android SDK
   - platforms: `android-35`

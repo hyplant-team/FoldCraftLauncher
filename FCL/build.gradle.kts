@@ -58,8 +58,8 @@ android {
         applicationId = pkgName
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1309
-        versionName = "1.3.0.9"
+        versionCode = 1311
+        versionName = "1.3.1.1"
     }
 
     buildTypes {
@@ -74,41 +74,6 @@ android {
         configureEach {
             resValue("string", "app_name", appName)
             resValue("string", "app_version", android.defaultConfig.versionName.toString())
-        }
-    }
-
-    androidComponents {
-        onVariants { variant ->
-            variant.outputs.forEach { output ->
-                if (output is com.android.build.api.variant.impl.VariantOutputImpl) {
-                    (output.getFilter(ABI)?.identifier ?: "all").let { abi ->
-                        output.outputFileName =
-                            "FCL-${variant.buildType}-${defaultConfig.versionName}-${abi}.apk"
-                    }
-
-                    val variantName = variant.name.replaceFirstChar { it.uppercaseChar() }
-                    afterEvaluate {
-                        val task =
-                            tasks.named("merge${variantName}Assets").get() as MergeSourceSetFolders
-                        task.doLast {
-                            val arch = System.getProperty("arch", "all")
-                            val assetsDir = task.outputDir.get().asFile
-                            copyAssetsFile(File("${project.projectDir}/src/main/assets"), assetsDir)
-                            val jreList = listOf("jre8", "jre17", "jre21", "jre25")
-                            println("arch:$arch")
-                            jreList.forEach { jre ->
-                                val runtimeDir = "$assetsDir/app_runtime/java/$jre"
-                                println("runtimeDir:$runtimeDir")
-                                File(runtimeDir).listFiles().forEach {
-                                    if (arch != "all" && it.name != "version" && !it.name.contains("universal") && it.name != "bin-${arch}.tar.xz") {
-                                        println("delete:${it} : ${it.delete()}")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -131,6 +96,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        resValues = true
     }
 
     splits {
@@ -148,11 +114,46 @@ android {
             }
         }
     }
+}
 
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
+androidComponents {
+    onVariants { variant ->
+        variant.outputs.forEach { output ->
+            if (output is com.android.build.api.variant.impl.VariantOutputImpl) {
+                (output.getFilter(ABI)?.identifier ?: "all").let { abi ->
+                    output.outputFileName =
+                        "FCL-${variant.buildType}-${project.android.defaultConfig.versionName}-${abi}.apk"
+                }
+
+                val variantName = variant.name.replaceFirstChar { it.uppercaseChar() }
+                afterEvaluate {
+                    val task =
+                        tasks.named("merge${variantName}Assets").get() as MergeSourceSetFolders
+                    task.doLast {
+                        val arch = System.getProperty("arch", "all")
+                        val assetsDir = task.outputDir.get().asFile
+                        copyAssetsFile(File("${project.projectDir}/src/main/assets"), assetsDir)
+                        val jreList = listOf("jre8", "jre17", "jre21", "jre25")
+                        println("arch:$arch")
+                        jreList.forEach { jre ->
+                            val runtimeDir = "$assetsDir/app_runtime/java/$jre"
+                            println("runtimeDir:$runtimeDir")
+                            File(runtimeDir).listFiles().forEach {
+                                if (arch != "all" && it.name != "version" && !it.name.contains("universal") && it.name != "bin-${arch}.tar.xz") {
+                                    println("delete:${it} : ${it.delete()}")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 

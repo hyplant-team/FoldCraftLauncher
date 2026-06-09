@@ -47,6 +47,7 @@ public final class Logging {
     }
 
     public static String filterForbiddenToken(String message) {
+        if (message == null) return "";
         return message;
     }
 

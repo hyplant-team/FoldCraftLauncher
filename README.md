@@ -84,9 +84,9 @@
 您可以使用 Android Studio 自动化配置和构建
 
 #### 🛠️ 配置环境
-- Gradle: `gradle-8.9-bin`
-  - android-application: `8.7.2`
-  - android-library: `8.7.2`
+- Gradle: `gradle-8.13-bin`
+  - android-application: `8.13.2`
+  - android-library: `8.13.2`
   - kotlin-android: `2.0.21`
 - Android SDK
   - platforms: `android-35`
