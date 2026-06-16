@@ -42,6 +42,7 @@ import com.mio.util.GuideUtil
 import com.mio.util.GuideUtil.Companion.guideTarget
 import com.mio.util.ImageUtil
 import com.tungsten.fcl.R
+import com.tungsten.fcl.activity.JVMCrashActivity;
 import com.tungsten.fcl.databinding.ActivityMainBinding
 import com.tungsten.fcl.game.JarExecutorHelper
 import com.tungsten.fcl.game.TexturesLoader
@@ -466,7 +467,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                             TexturesLoader.toAvatar(
                                 TexturesLoader.getDefaultSkin(TextureModel.ALEX).image,
                                 ConvertUtils.dip2px(
-                                    this@MainActivity, 30f
+                                    this@MainActivity, 52f
                                 )
                             ).toDrawable(resources)
                         )
@@ -479,7 +480,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                         avatar.imageProperty().bind(
                             TexturesLoader.avatarBinding(
                                 account, ConvertUtils.dip2px(
-                                    this@MainActivity, 30f
+                                    this@MainActivity, 52f
                                 )
                             )
                         )
@@ -497,7 +498,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 binding.avatar.imageProperty().bind(
                     TexturesLoader.avatarBinding(
                         currentAccount.get(), ConvertUtils.dip2px(
-                            this@MainActivity, 30f
+                            this@MainActivity, 52f
                         )
                     )
                 )
@@ -716,22 +717,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
         try {
             val file = File(FCLPath.LOG_DIR).resolve("latest_game.log")
             if (!file.exists()) return
-            val intent = Intent(Intent.ACTION_SEND)
-
-            val uri = FileProvider.getUriForFile(
-                this,
-                getPackageName() + ".provider",
-                file
-            )
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_STREAM, uri)
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            startActivity(
-                Intent.createChooser(
-                    intent,
-                    getString(com.tungsten.fcllibrary.R.string.crash_reporter_share)
-                )
-            )
+            JVMCrashActivity.startCrashActivity(true, this@MainActivity, 0, FCLPath.LOG_DIR + "/latest_game.log");
         } catch (e: Exception) {
             LOG.log(Level.INFO, "Share error: $e")
         }

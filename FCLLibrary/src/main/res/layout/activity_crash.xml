@@ -40,6 +40,7 @@
     <com.tungsten.fcllibrary.component.view.FCLTextView
         android:id="@+id/hint"
         style="@style/FCLCrashSidebarTitle"
+        android:singleLine="false"
         android:text="@string/crash_reporter_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/split"

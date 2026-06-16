@@ -5,6 +5,7 @@
     <int name="lang" value="0" />
     <boolean name="is_first_launch" value="true" />
     <boolean name="is_agree" value="false" />
+    <boolean name="allowScreenshots" value="true" />
     <string name="custom_launcher_name" value="" />
     <string name="env" value="" />
 </map>
