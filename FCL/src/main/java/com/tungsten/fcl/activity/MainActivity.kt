@@ -7,7 +7,6 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.SurfaceTexture
 import android.graphics.drawable.GradientDrawable
 import android.media.MediaPlayer
 import android.net.Uri
@@ -15,7 +14,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.KeyEvent
-import android.view.TextureView
 import android.view.View
 import android.view.animation.BounceInterpolator
 import android.view.animation.OvershootInterpolator
@@ -41,6 +39,7 @@ import com.mio.util.DisplayUtil
 import com.mio.util.GuideUtil
 import com.mio.util.GuideUtil.Companion.guideTarget
 import com.mio.util.ImageUtil
+import com.mio.util.showWarningDialog
 import com.tungsten.fcl.R
 import com.tungsten.fcl.activity.JVMCrashActivity;
 import com.tungsten.fcl.databinding.ActivityMainBinding
@@ -200,6 +199,9 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 }
                 jar.setOnClickListener(this@MainActivity)
                 jar.setOnLongClickListener {
+                    sharedPreferences.edit {
+                        putBoolean("show_jarExecutor_warn_dialog", true)
+                    }
                     EditDialog(this@MainActivity) {
                         JarExecutorHelper.exec(
                             this@MainActivity,
@@ -286,7 +288,6 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             }
         setupLiveBackground()
-        refreshScreenSize()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -404,8 +405,16 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 uiManager.onBackPressed()
             }
             if (view === jar) {
+                if (sharedPreferences.getBoolean("show_jarExecutor_warn_dialog", true)) {
+                    showWarningDialog(this@MainActivity, getString(R.string.jar_executor_warn)){
+                        sharedPreferences.edit {
+                            putBoolean("show_jarExecutor_warn_dialog", false)
+                        }
+                    }
+                    return
+                }
                 jar.isSelected = false
-                JarExecutorHelper.start(this@MainActivity, this@MainActivity)
+                JarExecutorHelper.start(this@MainActivity)
             }
             if (view === viewLogs) {
                 val builder = FileBrowser.Builder(this@MainActivity)
@@ -430,6 +439,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                         it.driver == selectedProfile.getVersionSetting(selectedProfile.selectedVersion).driver
                     }
                 }.getOrNull() ?: DriverPlugin.driverList[0]
+                refreshScreenSize()
                 DisplayUtil.refreshDisplayMetrics(this@MainActivity)
                 Versions.launch(this@MainActivity, selectedProfile)
             }
@@ -775,7 +785,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 binding.videoView.seekTo(0)
                 binding.videoView.start()
             }
-            binding.videoView.setOnErrorListener { mp, what, extra ->
+            binding.videoView.setOnErrorListener { _, _, _ ->
                 mediaPlayer = null
                 return@setOnErrorListener true
             }
@@ -820,31 +830,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
     }
 
     private fun refreshScreenSize() {
-        binding.textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
-            override fun onSurfaceTextureAvailable(
-                surface: SurfaceTexture,
-                width: Int,
-                height: Int
-            ) {
-                DisplayUtil.screenWidth = width
-                DisplayUtil.screenHeight = height
-            }
-
-            override fun onSurfaceTextureSizeChanged(
-                surface: SurfaceTexture,
-                width: Int,
-                height: Int
-            ) {
-                DisplayUtil.screenWidth = width
-                DisplayUtil.screenHeight = height
-            }
-
-            override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
-                return true
-            }
-
-            override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
-            }
-        }
+        DisplayUtil.screenWidth =  binding.root.width
+        DisplayUtil.screenHeight = binding.root.height
     }
 }

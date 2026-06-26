@@ -290,9 +290,4 @@ public class FileBrowserActivity extends FCLActivity implements View.OnClickList
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        callback = false;
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 }

@@ -81,7 +81,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
         FileUtils.cleanDirectoryQuietly(new File(FCLPath.CACHE_DIR));
         FileUtils.deleteDirectoryQuietly(new File(FCLPath.INTERNAL_DIR + "/code_cache"));
         FileUtils.deleteDirectoryQuietly(new File(FCLPath.INTERNAL_DIR.replaceFirst("user","user_de")));
-        RuntimeUtils.copyAssetsDirToLocalDir(getContext(), "othersInternal/cache", FCLPath.CACHE_DIR);
+        RuntimeUtils.copyAssetsDirToLocalDir(getContext(), "modpackInternal/cache", FCLPath.CACHE_DIR);
     }
 
     @Override
@@ -177,7 +177,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
             edit.apply();
         });
 
-        binding.allowScreenshots.setChecked(sharedPreferences.getBoolean("allowScreenshots", false));
+        binding.allowScreenshots.setChecked(sharedPreferences.getBoolean("allow_screenshots", true));
         binding.allowScreenshots.setOnCheckedChangeListener(this);
 
         binding.checkAutoSource.setChecked(config().autoChooseDownloadTypeProperty().get());
@@ -274,7 +274,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
             try {
                 clearCacheDirs();
             } catch (Exception e) {
-                LOG.log(Level.SEVERE, "Cache dir preset not found! Do NOT delete cache dir in othersInternal!", e);
+                LOG.log(Level.SEVERE, "Cache dir preset not found! Do NOT delete cache dir in modpackInternal!", e);
             }
         }
         if (v == binding.exportLog) {
@@ -379,107 +379,83 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
             dialog.show();
         }
         if (v == binding.backgroundLt || v == binding.backgroundDk) {
-            FileBrowser.Builder builder = new FileBrowser.Builder(getContext());
-            builder.setLibMode(LibMode.FILE_CHOOSER);
-            builder.setSelectionMode(SelectionMode.SINGLE_SELECTION);
             ArrayList<String> suffix = new ArrayList<>();
             suffix.add(".png");
             suffix.add(".jpg");
             suffix.add(".jpeg");
-            builder.setSuffix(suffix);
-            builder.create().browse(getActivity(), RequestCodes.SELECT_LAUNCHER_BACKGROUND_CODE, ((requestCode, resultCode, data) -> {
-                if (requestCode == RequestCodes.SELECT_LAUNCHER_BACKGROUND_CODE && resultCode == Activity.RESULT_OK && data != null) {
-                    String path = FileBrowser.getSelectedFiles(data).get(0);
-                    Uri uri = Uri.parse(path);
-                    if (AndroidUtils.isDocUri(uri)) {
-                        path = AndroidUtils.copyFileToDir(getActivity(), uri, new File(FCLPath.CACHE_DIR));
-                    }
-                    ThemeEngine.getInstance().applyAndSave(getContext(), ((MainActivity) getActivity()).binding.background, v == binding.backgroundLt ? path : null, v == binding.backgroundDk ? path : null);
+            MainActivity.getInstance().fileLauncher.launchSingleSelection(null, suffix, files -> {
+                String path = files.get(0);
+                Uri uri = Uri.parse(path);
+                if (AndroidUtils.isDocUri(uri)) {
+                    path = AndroidUtils.copyFileToDir(getActivity(), uri, new File(FCLPath.CACHE_DIR));
                 }
-            }));
+                ThemeEngine.getInstance().applyAndSave(getContext(), ((MainActivity) getActivity()).binding.background, v == binding.backgroundLt ? path : null, v == binding.backgroundDk ? path : null);
+            });
         }
         if (v == binding.backgroundLive) {
-            FileBrowser.Builder builder = new FileBrowser.Builder(getContext());
-            builder.setLibMode(LibMode.FILE_CHOOSER);
-            builder.setSelectionMode(SelectionMode.SINGLE_SELECTION);
             ArrayList<String> suffix = new ArrayList<>();
             suffix.add(".mp4");
-            builder.setSuffix(suffix);
-            builder.create().browse(getActivity(), RequestCodes.SELECT_LAUNCHER_BACKGROUND_CODE, ((requestCode, resultCode, data) -> {
-                if (requestCode == RequestCodes.SELECT_LAUNCHER_BACKGROUND_CODE && resultCode == Activity.RESULT_OK && data != null) {
-                    String path = FileBrowser.getSelectedFiles(data).get(0);
-                    Uri uri = Uri.parse(path);
-                    if (AndroidUtils.isDocUri(uri)) {
-                        AndroidUtils.copyFile(getActivity(), uri, new File(FCLPath.LIVE_BACKGROUND_PATH));
-                    } else {
-                        try {
-                            FileUtils.copyFile(new File(path), new File(FCLPath.LIVE_BACKGROUND_PATH));
-                        } catch (IOException ignore) {
-                        }
+            MainActivity.getInstance().fileLauncher.launchSingleSelection(null, suffix, files -> {
+                String path = files.get(0);
+                Uri uri = Uri.parse(path);
+                if (AndroidUtils.isDocUri(uri)) {
+                    AndroidUtils.copyFile(getActivity(), uri, new File(FCLPath.LIVE_BACKGROUND_PATH));
+                } else {
+                    try {
+                        FileUtils.copyFile(new File(path), new File(FCLPath.LIVE_BACKGROUND_PATH));
+                    } catch (IOException ignore) {
                     }
-                    MainActivity.getInstance().setupLiveBackground();
                 }
-            }));
+                MainActivity.getInstance().setupLiveBackground();
+            });
         }
         if (v == binding.cursor) {
-            FileBrowser.Builder builder = new FileBrowser.Builder(getContext());
-            builder.setLibMode(LibMode.FILE_CHOOSER);
-            builder.setSelectionMode(SelectionMode.SINGLE_SELECTION);
             ArrayList<String> suffix = new ArrayList<>();
             suffix.add(".png");
             suffix.add(".gif");
-            builder.setSuffix(suffix);
-            builder.create().browse(getActivity(), RequestCodes.SELECT_CURSOR_CODE, ((requestCode, resultCode, data) -> {
-                if (requestCode == RequestCodes.SELECT_CURSOR_CODE && resultCode == Activity.RESULT_OK && data != null) {
-                    String path = FileBrowser.getSelectedFiles(data).get(0);
-                    Uri uri = Uri.parse(path);
-                    String type = AndroidUtils.getFileName(getContext(), uri);
-                    if (type.endsWith(".gif")) {
-                        type = "gif";
-                    } else {
-                        type = "png";
-                    }
-                    deleteCursorFile();
-                    if (AndroidUtils.isDocUri(uri)) {
-                        AndroidUtils.copyFile(getActivity(), uri, new File(FCLPath.FILES_DIR, "cursor." + type));
-                    } else {
-                        try {
-                            FileUtils.copyFile(new File(path), new File(FCLPath.FILES_DIR, "cursor." + type));
-                        } catch (IOException ignore) {
-                        }
+            MainActivity.getInstance().fileLauncher.launchSingleSelection(null, suffix, files -> {
+                String path = files.get(0);
+                Uri uri = Uri.parse(path);
+                String type = AndroidUtils.getFileName(getContext(), uri);
+                if (type.endsWith(".gif")) {
+                    type = "gif";
+                } else {
+                    type = "png";
+                }
+                deleteCursorFile();
+                if (AndroidUtils.isDocUri(uri)) {
+                    AndroidUtils.copyFile(getActivity(), uri, new File(FCLPath.FILES_DIR, "cursor." + type));
+                } else {
+                    try {
+                        FileUtils.copyFile(new File(path), new File(FCLPath.FILES_DIR, "cursor." + type));
+                    } catch (IOException ignore) {
                     }
                 }
-            }));
+            });
         }
         if (v == binding.menuIcon) {
-            FileBrowser.Builder builder = new FileBrowser.Builder(getContext());
-            builder.setLibMode(LibMode.FILE_CHOOSER);
-            builder.setSelectionMode(SelectionMode.SINGLE_SELECTION);
             ArrayList<String> suffix = new ArrayList<>();
             suffix.add(".png");
             suffix.add(".gif");
-            builder.setSuffix(suffix);
-            builder.create().browse(getActivity(), RequestCodes.SELECT_CURSOR_CODE, ((requestCode, resultCode, data) -> {
-                if (requestCode == RequestCodes.SELECT_CURSOR_CODE && resultCode == Activity.RESULT_OK && data != null) {
-                    String path = FileBrowser.getSelectedFiles(data).get(0);
-                    Uri uri = Uri.parse(path);
-                    String type = AndroidUtils.getFileName(getContext(), uri);
-                    if (type.endsWith(".gif")) {
-                        type = "gif";
-                    } else {
-                        type = "png";
-                    }
-                    deleteMenuIconFile();
-                    if (AndroidUtils.isDocUri(uri)) {
-                        AndroidUtils.copyFile(getActivity(), uri, new File(FCLPath.FILES_DIR, "menu_icon." + type));
-                    } else {
-                        try {
-                            FileUtils.copyFile(new File(path), new File(FCLPath.FILES_DIR, "menu_icon." + type));
-                        } catch (IOException ignore) {
-                        }
+            MainActivity.getInstance().fileLauncher.launchSingleSelection(null, suffix, files -> {
+                String path = files.get(0);
+                Uri uri = Uri.parse(path);
+                String type = AndroidUtils.getFileName(getContext(), uri);
+                if (type.endsWith(".gif")) {
+                    type = "gif";
+                } else {
+                    type = "png";
+                }
+                deleteMenuIconFile();
+                if (AndroidUtils.isDocUri(uri)) {
+                    AndroidUtils.copyFile(getActivity(), uri, new File(FCLPath.FILES_DIR, "menu_icon." + type));
+                } else {
+                    try {
+                        FileUtils.copyFile(new File(path), new File(FCLPath.FILES_DIR, "menu_icon." + type));
+                    } catch (IOException ignore) {
                     }
                 }
-            }));
+            });
         }
         if (v == binding.resetTheme) {
             ThemeEngine.getInstance().applyAndSave(getContext(), ThemeEngine.getDefaultColor(getContext()));
@@ -609,7 +585,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
         } else if (v == binding.autoExitLauncher) {
             sharedPreferences.edit().putBoolean("autoExitLauncher", isChecked).apply();
         } else if (v == binding.allowScreenshots) {
-            sharedPreferences.edit().putBoolean("allowScreenshots", isChecked).apply();
+            sharedPreferences.edit().putBoolean("allow_screenshots", isChecked).apply();
         }
     }
 

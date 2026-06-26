@@ -5,7 +5,9 @@
     <int name="lang" value="0" />
     <boolean name="is_first_launch" value="true" />
     <boolean name="is_agree" value="false" />
-    <boolean name="allowScreenshots" value="true" />
+    <boolean name="allow_screenshots" value="true" />
+    <boolean name="check_notification_permission" value="false" />
+    <boolean name="show_jarExecutor_warn_dialog" value="true" />
     <string name="custom_launcher_name" value="" />
     <string name="env" value="" />
 </map>
