@@ -497,8 +497,9 @@ class VersionSettingPage(
             showItemSelectionDialog(
                 context,
                 context.getString(R.string.settings_fcl_graphics_backend),
-                mutableListOf("default", "opengl", "vulkan")
-            ) { backendName: String ->
+                listOf("default", "opengl", "vulkan"),
+                false
+            ) { _, backendName: String ->
                 binding.graphicsBackend.text = backendName
                 lastVersionSetting.graphicsBackend = backendName
             }

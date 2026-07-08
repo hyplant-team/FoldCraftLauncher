@@ -28,6 +28,7 @@
     <string name="splash_runtime_game_resource">Game Resource</string>
     <string name="splash_runtime_others">Others</string>
     <string name="splash_runtime_install">Install / Update</string>
+    <string name="missing_runtime_arch_files">The currently installed launcher is missing the runtime files required for your device\'s architecture(%s). Please download the installation package for the corresponding architecture(%s) or the universal installation package(%s).</string>
 
     <string name="account">Account</string>
     <string name="version">Version</string>

@@ -18,6 +18,7 @@
     <string name="splash_runtime_others">其他文件</string>
     <string name="splash_runtime_title">安装或更新运行环境\n\n安装完成后需要重启应用才能生效。应用会自动退出，重新打开即可使用。</string>
     <string name="splash_runtime_install">安装 / 更新</string>
+    <string name="missing_runtime_arch_files">当前安装的启动器缺少当前设备架构（%s）所需的运行时文件，请下载对应架构的安装包（%s）或是全架构安装包（%s）。</string>
 
     <string name="account">账户管理</string>
     <string name="version">版本列表</string>

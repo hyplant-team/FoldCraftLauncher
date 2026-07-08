@@ -182,21 +182,13 @@ public class UpdateDialog extends FCLDialog implements View.OnClickListener {
         if (url == null) {
             return null;
         }
-        String arch = "all";
-        switch (Architecture.getDeviceArchitecture()) {
-            case Architecture.ARCH_ARM:
-                arch = "armeabi-v7a";
-                break;
-            case Architecture.ARCH_ARM64:
-                arch = "arm64-v8a";
-                break;
-            case Architecture.ARCH_X86:
-                arch = "x86";
-                break;
-            case Architecture.ARCH_X86_64:
-                arch = "x86_64";
-                break;
-        }
+        String arch = switch (Architecture.getDeviceArchitecture()) {
+            case Architecture.ARCH_ARM -> "armeabi-v7a";
+            case Architecture.ARCH_ARM64 -> "arm64-v8a";
+            case Architecture.ARCH_X86 -> "x86";
+            case Architecture.ARCH_X86_64 -> "x86_64";
+            default -> "all";
+        };
         url = url.replace("-all", "-" + arch);
         return url;
     }

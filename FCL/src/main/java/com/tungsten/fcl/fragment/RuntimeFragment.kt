@@ -3,6 +3,7 @@ package com.tungsten.fcl.fragment
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.tungsten.fcl.activity.SplashActivity
 import com.tungsten.fcl.databinding.FragmentRuntimeBinding
 import com.tungsten.fcl.util.ReadTools
 import com.tungsten.fcl.util.RuntimeUtils
+import com.tungsten.fclauncher.utils.Architecture
 import com.tungsten.fclauncher.utils.FCLPath
 import com.tungsten.fclcore.util.Logging
 import com.tungsten.fcllibrary.component.FCLFragment
@@ -134,7 +136,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                             RuntimeUtils.reloadConfiguration(context)
                             RuntimeUtils.copyAssetsDirToLocalDir(context, "modpackInternal", FCLPath.INTERNAL_DIR)
                             others = true
-                        }.exceptionOrNull()?.let { showErrorDialog(it) }
+                        }.exceptionOrNull()?.let { showErrorDialog(it.toString()) }
                     }
                     othersState.visibility = View.VISIBLE
                     othersProgress.visibility = View.GONE
@@ -159,7 +161,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                             RuntimeUtils.deleteOldFiles(context)
                             RuntimeUtils.copyAssetsDirToLocalDir(context, "modpackExternal", FCLPath.EXTERNAL_DIR)
                             gameResource = true
-                        }.exceptionOrNull()?.let { showErrorDialog(it) }
+                        }.exceptionOrNull()?.let { showErrorDialog(it.toString()) }
                     }
                     gameResourceState.visibility = View.VISIBLE
                     gameResourceProgress.visibility = View.GONE
@@ -175,7 +177,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.install(context, FCLPath.LWJGL_DIR, "app_runtime/lwjgl")
                             lwjgl = true
-                        }.exceptionOrNull()?.let { showErrorDialog(it) }
+                        }.exceptionOrNull()?.let { showErrorDialog(it.toString()) }
                     }
                     lwjglState.visibility = View.VISIBLE
                     lwjglProgress.visibility = View.GONE
@@ -191,7 +193,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.install(context, FCLPath.CACIOCAVALLO_8_DIR, "app_runtime/caciocavallo")
                             cacio = true
-                        }.exceptionOrNull()?.let { showErrorDialog(it) }
+                        }.exceptionOrNull()?.let { showErrorDialog(it.toString()) }
                     }
                     cacioState.visibility = View.VISIBLE
                     cacioProgress.visibility = View.GONE
@@ -207,7 +209,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.install(context, FCLPath.CACIOCAVALLO_17_DIR, "app_runtime/caciocavallo17")
                             cacio17 = true
-                        }.exceptionOrNull()?.let { showErrorDialog(it) }
+                        }.exceptionOrNull()?.let { showErrorDialog(it.toString()) }
                     }
                     cacio17State.visibility = View.VISIBLE
                     cacio17Progress.visibility = View.GONE
@@ -223,7 +225,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.installJava(context, FCLPath.JAVA_8_PATH, "app_runtime/java/jre8")
                             java8 = true
-                        }.exceptionOrNull()?.let { showErrorDialog(it) }
+                        }.exceptionOrNull()?.let { showErrorDialog(it.toString()) }
                     }
                     java8State.visibility = View.VISIBLE
                     java8Progress.visibility = View.GONE
@@ -239,7 +241,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.installJava(context, FCLPath.JAVA_17_PATH, "app_runtime/java/jre17")
                             java17 = true
-                        }.exceptionOrNull()?.let { showErrorDialog(it) }
+                        }.exceptionOrNull()?.let { showErrorDialog(it.toString()) }
                     }
                     java17State.visibility = View.VISIBLE
                     java17Progress.visibility = View.GONE
@@ -253,9 +255,13 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                 lifecycleScope.launch {
                     withContext(Dispatchers.IO) {
                         runCatching {
-                            RuntimeUtils.installJava(context, FCLPath.JAVA_21_PATH, "app_runtime/java/jre21")
+                            RuntimeUtils.installJava(
+                                context,
+                                FCLPath.JAVA_21_PATH,
+                                "app_runtime/java/jre21"
+                            )
                             java21 = true
-                        }.exceptionOrNull()?.let { showErrorDialog(it) }
+                        }.exceptionOrNull()?.let { showErrorDialog(it.toString()) }
                     }
                     java21State.visibility = View.VISIBLE
                     java21Progress.visibility = View.GONE
@@ -271,7 +277,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.installJava(context, FCLPath.JAVA_25_PATH, "app_runtime/java/jre25")
                             java25 = true
-                        }.exceptionOrNull()?.let { showErrorDialog(it) }
+                        }.exceptionOrNull()?.let { showErrorDialog(it.toString()) }
                     }
                     java25State.visibility = View.VISIBLE
                     java25Progress.visibility = View.GONE
@@ -287,7 +293,7 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
                         runCatching {
                             RuntimeUtils.installJna(context, FCLPath.JNA_PATH, "app_runtime/jna")
                             jna = true
-                        }.exceptionOrNull()?.let { showErrorDialog(it) }
+                        }.exceptionOrNull()?.let { showErrorDialog(it.toString()) }
                     }
                     jnaState.visibility = View.VISIBLE
                     jnaProgress.visibility = View.GONE
@@ -304,17 +310,50 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
 
     override fun onClick(view: View) {
         if (view === bind.install) {
+            val deviceArch = Architecture.archAsString(Architecture.getDeviceArchitecture())
+            if (!isJavaArchSupported(deviceArch)) {
+                showErrorDialog(
+                    getString(
+                        R.string.missing_runtime_arch_files,
+                        deviceArch,
+                        "FCL-release-x.x.x.x-$deviceArch.apk",
+                        "FCL-release-x.x.x.x-all.apk"
+                    )
+                )
+                return
+            }
             install()
         }
     }
 
-    private fun showErrorDialog(e: Throwable) {
-        Logging.LOG.log(Level.SEVERE, "Failed to install assets", e)
+    private fun isJavaArchSupported(arch: String): Boolean {
+        try {
+            val javaDirs = listOf("jre8", "jre17", "jre21", "jre25")
+            val assetManager = requireContext().assets
+            var supportedCount = 0
+            for (javaDir in javaDirs) {
+                val dirPath = "app_runtime/java/$javaDir"
+                val files = assetManager.list(dirPath)
+                if (files != null) {
+                    val expectedFile = "bin-$arch.tar.xz"
+                    if (files.contains(expectedFile)) {
+                        supportedCount++
+                    }
+                }
+            }
+            return supportedCount > 0
+        } catch (e: Exception) {
+            showErrorDialog(e.toString())
+            return false
+        }
+    }
+
+    private fun showErrorDialog(message: String) {
         installing = false
-        lifecycleScope.launch(Dispatchers.Main){
+        lifecycleScope.launch(Dispatchers.Main) {
             FCLAlertDialog.Builder(requireContext())
-                .setMessage(e.toString())
-                .setPositiveButton{
+                .setMessage(message)
+                .setPositiveButton {
                 }
                 .create()
                 .show()
