@@ -144,7 +144,8 @@
   - [virglrenderer](https://github.com/AngelAuraMC/virglrenderer): [MIT License](https://gitlab.freedesktop.org/virgl/virglrenderer/-/blob/master/COPYING).
   - [OpenAL-Soft](https://github.com/kcat/openal-soft): [GNU GPLv2](app_pojavlauncher/src/main/assets/licenses/OPENAL-SOFT_GPL2)
     - [oboe](https://github.com/google/oboe): [Apache License 2.0](app_pojavlauncher/src/main/assets/licenses/OBOE_APACHE2).
-    - [pfffft](https://bitbucket.org/jpommier/pffft/src/master/): [ARR](app_pojavlauncher/src/main/assets/licenses/PFFFT_LICENSE)
+    - [pfffft](https://bitbucket.org/jpommier/pffft/src/master/): [ARR](app_pojavlauncher/src/main/assets/licensesv/PFFFT_LICENSE)
+  - [control-converter](https://github.com/NingZeStudio/control-converter) (FCL→ZL2 控制布局转换，Go 实现，打包为 `libcc.so`): [MIT License](https://opensource.org/licenses/MIT)
 - [root-S7 FCL服务器直装版](https://github.com/root-S7/FoldCraftLauncher)
   - 旧的提交已经删除，[我的旧版仓库](https://github.com/hyplant/FoldCraftLauncherModpack-old)保留了部分提交
 <details>

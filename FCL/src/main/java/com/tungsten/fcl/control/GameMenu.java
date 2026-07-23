@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -41,7 +42,9 @@ import com.tungsten.fcl.R;
 import com.tungsten.fcl.activity.JVMCrashActivity;
 import com.tungsten.fcl.control.data.ButtonStyles;
 import com.tungsten.fcl.control.data.ControlButtonData;
+import com.tungsten.fcl.control.data.ControlButtonStyle;
 import com.tungsten.fcl.control.data.ControlDirectionData;
+import com.tungsten.fcl.control.data.ControlDirectionStyle;
 import com.tungsten.fcl.control.data.ControlViewGroup;
 import com.tungsten.fcl.control.data.CustomControl;
 import com.tungsten.fcl.control.data.DirectionStyles;
@@ -375,7 +378,33 @@ public class GameMenu implements MenuCallback, View.OnClickListener {
         ArrayAdapter<String> viewGroupNameAdapter = new ArrayAdapter<>(activity, R.layout.item_spinner_small, viewGroupNameList);
         viewGroupNameAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown_small);
         spinner.setAdapter(viewGroupNameAdapter);
-        FXUtils.bindSelection(spinner, viewGroupProperty);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setViewGroup(spinner.getDataList().get(position));
+                if (getViewGroup() != null) {
+                    getViewGroup().getViewData().buttonList().forEach(it -> {
+                        String name = it.getStyle().getName();
+                        ControlButtonStyle style = ButtonStyles.findStyleByName(name);
+                        if (name.equals(style.getName())) {
+                            it.setStyle(style);
+                        }
+                    });
+                    getViewGroup().getViewData().directionList().forEach(it -> {
+                        String name = it.getStyle().getName();
+                        ControlDirectionStyle style = DirectionStyles.findStyleByName(name);
+                        if (name.equals(style.getName())) {
+                            it.setStyle(style);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @SuppressLint("SetTextI18n")
