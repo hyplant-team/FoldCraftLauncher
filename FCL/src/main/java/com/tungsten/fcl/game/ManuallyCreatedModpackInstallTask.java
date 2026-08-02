@@ -48,9 +48,12 @@ public class ManuallyCreatedModpackInstallTask extends Task<Path> {
     public void execute() throws Exception {
         Path dest = Paths.get(FCLPath.EXTERNAL_DIR).resolve(name);
         setResult(dest);
-
-        if (zipFile.getFileName().toString().toLowerCase().endsWith(".7z")) {
+        String fileName = zipFile.getFileName().toString().toLowerCase();
+        if (fileName.endsWith(".7z")) {
             CompressingUtils.extract7z(zipFile.toFile(), dest.toFile());
+            return;
+        } else if (fileName.endsWith(".rar")) {
+            CompressingUtils.extractRar(zipFile.toFile(), dest.toFile());
             return;
         }
 
