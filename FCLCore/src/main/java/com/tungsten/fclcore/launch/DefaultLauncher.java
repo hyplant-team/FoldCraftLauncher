@@ -24,7 +24,6 @@ import static com.tungsten.fclcore.util.Pair.pair;
 import android.content.Context;
 import android.os.Build;
 
-import com.google.gson.GsonBuilder;
 import com.mio.JavaManager;
 import com.mio.data.Renderer;
 import com.tungsten.fclauncher.FCLConfig;
@@ -48,6 +47,7 @@ import com.tungsten.fclcore.util.io.IOUtils;
 import com.tungsten.fclcore.util.platform.CommandBuilder;
 import com.tungsten.fclcore.util.platform.OperatingSystem;
 import com.tungsten.fclcore.util.versioning.GameVersionNumber;
+import com.tungsten.fclcore.util.versioning.VersionNumber;
 
 import org.jackhuang.hmcl.util.ServerAddress;
 
@@ -61,6 +61,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -76,6 +77,8 @@ import java.util.stream.Collectors;
 
 public class DefaultLauncher extends Launcher {
     private String jnaVersion;
+    private String lwjglVersion = "3.3.3";
+    private boolean useLwjglX = false;
 
     public DefaultLauncher(Context context, GameRepository repository, Version version, AuthInfo authInfo, LaunchOptions options) {
         super(context, repository, version, authInfo, options);
@@ -158,9 +161,9 @@ public class DefaultLauncher extends Launcher {
         res.addDefault("-Dos.version=Android-", Build.VERSION.RELEASE);
         res.addDefault("-Dorg.lwjgl.opengl.libname=", "${gl_lib_name}");
         res.addDefault("-Dorg.lwjgl.openal.libname=", context.getApplicationInfo().nativeLibraryDir + "/libopenal.so");
-        res.addDefault("-Dorg.lwjgl.freetype.libname=", context.getApplicationInfo().nativeLibraryDir + "/libfreetype.so");
-        res.addDefault("-Dglfwstub.windowWidth=", options.getWidth() + "");
-        res.addDefault("-Dglfwstub.windowHeight=", options.getHeight() + "");
+        res.addDefault("-Dorg.lwjgl.freetype.libname=", FCLPath.LWJGL_DIR + "/" + lwjglVersion + "/natives/" + Architecture.archAsStringAndroid(Architecture.getDeviceArchitecture()) + "/libfreetype.so");
+        res.addDefault("-Dorg.lwjgl.system.allocator=", "system");
+        res.addDefault("-Dfml.earlyprogresswindow=", "false");
         res.addDefault("-Dglfwstub.initEgl=", "false");
         res.addDefault("-Duser.home=", options.getGameDir().getAbsolutePath());
         res.addDefault("-Duser.timezone=", TimeZone.getDefault().getID());
@@ -174,10 +177,6 @@ public class DefaultLauncher extends Launcher {
             libJna = new File(libJna, jnaVersion);
         }
         res.addDefault("-Djna.boot.library.path=", libJna.exists() ? libJna.getAbsolutePath() : context.getApplicationInfo().nativeLibraryDir);
-
-        if (getInjectorArg() != null && options.isBeGesture()) {
-            res.addDefault("-Dfcl.injector=", getInjectorArg());
-        }
 
         // Fix 1.7.2 Forge
         if (repository.getGameVersion(version).isPresent() && repository.getGameVersion(version).get().equals("1.7.2")) {
@@ -267,7 +266,24 @@ public class DefaultLauncher extends Launcher {
 
     private void addLWJGLClassPath(Set<String> classpath) {
         Set<String> temp = new LinkedHashSet<>();
-        temp.add(FCLPath.LWJGL_DIR + "/lwjgl.jar");
+        File dir = new File(FCLPath.LWJGL_DIR, lwjglVersion);
+        temp.add(dir.getAbsolutePath() + "/lwjgl.jar");
+        if (useLwjglX) {
+            temp.add(dir.getAbsolutePath() + "/lwjgl-lwjglx.jar");
+        }
+        File[] files = dir.listFiles();
+        if (files != null) {
+            Set<String> list = Arrays.stream(files)
+                    .filter(file -> file.getName().endsWith(".jar")
+                            && !file.getName().equals("lwjgl.jar")
+                            && !file.getName().equals("lwjgl-lwjglx.jar")
+                    )
+                    .map(File::getAbsolutePath)
+                    .collect(Collectors.toSet());
+            temp.addAll(list);
+        } else {
+            LOG.warning("LWJGL directory(" + dir + ") not found!");
+        }
         temp.addAll(classpath);
         classpath.clear();
         classpath.addAll(temp);
@@ -324,40 +340,6 @@ public class DefaultLauncher extends Launcher {
             }
         }
         res.add(cacioClasspath.toString());
-    }
-
-    public String getInjectorArg() {
-        try {
-            String map = IOUtils.readFullyAsString(DefaultLauncher.class.getResourceAsStream("/assets/version_data/map.json"));
-            InjectorMap injectorMap = new GsonBuilder()
-                    .setPrettyPrinting()
-                    .create()
-                    .fromJson(map, InjectorMap.class);
-            Optional<InjectorMap.MapInfo> mapInfo = injectorMap.getMaps().stream()
-                    .filter(it -> {
-                        String versionTypeId = version.getAssetIndex().getId();
-                        if (versionTypeId.equals("legacy") || versionTypeId.equals("pre-1.6")) {
-                            versionTypeId = repository.getGameVersion(version).orElse("");
-                        }
-                        if (versionTypeId.equals("1.8")
-                                && repository.getGameVersion(version).isPresent()
-                                && (repository.getGameVersion(version).get().equals("1.8.8")
-                                || repository.getGameVersion(version).get().equals("1.8.9"))) {
-                            versionTypeId = "1.8.8";
-                        }
-                        if (versionTypeId.equals("1.9")
-                                && repository.getGameVersion(version).isPresent()
-                                && repository.getGameVersion(version).get().equals("1.9.4")) {
-                            versionTypeId = "1.9.4";
-                        }
-                        return it.getId().equals(versionTypeId);
-                    })
-                    .findFirst();
-            return mapInfo.map(it -> it.getArgument().getArgument(version, repository.getGameVersion(version).orElse(null))).orElse(null);
-        } catch (IOException e) {
-            LOG.log(Level.WARNING, "Failed to get game map", e);
-            return null;
-        }
     }
 
     public Map<String, Boolean> getFeatures() {
@@ -517,10 +499,26 @@ public class DefaultLauncher extends Launcher {
                 analyzer.has(LibraryAnalyzer.LibraryType.FABRIC),
                 analyzer.has(LibraryAnalyzer.LibraryType.QUILT)
         ));
+        config.setLwjglVersion(lwjglVersion);
         return FCLauncher.launchMinecraft(config);
     }
 
     public void setJnaVersion(String jnaVersion) {
         this.jnaVersion = jnaVersion;
+    }
+
+    public void setLwjglVersion(String lwjglVersion) {
+        try {
+            VersionNumber v1 = VersionNumber.asVersion(lwjglVersion);
+            if (v1.compareTo("3.0") < 0) {
+                useLwjglX = true;
+            }
+            if (v1.compareTo("3.4.1") >= 0) {
+                this.lwjglVersion = "3.4.1";
+                return;
+            }
+        } catch (Throwable ignore) {
+        }
+        this.lwjglVersion = "3.3.3";
     }
 }

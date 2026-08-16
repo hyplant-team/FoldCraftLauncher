@@ -73,6 +73,7 @@ class JavaManageDialog(context: Context, val onSelected: (String) -> Unit) : FCL
                 null,
                 listOf(".tar.xz")
             ) { files ->
+                if (files == null) return@launchSingleSelection
                 val path = files[0]
                 val uri = path.toUri()
                 val fileName = if (AndroidUtils.isDocUri(uri)) {
@@ -193,7 +194,7 @@ class JavaManageDialog(context: Context, val onSelected: (String) -> Unit) : FCL
                 .setAlertLevel(
                     FCLAlertDialog.AlertLevel.ALERT
                 )
-                .setNegativeButton(context.getString(com.tungsten.fcllibrary.R.string.dialog_positive)) {
+                .setNegativeButton(context.getString(com.tungsten.fcl.R.string.dialog_positive)) {
 
                 }
                 .create()

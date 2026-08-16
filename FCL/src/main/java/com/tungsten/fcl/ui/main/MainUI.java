@@ -245,8 +245,8 @@ public class MainUI extends FCLCommonUI implements View.OnClickListener {
         builder.setAlertLevel(FCLAlertDialog.AlertLevel.INFO);
         builder.setCancelable(false);
         builder.setMessage(getContext().getString(R.string.menu_settings_force_exit_msg));
-        builder.setPositiveButton(getContext().getString(com.tungsten.fcllibrary.R.string.dialog_negative), null);
-        builder.setNegativeButton(getContext().getString(com.tungsten.fcllibrary.R.string.dialog_positive), () -> {
+        builder.setPositiveButton(getContext().getString(R.string.dialog_negative), null);
+        builder.setNegativeButton(getContext().getString(R.string.dialog_positive), () -> {
             getActivity().finish();
             System.exit(0);
         });
@@ -262,7 +262,7 @@ public class MainUI extends FCLCommonUI implements View.OnClickListener {
                 builder.setCancelable(true);
                 builder.setMessage(getContext().getString(R.string.announcement_significant));
                 builder.setPositiveButton(null, null);
-                builder.setNegativeButton(getContext().getString(com.tungsten.fcllibrary.R.string.dialog_positive), null);
+                builder.setNegativeButton(getContext().getString(R.string.dialog_positive), null);
                 builder.create().show();
             } else {
                 hideAnnouncement();

@@ -149,7 +149,7 @@ public final class LauncherHelper {
         TaskExecutor executor = checkGameState(context, setting, version.get())
                 .thenComposeAsync(javaVersion -> {
                     javaVersionRef.set(Objects.requireNonNull(javaVersion));
-                    version.set(LibFilter.filter(version.get()));
+                    version.set(LibFilter.filter(version.get(), false));
                     if (setting.isNotCheckGame())
                         return null;
                     return Task.allOf(
@@ -194,6 +194,8 @@ public final class LauncherHelper {
                             version.get().getLibraries().forEach(library -> {
                                 if (library.getName().startsWith("net.java.dev.jna:jna:")) {
                                     launcher.setJnaVersion(library.getVersion());
+                                } else if (library.getName().startsWith("org.lwjgl.lwjgl:lwjgl:") || library.getName().startsWith("org.lwjgl:lwjgl:")) {
+                                    launcher.setLwjglVersion(library.getVersion());
                                 }
                             });
                             return launcher;
@@ -315,7 +317,7 @@ public final class LauncherHelper {
                             builder.setCancelable(false);
                             builder.setTitle(context.getString(R.string.launch_failed));
                             builder.setMessage(message);
-                            builder.setNegativeButton(context.getString(com.tungsten.fcllibrary.R.string.dialog_positive), null);
+                            builder.setNegativeButton(context.getString(com.tungsten.fcl.R.string.dialog_positive), null);
                             builder.create().show();
                         });
                     }

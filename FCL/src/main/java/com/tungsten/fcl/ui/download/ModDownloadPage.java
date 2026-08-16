@@ -53,7 +53,7 @@ public class ModDownloadPage extends DownloadPage {
                 dialog.setPositiveButton(context.getString(R.string.view_incompatible_online), () -> {
                     AndroidUtils.openLink(context, url);
                 });
-                dialog.setNegativeButton(context.getString(com.tungsten.fcllibrary.R.string.dialog_positive), null);
+                dialog.setNegativeButton(context.getString(R.string.dialog_positive), null);
                 dialog.show();
             } catch (Exception e) {
                 e.printStackTrace();

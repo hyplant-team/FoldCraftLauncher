@@ -235,42 +235,39 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                         home.isSelected = true
                     }
                 }
-                uiManager.init {
-                    home.setOnSelectListener(this@MainActivity)
-                    manage.setOnSelectListener(this@MainActivity)
-                    download.setOnSelectListener(this@MainActivity)
-                    controller.setOnSelectListener(this@MainActivity)
-                    multiplayer.setOnSelectListener(this@MainActivity)
-                    setting.setOnSelectListener(this@MainActivity)
-                    home.setSelected(true)
-                    back.setOnClickListener(this@MainActivity)
-                    back.setOnLongClickListener {
-                        throw RuntimeException("DebugLauncherCrash")
-                        true
+                uiManager.init()
+                home.setOnSelectListener(this@MainActivity)
+                manage.setOnSelectListener(this@MainActivity)
+                download.setOnSelectListener(this@MainActivity)
+                controller.setOnSelectListener(this@MainActivity)
+                multiplayer.setOnSelectListener(this@MainActivity)
+                setting.setOnSelectListener(this@MainActivity)
+                home.setSelected(true)
+                back.setOnClickListener(this@MainActivity)
+                back.setOnLongClickListener {
+                    throw RuntimeException("DebugLauncherCrash")
+                    true
+                }
+                UpdateChecker.getInstance().checkAuto(this@MainActivity).start()
+                if (!checkNotificationPermission() && getSharedPreferences(
+                        "launcher",
+                        MODE_PRIVATE
+                    ).getBoolean("check_notification_permission", true)
+                ) {
+                    getSharedPreferences("launcher", MODE_PRIVATE).edit {
+                        putBoolean("check_notification_permission", false)
                     }
-                    if (FCLApplication.Prop.getProperty("automatic-update-detection", "false") == "true") {
-                        UpdateChecker.getInstance().checkAuto(this@MainActivity).start()
-                    }
-                    if (!checkNotificationPermission() && getSharedPreferences(
-                            "launcher",
-                            MODE_PRIVATE
-                        ).getBoolean("check_notification_permission", true)
-                    ) {
-                        getSharedPreferences("launcher", MODE_PRIVATE).edit {
-                            putBoolean("check_notification_permission", false)
+                    FCLAlertDialog.Builder(this@MainActivity)
+                        .setMessage(getString(R.string.notification_permission))
+                        .setPositiveButton {
+                            requestNotificationPermission()
                         }
-                        FCLAlertDialog.Builder(this@MainActivity)
-                            .setMessage(getString(R.string.notification_permission))
-                            .setPositiveButton {
-                                requestNotificationPermission()
-                            }
-                            .setNegativeButton {}
-                            .create()
-                            .show()
-                    }
-                    if (!modpackHandled) {
-                        handleModpack(intent)
-                    }
+                        .setNegativeButton {}
+                        .create()
+                        .show()
+                }
+                if (!modpackHandled) {
+                    handleModpack(intent)
                 }
                 setupAccountDisplay()
                 setupVersionDisplay()
@@ -405,8 +402,8 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 uiManager.onBackPressed()
             }
             if (view === jar) {
-                if (sharedPreferences.getBoolean("show_jarExecutor_warn_dialog", true)) {
-                    showWarningDialog(this@MainActivity, getString(R.string.jar_executor_warn)){
+                if (sharedPreferences.getBoolean("showJarExecutorWarnDialog", true)) {
+                    showWarningDialog(this@MainActivity, getString(R.string.jar_executor_warn)) {
                         sharedPreferences.edit {
                             putBoolean("show_jarExecutor_warn_dialog", false)
                         }
@@ -475,7 +472,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                         accountHint.text = getString(R.string.account_state_add)
                         avatar.setBackgroundDrawable(
                             TexturesLoader.toAvatar(
-                                TexturesLoader.getDefaultSkin(TextureModel.ALEX).image,
+                                TexturesLoader.getDefaultSkin(TextureModel.ALEX).image(),
                                 ConvertUtils.dip2px(
                                     this@MainActivity, 52f
                                 )
@@ -830,7 +827,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
     }
 
     private fun refreshScreenSize() {
-        DisplayUtil.screenWidth =  binding.root.width
+        DisplayUtil.screenWidth = binding.root.width
         DisplayUtil.screenHeight = binding.root.height
     }
 }

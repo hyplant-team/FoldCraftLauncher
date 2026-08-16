@@ -60,7 +60,7 @@ class ProcessService : Service() {
                 "",
                 ""
             ),
-            command
+            command ?: emptyArray()
         )
         startProcess(config)
         return START_NOT_STICKY
@@ -72,10 +72,6 @@ class ProcessService : Service() {
         val bridge = FCLauncher.launchAPIInstaller(config)
         val callback: FCLBridgeCallback = object : FCLBridgeCallback {
             override fun onCursorModeChange(mode: Int) {
-                // Ignore
-            }
-
-            override fun onHitResultTypeChange(type: Int) {
                 // Ignore
             }
 

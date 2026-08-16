@@ -6,8 +6,6 @@ import static com.tungsten.fclcore.util.Lang.thread;
 import static com.tungsten.fclcore.util.Logging.LOG;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,7 +35,6 @@ import com.tungsten.fcl.setting.DownloadProviders;
 import com.tungsten.fcl.upgrade.UpdateChecker;
 import com.tungsten.fcl.util.AndroidUtils;
 import com.tungsten.fcl.util.FXUtils;
-import com.tungsten.fcl.util.RequestCodes;
 import com.tungsten.fcl.util.RuntimeUtils;
 import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fclcore.task.FetchTask;
@@ -45,9 +42,6 @@ import com.tungsten.fclcore.task.Schedulers;
 import com.tungsten.fclcore.task.Task;
 import com.tungsten.fclcore.util.Logging;
 import com.tungsten.fclcore.util.io.FileUtils;
-import com.tungsten.fcllibrary.browser.FileBrowser;
-import com.tungsten.fcllibrary.browser.options.LibMode;
-import com.tungsten.fcllibrary.browser.options.SelectionMode;
 import com.tungsten.fcllibrary.component.dialog.FCLAlertDialog;
 import com.tungsten.fcllibrary.component.dialog.FCLColorPickerDialog;
 import com.tungsten.fcllibrary.component.theme.Theme;
@@ -68,7 +62,6 @@ import java.util.logging.Level;
 
 public class LauncherSettingPage extends FCLCommonPage implements View.OnClickListener, AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener {
 
-    public static final long ONE_DAY = 1000 * 60 * 60 * 24;
     private PageSettingLauncherBinding binding;
     private boolean isFirst = true;
     private SharedPreferences sharedPreferences;
@@ -215,24 +208,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
         binding.threads.setProgress(config().getDownloadThreads());
         binding.threads.addProgressListener();
         binding.threads.progressProperty().bindBidirectional(config().downloadThreadsProperty());
-
-        // if (System.currentTimeMillis() - getLastClearCacheTime() >= 3 * ONE_DAY) {
-            // FileUtils.cleanDirectoryQuietly(new File(FCLPath.CACHE_DIR).getParentFile());
-            // setLastClearCacheTime(System.currentTimeMillis());
-        // }
     }
-
-    // public long getLastClearCacheTime() {
-        // SharedPreferences sharedPreferences = getContext().getSharedPreferences("launcher", MODE_PRIVATE);
-        // return sharedPreferences.getLong("clear_cache", 0L);
-    // }
-
-    // public void setLastClearCacheTime(long time) {
-        // SharedPreferences sharedPreferences = getContext().getSharedPreferences("launcher", MODE_PRIVATE);
-        // @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPreferences.edit();
-        // editor.putLong("clear_cache", time);
-        // editor.apply();
-    // }
 
     private int getSourcePosition(String source) {
         return switch (source) {
@@ -251,7 +227,6 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
     public void onClick(View v) {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("launcher", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-
         if (v == binding.checkUpdate) {
             editor.putInt("ignore_update", -1);
             editor.putInt("ignore_announcement", -1);
@@ -264,7 +239,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
                         builder.setCancelable(false);
                         builder.setAlertLevel(FCLAlertDialog.AlertLevel.ALERT);
                         builder.setMessage(getContext().getString(R.string.update_check_failed) + "\n" + e);
-                        builder.setNegativeButton(getContext().getString(com.tungsten.fcllibrary.R.string.dialog_positive), null);
+                        builder.setNegativeButton(getContext().getString(R.string.dialog_positive), null);
                         builder.create().show();
                     }
                 }).start();
@@ -289,7 +264,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
                         builder.setCancelable(false);
                         builder.setAlertLevel(FCLAlertDialog.AlertLevel.ALERT);
                         builder.setMessage(getContext().getString(R.string.settings_launcher_launcher_log_export_failed) + "\n" + e);
-                        builder.setNegativeButton(getContext().getString(com.tungsten.fcllibrary.R.string.dialog_positive), null);
+                        builder.setNegativeButton(getContext().getString(com.tungsten.fcl.R.string.dialog_positive), null);
                         builder.create().show();
                     });
                     LOG.log(Level.WARNING, "Failed to export logs", e);
@@ -300,7 +275,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
                     builder.setCancelable(false);
                     builder.setAlertLevel(FCLAlertDialog.AlertLevel.INFO);
                     builder.setMessage(AndroidUtils.getLocalizedText(getContext(), "settings_launcher_launcher_log_export_success", logFile));
-                    builder.setNegativeButton(getContext().getString(com.tungsten.fcllibrary.R.string.dialog_positive), null);
+                    builder.setNegativeButton(getContext().getString(com.tungsten.fcl.R.string.dialog_positive), null);
                     builder.create().show();
                 });
             });
@@ -384,6 +359,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
             suffix.add(".jpg");
             suffix.add(".jpeg");
             MainActivity.getInstance().fileLauncher.launchSingleSelection(null, suffix, files -> {
+                if (files == null) return;
                 String path = files.get(0);
                 Uri uri = Uri.parse(path);
                 if (AndroidUtils.isDocUri(uri)) {
@@ -396,6 +372,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
             ArrayList<String> suffix = new ArrayList<>();
             suffix.add(".mp4");
             MainActivity.getInstance().fileLauncher.launchSingleSelection(null, suffix, files -> {
+                if (files == null) return;
                 String path = files.get(0);
                 Uri uri = Uri.parse(path);
                 if (AndroidUtils.isDocUri(uri)) {
@@ -414,6 +391,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
             suffix.add(".png");
             suffix.add(".gif");
             MainActivity.getInstance().fileLauncher.launchSingleSelection(null, suffix, files -> {
+                if (files == null) return;
                 String path = files.get(0);
                 Uri uri = Uri.parse(path);
                 String type = AndroidUtils.getFileName(getContext(), uri);
@@ -438,6 +416,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
             suffix.add(".png");
             suffix.add(".gif");
             MainActivity.getInstance().fileLauncher.launchSingleSelection(null, suffix, files -> {
+                if (files == null) return;
                 String path = files.get(0);
                 Uri uri = Uri.parse(path);
                 String type = AndroidUtils.getFileName(getContext(), uri);
@@ -483,7 +462,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
 
             if (bitmap != null) {
                 Palette palette = Palette.from(bitmap).generate();
-                int dominantColor = palette.getDominantColor(getContext().getColor(com.tungsten.fcllibrary.R.color.default_theme_color));
+                int dominantColor = palette.getDominantColor(getContext().getColor(R.color.default_theme_color));
                 if (v == binding.fetchBackgroundColor) {
                     int color = palette.getMutedColor(dominantColor);
                     if (ThemeEngine.getInstance().getTheme().getColor() == color) {
@@ -548,7 +527,7 @@ public class LauncherSettingPage extends FCLCommonPage implements View.OnClickLi
                 new FCLAlertDialog.Builder(getContext())
                         .setAlertLevel(FCLAlertDialog.AlertLevel.INFO)
                         .setMessage(getContext().getString(R.string.message_warn_restart_after_change))
-                        .setNegativeButton(getContext().getString(com.tungsten.fcllibrary.R.string.dialog_positive), () -> {
+                        .setNegativeButton(getContext().getString(com.tungsten.fcl.R.string.dialog_positive), () -> {
 
                         })
                         .create()

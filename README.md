@@ -153,9 +153,23 @@
 
 ---
 
+<<<<<<< HEAD
 ### 📝 关于此 README.md
 此文档参考了 原版FCL 和 root-S7修改版 的 README.md
 </details>
+=======
+## 🌍 翻译
+
+欢迎参与翻译！本项目通过 [Weblate](https://hosted.weblate.org/projects/foldcraftlauncher/) 管理本地化，无需安装任何工具，直接在网页上贡献翻译即可。
+
+---
+
+## 🤝 贡献与致谢
+### 贡献者墙
+<a href="https://github.com/FCL-Team/FoldCraftLauncher/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=FCL-Team/FoldCraftLauncher" />
+</a>
+>>>>>>> df8ffe9b30ca43ec419f5fc67941a4205a89385c
 
 ---
 

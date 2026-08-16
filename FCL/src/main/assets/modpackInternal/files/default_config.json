@@ -7,7 +7,6 @@
   "java": "Auto",
   "notCheckGame": false,
   "notCheckJVM": false,
-  "beGesture": false,
   "graphicsBackend": "default",
   "vulkanDriverSystem": false,
   "controller": "f9b80a8f2",

@@ -21,7 +21,6 @@ public class VersionSettingDefault {
     private static String java = "Auto";
     private static boolean notCheckGame = false;
     private static boolean notCheckJVM = true;
-    private static boolean beGesture = false;
     private static String graphicsBackend = "default";
     private static boolean vulkanDriverSystem = false;
     private static String controller = "f9b80a8f2";
@@ -60,9 +59,6 @@ public class VersionSettingDefault {
     }
     public static boolean getNotCheckJVM() {
         return notCheckJVM;
-    }
-    public static boolean getBeGesture() {
-        return beGesture;
     }
     public static String getGraphicsBackend() {
         return graphicsBackend;
@@ -108,7 +104,6 @@ public class VersionSettingDefault {
             java = defaultConfig.has("java") ? defaultConfig.get("java").getAsString() : java;
             notCheckGame = defaultConfig.has("notCheckGame") ? defaultConfig.get("notCheckGame").getAsBoolean() : notCheckGame;
             notCheckJVM = defaultConfig.has("notCheckJVM") ? defaultConfig.get("notCheckJVM").getAsBoolean() : notCheckJVM;
-            beGesture = defaultConfig.has("beGesture") ? defaultConfig.get("beGesture").getAsBoolean() : beGesture;
             graphicsBackend = defaultConfig.has("graphicsBackend") ? defaultConfig.get("graphicsBackend").getAsString() : graphicsBackend;
             vulkanDriverSystem = defaultConfig.has("vulkanDriverSystem") ? defaultConfig.get("vulkanDriverSystem").getAsBoolean() : vulkanDriverSystem;
             controller = defaultConfig.has("controller") ? defaultConfig.get("controller").getAsString() : controller;

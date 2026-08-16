@@ -2,11 +2,9 @@ package com.tungsten.fcl.ui.manage
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import android.content.DialogInterface
 import android.view.View
 import android.view.View.OnLongClickListener
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import com.mio.manager.RendererManager.getRenderer
@@ -17,7 +15,6 @@ import com.mio.util.showErrorDialog
 import com.mio.util.showItemSelectionDialog
 import com.tungsten.fcl.R
 import com.tungsten.fcl.FCLApplication;
-import com.tungsten.fcl.activity.MainActivity
 import com.tungsten.fcl.activity.MainActivity.Companion.getInstance
 import com.tungsten.fcl.control.SelectControllerDialog
 import com.tungsten.fcl.databinding.PageVersionSettingBinding
@@ -194,7 +191,7 @@ class VersionSettingPage(
                 builder.setAlertLevel(FCLAlertDialog.AlertLevel.INFO)
                 builder.setMessage(context.getString(R.string.message_vulkan_driver_system))
                 builder.setNegativeButton(
-                    context.getString(com.tungsten.fcllibrary.R.string.dialog_positive),
+                    context.getString(com.tungsten.fcl.R.string.dialog_positive),
                     null
                 )
                 builder.create().show()
@@ -206,8 +203,11 @@ class VersionSettingPage(
         }
         val listener = OnLongClickListener { view: View? ->
             val dialog = FullEditDialog(
-                context
-            ) { str: String? -> (view as FCLEditText).setText(str) }
+                context,
+                true
+            ) {
+                (view as FCLEditText).setText(it)
+            }
             dialog.getEditText().setText((view as FCLEditText).getText())
             dialog.show()
             true
@@ -317,10 +317,6 @@ class VersionSettingPage(
                 lastVersionSetting.forceResolutionProperty
             )
             FXUtils.unbindBoolean(
-                binding.switchControllerInjector,
-                lastVersionSetting.beGestureProperty
-            )
-            FXUtils.unbindBoolean(
                 binding.switchVulkanDriverSystem,
                 lastVersionSetting.vkDriverSystemProperty
             )
@@ -344,7 +340,6 @@ class VersionSettingPage(
         FXUtils.bindBoolean(binding.switchNotCheckJava, versionSetting.notCheckJVMProperty)
         FXUtils.bindBoolean(binding.switchDebugLog, versionSetting.debugLogProperty)
         FXUtils.bindBoolean(binding.switchForceResolution, versionSetting.forceResolutionProperty)
-        FXUtils.bindBoolean(binding.switchControllerInjector, versionSetting.beGestureProperty)
         FXUtils.bindBoolean(binding.switchVulkanDriverSystem, versionSetting.vkDriverSystemProperty)
         maxMemory.bindBidirectional(versionSetting.maxMemoryProperty)
 
@@ -359,7 +354,6 @@ class VersionSettingPage(
         }
         binding.graphicsBackend.text = versionSetting.graphicsBackend
         val renderer = getRenderer(versionSetting.renderer)
-        binding.renderer.setSelected(true)
         binding.renderer.text = renderer.des
         binding.driverContainer.visibility =
             if (binding.switchVulkanDriverSystem.checkProperty().get()) View.GONE else View.VISIBLE
@@ -389,8 +383,8 @@ class VersionSettingPage(
     private fun onExploreIcon() {
         if (versionId == null) return
 
-        MainActivity.getInstance().fileLauncher.launchSingleSelection(null, listOf(".png")) {
-            var path = it[0]
+        getInstance().fileLauncher.launchSingleSelection(null, listOf(".png")) {
+            var path = it?.get(0) ?: return@launchSingleSelection
             val uri = path.toUri()
             if (AndroidUtils.isDocUri(uri)) {
                 path =
@@ -484,11 +478,11 @@ class VersionSettingPage(
             builder.setCancelable(true)
             builder.setMessage(context.getString(R.string.message_install_java))
             builder.setPositiveButton(
-                context.getString(com.tungsten.fcllibrary.R.string.dialog_negative),
+                context.getString(R.string.dialog_negative),
                 null
             )
             builder.setNegativeButton(
-                context.getString(com.tungsten.fcllibrary.R.string.dialog_positive),
+                context.getString(R.string.dialog_positive),
                 { AndroidUtils.openLink(context, url) }
             )
             builder.create().show()
@@ -511,7 +505,7 @@ class VersionSettingPage(
                     builder.setAlertLevel(FCLAlertDialog.AlertLevel.INFO)
                     builder.setMessage(context.getString(R.string.message_warn_renderer_global_setting))
                     builder.setNegativeButton(
-                        context.getString(com.tungsten.fcllibrary.R.string.dialog_positive),
+                        context.getString(com.tungsten.fcl.R.string.dialog_positive),
                         null
                     )
                     builder.create().show()
@@ -532,11 +526,11 @@ class VersionSettingPage(
             builder.setCancelable(true)
             builder.setMessage(context.getString(R.string.message_install_plugin))
             builder.setPositiveButton(
-                context.getString(com.tungsten.fcllibrary.R.string.dialog_negative),
+                context.getString(R.string.dialog_negative),
                 null
             )
             builder.setNegativeButton(
-                context.getString(com.tungsten.fcllibrary.R.string.dialog_positive),
+                context.getString(R.string.dialog_positive),
                 { AndroidUtils.openLink(context, url) }
             )
             builder.create().show()
@@ -548,11 +542,11 @@ class VersionSettingPage(
             builder.setCancelable(true)
             builder.setMessage(context.getString(R.string.message_install_plugin))
             builder.setPositiveButton(
-                context.getString(com.tungsten.fcllibrary.R.string.dialog_negative),
+                context.getString(R.string.dialog_negative),
                 null
             )
             builder.setNegativeButton(
-                context.getString(com.tungsten.fcllibrary.R.string.dialog_positive),
+                context.getString(R.string.dialog_positive),
                 { AndroidUtils.openLink(context, url) }
             )
             builder.create().show()

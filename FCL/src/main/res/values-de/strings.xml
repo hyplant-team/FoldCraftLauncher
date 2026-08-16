@@ -76,9 +76,6 @@
     <string name="account_select_character">Charakter auswählen</string>
     <string name="account_skin">Skin</string>
     <string name="account_skin_type_default">Standard</string>
-    <string name="account_skin_type_csl_api_location_hint">URL</string>
-    <string name="account_skin_type_csl_api_hint">"Der Charaktername auf der Website muss mit dem Kontonamen übereinstimmen. Der Skin wird automatisch geladen."</string>
-    <string name="account_skin_type_local_file">Lokaler Skin</string>
     <string name="account_skin_upload">Skin auf dem Gerät auswählen</string>
     <string name="account_state_no_account">Kein Konto</string>
     <string name="account_state_add">Zum Hinzufügen klicken</string>
@@ -463,7 +460,6 @@
 
     <string name="menu_settings">Einstellungen</string>
     <string name="menu_settings_debug">Log</string>
-    <string name="menu_settings_disable_be_gesture">Erweiterte Gesten deaktivieren</string>
     <string name="menu_settings_disable_gesture">Gesten deaktivieren</string>
     <string name="menu_settings_disable_left_touch">Berührungen auf der linken Bildschirmhälfte deaktivieren</string>
     <string name="menu_settings_force_exit">Erzwungener Beenden</string>
@@ -629,6 +625,7 @@
     <string name="mods_mcmod_search">In MCMOD suchen</string>
     <string name="mods_name">Name</string>
     <string name="mods_not_modded">Sie müssen zuerst einen Mod-Loader (Fabric, Forge oder LiteLoader) installieren, um Ihre Mods zu verwalten!</string>
+    <string name="message_broken_mods">Die folgenden Mod-Dateien sind beschädigt. Möchten Sie sie löschen?\n%s</string>
     <string name="mods_restore">Wiederherstellen</string>
     <string name="mods_url">Offizielle Seite</string>
     <string name="mods_update_modpack_mod_warning">Das Aktualisieren von Mods in einem Modpack kann zu irreparablen Schäden führen, möglicherweise wird das Modpack beschädigt und kann nicht mehr gestartet werden. Sind Sie sicher, dass Sie aktualisieren möchten?</string>
@@ -667,7 +664,6 @@
     <string name="settings_advanced_server_ip_prompt">Automatisch nach dem Start beitreten</string>
 
     <string name="settings_fcl_controller">Controller</string>
-    <string name="settings_fcl_controller_injector">Serverseitige Gesten</string>
     <string name="settings_fcl_vulkan_driver_system">System-Vulkan-Treiber verwenden</string>
     <string name="settings_fcl_renderer">OpenGL-Implementierung (Renderer)</string>
     <string name="settings_fcl_pojav_bigcore">Leistungskerne für Rendering erzwingen</string>
@@ -898,4 +894,46 @@
     <string name="tip_hide_menu_view">Menü ist ausgeblendet. Drücken Sie die Lautstärketaste, um das Menü zu öffnen.</string>
     <string name="modloader">Mod-Loader</string>
     <string name="message_warn_renderer_global_setting">Die von Ihnen gewählte Version hat separate Einstellungen für jedes Profil, daher kann der hier angegebene Renderer nicht auf die aktuelle Version angewendet werden. Es wird empfohlen, die "Starten"-Taste lange zu drücken, um den Renderer auszuwählen.</string>
+
+    <!-- 原 FCLLibrary 模块字符串（模块已并入 FCL） -->
+    <string name="file_browser_title">Datei-Browser</string>
+    <string name="file_browser_back">Zurück</string>
+    <string name="file_browser_close">Beenden</string>
+    <string name="file_browser_shared">Freigegebenes Verzeichnis</string>
+    <string name="file_browser_private">Privates Verzeichnis</string>
+    <string name="file_browser_open_external">In externer App öffnen</string>
+    <string name="file_browser_select_external">Mit externer App auswählen</string>
+    <string name="file_browser_mode">Modus:</string>
+    <string name="file_browser_mode_browse">Dateien durchsuchen</string>
+    <string name="file_browser_mode_file">Datei auswählen</string>
+    <string name="file_browser_mode_folder">Ordner auswählen</string>
+    <string name="file_browser_selection">Typ:</string>
+    <string name="file_browser_selection_simple">Einzelauswahl</string>
+    <string name="file_browser_selection_multiple">Mehrfachauswahl</string>
+    <string name="file_browser_positive">Bestätigen</string>
+    <string name="file_browser_share_title">Datei teilen</string>
+    <string name="file_browser_share_message">Sind Sie sicher, dass Sie diese Datei teilen möchten?</string>
+    <string name="crash_reporter_title">Absturzbericht</string>
+    <string name="crash_reporter_hint">Fold Craft Launcher ist auf einen unlösbaren Fehler gestoßen. Bitte wenden Sie sich an den Entwickler oder andere um Hilfe.</string>
+    <string name="crash_reporter_restart">Neustart</string>
+    <string name="crash_reporter_close">Beenden</string>
+    <string name="crash_reporter_copy">Kopieren</string>
+    <string name="crash_reporter_share">Teilen</string>
+    <string name="crash_reporter_upload">Protokoll hochladen</string>
+    <string name="upload_success">Upload erfolgreich! URL in Zwischenablage kopiert: %s</string>
+    <string name="upload_failed">Upload fehlgeschlagen: %s</string>
+    <string name="crash_reporter_toast">Erfolgreich kopiert!</string>
+    <string name="color_picker_title">Farbauswahl</string>
+    <string name="color_picker_toast">Unbekannte Farbe!</string>
+    <string name="dialog_alert">Warnung</string>
+    <string name="dialog_info">Information</string>
+    <string name="dialog_positive">OK</string>
+    <string name="dialog_negative">Abbrechen</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="log_upload_success_title">Protokoll erfolgreich hochgeladen</string>
+    <string name="log_upload_copy">Link kopieren</string>
+    <string name="log_upload_open">Link öffnen</string>
+    <string name="log_upload_share">Link teilen</string>
+    <string name="log_upload_share_template">Ich habe ein Problem mit dem Launcher, hier ist der Log-Link:\n%s</string>
+    <string name="close">Schließen</string>
 </resources>

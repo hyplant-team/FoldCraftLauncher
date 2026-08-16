@@ -123,7 +123,7 @@ public class UpdateDialog extends FCLDialog implements View.OnClickListener {
             dismiss();
         }
         if (v == positive) {
-            String upgradeUrl = getTargetArchUrl();
+           String upgradeUrl = getTargetArchUrl();
             if (upgradeUrl != null) {
                 TaskDialog dialog = new TaskDialog(getContext(), new TaskCancellationAction(AppCompatDialog::dismiss));
                 dialog.setTitle(getContext().getString(R.string.update_launcher));
@@ -145,7 +145,7 @@ public class UpdateDialog extends FCLDialog implements View.OnClickListener {
                                 builder.setCancelable(false);
                                 builder.setAlertLevel(FCLAlertDialog.AlertLevel.ALERT);
                                 builder.setMessage(getContext().getString(R.string.update_failed) + "\n" + exception.getMessage());
-                                builder.setNegativeButton(getContext().getString(com.tungsten.fcllibrary.R.string.dialog_positive), null);
+                                builder.setNegativeButton(getContext().getString(R.string.dialog_positive), null);
                                 builder.setPositiveButton(getContext().getString(R.string.update_netdisk), ()->{
                                     AndroidUtils.openLink(getContext(), version.getNetdiskUrl());
                                 });

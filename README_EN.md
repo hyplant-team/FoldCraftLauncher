@@ -155,9 +155,23 @@ Vanilla FCL is licensed under **[GPL-3.0 License](https://www.gnu.org/licenses/g
 
 ---
 
+<<<<<<< HEAD
 ### 📝 About The README.md
 This document refers to the README.md of the original FCL and root-S7 FCL-Server
 </details>
+=======
+## 🌍 Translation
+
+We'd love your help with translations! The project's localization is managed on [Weblate](https://hosted.weblate.org/projects/foldcraftlauncher/) — no tools needed, just translate in your browser.
+
+---
+
+## 🤝 Contributions & Acknowledgements
+### Contributors Wall
+<a href="https://github.com/FCL-Team/FoldCraftLauncher/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=FCL-Team/FoldCraftLauncher" />
+</a>
+>>>>>>> df8ffe9b30ca43ec419f5fc67941a4205a89385c
 
 ---
 

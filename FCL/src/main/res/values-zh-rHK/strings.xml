@@ -78,9 +78,6 @@
     <string name="account_select_character">選擇角色</string>
     <string name="account_skin">皮膚</string>
     <string name="account_skin_type_default">默認</string>
-    <string name="account_skin_type_csl_api_location_hint">CustomSkinAPI 地址</string>
-    <string name="account_skin_type_csl_api_hint">你需要喺皮膚站中創建並使用同該離線賬戶角色同名角色，此時離線賬戶皮膚將為皮膚站上角色所設定嘅皮膚。</string>
-    <string name="account_skin_type_local_file">本地文件</string>
     <string name="account_skin_upload">選擇皮膚文件</string>
     <string name="account_state_no_account">冇賬戶</string>
     <string name="account_state_add">點擊添加賬戶</string>
@@ -380,7 +377,7 @@
     <string name="game_crash_reason_forgemod_resolution">當前遊戲因為 Mod 依賴問題，無法繼續運行。Forge 提供咗如下信息：\n%1$s</string>
     <string name="game_crash_reason_mod_resolution_collection">當前遊戲因為前置 Mod 版本唔匹配，無法繼續運行。\n%1$s 需要前置 Mod：%2$s 才能繼續運行。\n呢表示你需要更新或降級前置。你可以到下載頁嘅模組下載，或到網上下載 %3$s。</string>
     <string name="game_crash_reason_mod_resolution_conflict">當前遊戲因為 Mod 衝突，無法繼續運行。\n%1$s 與 %2$s 唔能兼容。</string>
-    <string name="game_crash_reason_mod_resolution_missing">當前遊戲因為缺少 Mod 前置，無法繼續運行。\n%1$s 需要前置 Mod：%2$s 才能繼續運行。\n呢表示你少安裝咗 Mod，或該 Mod 版本唔夠。你可以到下載頁嘅模組下載，或到網上下載 %3$s。</string>
+    <string name="game_crash_reason_mod_resolution_missing">當前遊戲因為缺少 Mod 前置，無法繼續運行。\n%1$s 需要前置 Mod：%2$s 才能繼續運行。\n呢表示你少安裝咗 Mod，或該 Mod 版本唔夠。你可以到下載頁嘅模組下載，或到網上下載 %2$s。</string>
     <string name="game_crash_reason_mod_resolution_missing_minecraft">當前遊戲因為 Mod 同 Minecraft 遊戲版本唔匹配，無法繼續運行。\n%1$s 需要 Minecraft %2$s 才能運行。\n如果你要繼續使用你已經安裝嘅 Mod，你可以選擇安裝對應嘅 Minecraft 版本；如果你要繼續使用當前 Minecraft 版本，你需要安裝對應版本嘅 Mod。</string>
     <string name="game_crash_reason_mod_resolution_mod_version">%1$s (版本號 %2$s)</string>
     <string name="game_crash_reason_mod_resolution_mod_version_any">%1$s (任意版本)</string>
@@ -410,7 +407,7 @@
     <string name="game_crash_reason_processing_of_javaagent_failed">當前遊戲因執行 -javaagent 失敗，無法繼續運行。\n如果你添加咗相關參數，請檢查參數係否正確。</string>
     <string name="game_crash_reason_stacktrace">原因未知，請點擊日誌按鈕查看詳細信息。\n下面係一啲關鍵詞，其中可能包含 Mod 名稱，你可以通過搜索嘅方式查找有關信息。\n%s</string>
     <string name="game_crash_reason_unknown">原因未知，請參考日誌。\n如果你要求助他人，請你導出遊戲崩潰信息後將導出嘅文件發送畀他人以供分析。</string>
-    <string name="game_crash_reason_unsatisfied_link_error">當前遊戲因為缺少本地庫，無法繼續運行。</string>
+    <string name="game_crash_reason_unsatisfied_link_error">當前遊戲因為缺少本地庫：%1$s，無法繼續運行。</string>
     <string name="game_crash_title">遊戲意外退出</string>
 
     <string name="help">幫助</string>
@@ -427,8 +424,8 @@
     <string name="install_change_version_confirm">你確定將 %s 版本從 %s 改為 %s 嗎?</string>
     <string name="install_failed">安裝失敗</string>
     <string name="install_failed_downloading">無法下載一啲所需文件。</string>
-    <string name="install_failed_downloading_detail">無法下載</string>
-    <string name="install_failed_downloading_timeout">下載超時</string>
+    <string name="install_failed_downloading_detail">無法下載文件：%s</string>
+    <string name="install_failed_downloading_timeout">下載超時：%s</string>
     <string name="install_failed_install_online">無法識別該文件。如果你需要添加模組，請前往模組管理頁面。</string>
     <string name="install_failed_malformed">文件下載中斷，你可以切換下載源以嘗試修復此問題。</string>
     <string name="install_failed_optifine_conflict">喺 Minecraft 1.13 及更新嘅版本中無法同時安裝 Forge，OptiFine 同 Fabric。</string>
@@ -507,7 +504,6 @@
 
     <string name="menu_settings">設置</string>
     <string name="menu_settings_debug">調試</string>
-    <string name="menu_settings_disable_be_gesture">禁用仿基岩版手勢</string>
     <string name="menu_settings_disable_gesture">禁用手勢</string>
     <string name="menu_settings_disable_left_touch">禁用左半屏觸控</string>
     <string name="menu_settings_force_exit">強制退出</string>
@@ -742,6 +738,7 @@
     <string name="mods_modrinth">Modrinth</string>
     <string name="mods_name">名稱</string>
     <string name="mods_not_modded">你必須先安裝一個模組加載器（Fabric，Forge 或者 LiteLoader）以管理你嘅模組！</string>
+    <string name="message_broken_mods">偵測到以下損壞的模組檔案，是否刪除？\n%s</string>
     <string name="mods_restore">回滾</string>
     <string name="mods_url">官方頁面</string>
     <string name="mods_update_modpack_mod_warning">更新整合包中嘅 Mod 可能導致整合包損壞，使整合包無法正常啟動。該操作不可逆，確定要更新嗎？</string>
@@ -781,7 +778,6 @@
     <string name="settings_advanced_server_ip_prompt">啟動遊戲後自動加入對應伺服器</string>
 
     <string name="settings_fcl_controller">控制</string>
-    <string name="settings_fcl_controller_injector">基岩版觸控手勢</string>
     <string name="settings_fcl_vulkan_driver_system">使用系統Vulkan驅動</string>
     <string name="settings_fcl_renderer">OpenGL實作方式 (渲染器)</string>
     <string name="settings_fcl_pojav_bigcore">強制渲染器喺大核上運行</string>
@@ -1021,4 +1017,46 @@
     <string name="message_select_url">請選擇一個鏈接進行下載（將會跳轉至瀏覽器）</string>
     <string name="supported_mc_version">支持嘅MC版本：</string>
     <string name="message_check_renderer">當前渲染器 %s 唔支持該遊戲版本，繼續使用可能導致渲染錯誤或遊戲崩潰！是否繼續？</string>
+
+    <!-- 原 FCLLibrary 模块字符串（模块已并入 FCL） -->
+    <string name="file_browser_title">檔案瀏覽器</string>
+    <string name="file_browser_back">返回</string>
+    <string name="file_browser_close">退出</string>
+    <string name="file_browser_shared">共用目錄</string>
+    <string name="file_browser_private">私人目錄</string>
+    <string name="file_browser_open_external">用外部應用程式打開（例如MT）</string>
+    <string name="file_browser_mode">模式：</string>
+    <string name="file_browser_mode_browse">瀏覽檔案</string>
+    <string name="file_browser_mode_file">選擇檔案</string>
+    <string name="file_browser_mode_folder">選擇資料夾</string>
+    <string name="file_browser_selection">類型：</string>
+    <string name="file_browser_selection_simple">單選</string>
+    <string name="file_browser_selection_multiple">多選</string>
+    <string name="file_browser_positive">確認</string>
+    <string name="file_browser_share_title">分享檔案</string>
+    <string name="file_browser_share_message">你確定要分享此檔案嗎？</string>
+    <string name="crash_reporter_title">崩潰報告</string>
+    <string name="crash_reporter_hint">Fold Craft Launcher 遇到無法解決嘅錯誤，請向開發者或其他人求助。</string>
+    <string name="crash_reporter_restart">重新啟動軟件</string>
+    <string name="crash_reporter_close">退出軟件</string>
+    <string name="crash_reporter_copy">複製日誌</string>
+    <string name="crash_reporter_share">分享日誌</string>
+    <string name="crash_reporter_upload">上傳日誌</string>
+    <string name="upload_success">上傳成功！URL 已複製到剪貼板：%s</string>
+    <string name="upload_failed">上傳失敗：%s</string>
+    <string name="crash_reporter_toast">複製成功！</string>
+    <string name="color_picker_title">選擇顏色</string>
+    <string name="color_picker_toast">未知顏色！</string>
+    <string name="dialog_alert">警告</string>
+    <string name="dialog_info">提示</string>
+    <string name="dialog_positive">確認</string>
+    <string name="dialog_negative">取消</string>
+    <string name="file_browser_select_external">用外部應用程式選擇</string>
+    <string name="edit">編輯</string>
+    <string name="log_upload_success_title">日誌上傳成功</string>
+    <string name="log_upload_copy">複製連結</string>
+    <string name="log_upload_open">開啟連結</string>
+    <string name="log_upload_share">分享連結</string>
+    <string name="log_upload_share_template">我喺啟動器入面遇到咗問題，呢度係日誌連結：\n%s</string>
+    <string name="close">關閉</string>
 </resources>

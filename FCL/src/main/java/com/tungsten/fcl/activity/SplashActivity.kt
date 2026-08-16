@@ -65,8 +65,7 @@ class SplashActivity : FCLActivity() {
         sharedPreferences = getSharedPreferences("launcher", MODE_PRIVATE)
         val background = findViewById<ConstraintLayout>(R.id.background)
         ImageUtil.loadInto(
-            background,
-            ThemeEngine.getInstance().getTheme().getBackground(this)
+            background, ThemeEngine.getInstance().getTheme().getBackground(this)
         )
         if (sharedPreferences.getBoolean("is_agree", false)) {
             checkPermission()
@@ -79,7 +78,7 @@ class SplashActivity : FCLActivity() {
                     sharedPreferences.edit { putBoolean("is_agree", true) }
                     checkPermission()
                 }
-                setNegativeButton(getString(com.tungsten.fcllibrary.R.string.crash_reporter_close)) { finish() }
+                setNegativeButton(getString(com.tungsten.fcl.R.string.crash_reporter_close)) { finish() }
                 create().show()
             }
         }
@@ -165,8 +164,7 @@ class SplashActivity : FCLActivity() {
                 newIntent.putExtra("modpack_cache_path", cacheFile.absolutePath)
             } catch (e: Exception) {
                 Logging.LOG.log(
-                    Level.WARNING,
-                    "Failed to handle modpack intent: ${e.message}"
+                    Level.WARNING, "Failed to handle modpack intent: ${e.message}"
                 )
             }
         }
@@ -189,17 +187,14 @@ class SplashActivity : FCLActivity() {
             }
         } else {
             if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    permission.WRITE_EXTERNAL_STORAGE
+                    this, permission.WRITE_EXTERNAL_STORAGE
                 ) || !ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    permission.READ_EXTERNAL_STORAGE
+                    this, permission.READ_EXTERNAL_STORAGE
                 )
             ) {
                 requestPermissions(
                     arrayOf(
-                        permission.WRITE_EXTERNAL_STORAGE,
-                        permission.READ_EXTERNAL_STORAGE
+                        permission.WRITE_EXTERNAL_STORAGE, permission.READ_EXTERNAL_STORAGE
                     )
                 ) {
                     checkPermission()
@@ -222,27 +217,26 @@ class SplashActivity : FCLActivity() {
             return Environment.isExternalStorageManager()
         }
         return ContextCompat.checkSelfPermission(
-            this,
-            permission.READ_EXTERNAL_STORAGE
+            this, permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            this,
-            permission.WRITE_EXTERNAL_STORAGE
+            this, permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun initState() {
         try {
             lwjgl = RuntimeUtils.isLatest(
-                FCLPath.LWJGL_DIR,
-                "/assets/app_runtime/lwjgl"
+                FCLPath.LWJGL_DIR + "/3.3.3",
+                "/assets/app_runtime/lwjgl/3.3.3"
+            ) && RuntimeUtils.isLatest(
+                FCLPath.LWJGL_DIR + "/3.4.1",
+                "/assets/app_runtime/lwjgl/3.4.1"
             )
             cacio = RuntimeUtils.isLatest(
-                FCLPath.CACIOCAVALLO_8_DIR,
-                "/assets/app_runtime/caciocavallo"
+                FCLPath.CACIOCAVALLO_8_DIR, "/assets/app_runtime/caciocavallo"
             )
             cacio17 = RuntimeUtils.isLatest(
-                FCLPath.CACIOCAVALLO_17_DIR,
-                "/assets/app_runtime/caciocavallo17"
+                FCLPath.CACIOCAVALLO_17_DIR, "/assets/app_runtime/caciocavallo17"
             )
             java8 = RuntimeUtils.isLatest(FCLPath.JAVA_8_PATH, "/assets/app_runtime/java/jre8")
             java17 = RuntimeUtils.isLatest(FCLPath.JAVA_17_PATH, "/assets/app_runtime/java/jre17")

@@ -58,9 +58,12 @@ android {
         applicationId = pkgName
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1322
-        versionName = "1.3.2.2"
+        versionCode = 1326
+        versionName = "1.3.2.6"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    testBuildType = "debug"
 
     buildTypes {
         getByName("release") {
@@ -87,6 +90,11 @@ android {
             useLegacyPackaging = true
             pickFirsts += listOf("**/libbytehook.so")
         }
+    }
+
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
     }
 
     androidResources{
@@ -116,6 +124,27 @@ android {
     }
 }
 
+/**
+ * 按 -Darch 过滤 JRE 压缩包，生成当前架构需要的资产目录。
+ * 非 all 构建只保留 version、universal 和 bin-<arch>.tar.xz（运行时两者都需要，见 RuntimeUtils#installJava）。
+ */
+abstract class FilterJreAssets : Sync() {
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+}
+
+val filterJreAssets = tasks.register<FilterJreAssets>("filterJreAssets") {
+    val arch = System.getProperty("arch", "all")
+    // Copy/Sync 的 up-to-date 检查不包含 copy spec 的过滤规则，必须显式声明 arch 输入，
+    // 否则切换架构时任务不会重跑，产物会残留上一架构的 JRE 包
+    inputs.property("arch", arch)
+    from(layout.projectDirectory.dir("src/main/jreAssets"))
+    into(outputDir)
+    if (arch != "all") {
+        exclude { it.name.startsWith("bin-") && it.name != "bin-$arch.tar.xz" }
+    }
+}
+
 androidComponents {
     onVariants { variant ->
         variant.outputs.forEach { output ->
@@ -124,23 +153,51 @@ androidComponents {
                     output.outputFileName =
                         "FCL-${variant.buildType}-${project.android.defaultConfig.versionName}-${abi}.apk"
                 }
+            }
+        }
 
-                val variantName = variant.name.replaceFirstChar { it.uppercaseChar() }
-                afterEvaluate {
-                    val task =
-                        tasks.named("merge${variantName}Assets").get() as MergeSourceSetFolders
-                    task.doLast {
-                        val arch = System.getProperty("arch", "all")
-                        val assetsDir = task.outputDir.get().asFile
-                        copyAssetsFile(File("${project.projectDir}/src/main/assets"), assetsDir)
-                        val jreList = listOf("jre8", "jre17", "jre21", "jre25")
-                        println("arch:$arch")
-                        jreList.forEach { jre ->
-                            val runtimeDir = "$assetsDir/app_runtime/java/$jre"
-                            println("runtimeDir:$runtimeDir")
-                            File(runtimeDir).listFiles().forEach {
-                                if (arch != "all" && it.name != "version" && !it.name.contains("universal") && it.name != "bin-${arch}.tar.xz") {
-                                    println("delete:${it} : ${it.delete()}")
+        // JRE 资产不放在 src/main/assets 里（AGP 的 mergeAssets 不应用 source set 的 exclude 过滤），
+        // 而是按架构注册为生成源；arch 变化会让 Sync 任务重新执行，mergeAssets 随之重跑，避免产物残留旧架构文件。
+        if (System.getProperty("arch", "all") != "all") {
+            variant.sources.assets?.addGeneratedSourceDirectory(filterJreAssets) { it.outputDir }
+        } else {
+            variant.sources.assets?.addStaticSourceDirectory("src/main/jreAssets")
+        }
+
+        // LWJGL natives 打包在 lwjgl-*-natives aar 的 assets/app_runtime/lwjgl/<版本>/natives/<abi> 下，
+        // 不走 AGP 的 abiFilters，需在 mergeAssets 后手动按架构删除其他 ABI 的 natives 目录。
+        val variantName = variant.name.replaceFirstChar { it.uppercaseChar() }
+        afterEvaluate {
+            val mergeAssets =
+                tasks.named("merge${variantName}Assets", MergeSourceSetFolders::class.java)
+            val arch = System.getProperty("arch", "all")
+            // 显式声明 arch 输入，arch 变化时任务重跑，避免产物残留上一架构的 natives
+            mergeAssets.configure { inputs.property("lwjglArch", arch) }
+            mergeAssets.configure {
+                doLast {
+                    if (arch == "all") return@doLast
+                    val abi = when (arch) {
+                        "arm" -> "armeabi-v7a"
+                        "arm64" -> "arm64-v8a"
+                        "x86" -> "x86"
+                        "x86_64" -> "x86_64"
+                        else -> return@doLast
+                    }
+                    val assetsDir = outputDir.get().asFile
+                    copyAssetsFile(File("${project.projectDir}/src/main/assets"), assetsDir)
+                    // 版本列表从 libs 下的 lwjgl-*-natives-release.aar 文件名推导，避免新增版本时忘记同步
+                    val lwjglVersions = project.file("libs").listFiles { f ->
+                        f.name.matches(Regex("lwjgl-\\d+\\.\\d+\\.\\d+-natives-release\\.aar"))
+                    }
+                        ?.map { Regex("lwjgl-(\\d+\\.\\d+\\.\\d+)-natives-release\\.aar").find(it.name)!!.groupValues[1] }
+                        ?: emptyList()
+                    lwjglVersions.forEach { version ->
+                        val nativesDir = File(assetsDir, "app_runtime/lwjgl/$version/natives")
+                        if (nativesDir.isDirectory) {
+                            nativesDir.listFiles()?.forEach { dir ->
+                                if (dir.isDirectory && dir.name != abi) {
+                                    logger.lifecycle("删除非目标架构 natives: $dir")
+                                    dir.deleteRecursively()
                                 }
                             }
                         }
@@ -160,9 +217,10 @@ kotlin {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation(project(":FCLCore"))
-    implementation(project(":FCLLibrary"))
     implementation(project(":FCLauncher"))
     implementation(project(":Terracotta"))
+    implementation(libs.commons.io)
+    implementation(libs.jelf)
     implementation(libs.taptargetview)
     implementation(libs.nanohttpd)
     implementation(libs.commons.compress)
@@ -180,4 +238,7 @@ dependencies {
     implementation(libs.segmented.button)
     implementation(libs.datastore)
     implementation(libs.kotlinx.serialization.json)
+
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.ext.junit)
 }

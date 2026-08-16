@@ -10,15 +10,11 @@ import com.tungsten.fcl.R;
 import com.tungsten.fcl.activity.MainActivity;
 import com.tungsten.fcl.ui.PageManager;
 import com.tungsten.fcl.util.AndroidUtils;
-import com.tungsten.fcl.util.RequestCodes;
 import com.tungsten.fclcore.fakefx.beans.property.SimpleStringProperty;
 import com.tungsten.fclcore.fakefx.beans.property.StringProperty;
 import com.tungsten.fclcore.game.World;
 import com.tungsten.fclcore.util.io.FileUtils;
 import com.tungsten.fclcore.util.versioning.VersionNumber;
-import com.tungsten.fcllibrary.browser.FileBrowser;
-import com.tungsten.fcllibrary.browser.options.LibMode;
-import com.tungsten.fcllibrary.browser.options.SelectionMode;
 import com.tungsten.fcllibrary.component.dialog.FCLAlertDialog;
 import com.tungsten.fcllibrary.component.view.FCLUILayout;
 
@@ -56,6 +52,7 @@ public class WorldListItem {
 
     public void export() {
         MainActivity.getInstance().fileLauncher.launchSingleSelection(null, null, true, files -> {
+            if (files == null) return;
             WorldExportDialog dialog = new WorldExportDialog(context, world, files.get(0));
             dialog.show();
         });
@@ -69,7 +66,7 @@ public class WorldListItem {
             builder.setCancelable(false);
             builder.setAlertLevel(FCLAlertDialog.AlertLevel.INFO);
             builder.setMessage(context.getString(R.string.world_datapack_1_13));
-            builder.setNegativeButton(context.getString(com.tungsten.fcllibrary.R.string.dialog_positive), null);
+            builder.setNegativeButton(context.getString(com.tungsten.fcl.R.string.dialog_positive), null);
             builder.create().show();
             return;
         }

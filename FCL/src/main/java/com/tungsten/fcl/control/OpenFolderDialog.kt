@@ -82,6 +82,7 @@ class OpenFolderDialog(
             binding.importButton -> {
                 val targetDir = internalPath
                 activity.fileLauncher.launchMultiSelection(targetDir, null) {
+                    if (it == null) return@launchMultiSelection
                     importFiles(it, targetDir)
                 }
             }
@@ -154,7 +155,7 @@ class OpenFolderDialog(
                                     )
                                 )
                                 .setPositiveButton(
-                                    activity.getString(com.tungsten.fcllibrary.R.string.close)
+                                    activity.getString(com.tungsten.fcl.R.string.close)
                                 ) {}.create().show()
                         }
                     }
