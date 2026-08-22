@@ -3,44 +3,49 @@ package com.tungsten.fcl.ui.setting;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.tungsten.fcl.FCLApplication;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.tungsten.fcl.R;
+import com.tungsten.fcl.FCLApplication;
 import com.tungsten.fcl.util.AndroidUtils;
 import com.tungsten.fclcore.task.Task;
-import com.tungsten.fcllibrary.component.ui.FCLCommonPage;
-import com.tungsten.fcllibrary.component.view.FCLLinearLayout;
-import com.tungsten.fcllibrary.component.view.FCLUILayout;
+import com.tungsten.fcllibrary.component.ui.FCLPage;
 
-public class AboutPage extends FCLCommonPage implements View.OnClickListener {
+/**
+ * 关于页：RecyclerView 行级复用，说明（about_desc）置顶，下方为链接行。
+ */
+public class AboutPage extends FCLPage {
 
-    private FCLLinearLayout about_a;
-    private FCLLinearLayout about_b;
-    private FCLLinearLayout about_c;
-    private FCLLinearLayout community_a;
-    private FCLLinearLayout community_b;
-    private FCLLinearLayout community_c;
+    private static final int TYPE_DESC = 0;
+    private static final int TYPE_LINK = 1;
 
-    public AboutPage(Context context, int id, FCLUILayout parent, int resId) {
-        super(context, id, parent, resId);
+    /** 条目顺序：说明置顶，随后为各链接行 */
+    private static final int[] TITLES = {
+            R.string.about_desc,
+            R.string.about_link_a,
+            R.string.about_link_b,
+            R.string.about_link_c,
+            R.string.about_link_d,
+            R.string.about_link_e
+    };
+
+    public AboutPage(Context context, int id, int resId) {
+        super(context, id, resId);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        about_a = findViewById(R.id.about_a);
-        about_b = findViewById(R.id.about_b);
-        about_c = findViewById(R.id.about_c);
-        about_a.setOnClickListener(this);
-        about_b.setOnClickListener(this);
-        about_c.setOnClickListener(this);
-        community_a = findViewById(R.id.community_a);
-        community_b = findViewById(R.id.community_b);
-        community_c = findViewById(R.id.community_c);
-        community_a.setOnClickListener(this);
-        community_b.setOnClickListener(this);
-        community_c.setOnClickListener(this);
+        RecyclerView recyclerView = findViewById(R.id.about_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new AboutAdapter());
     }
 
     @Override
@@ -48,31 +53,66 @@ public class AboutPage extends FCLCommonPage implements View.OnClickListener {
         return null;
     }
 
-    @Override
-    public void onClick(View v) {
-        String url = null;
+    private class AboutAdapter extends RecyclerView.Adapter<AboutAdapter.Holder> {
 
-        if (v == about_a) {
-            url = FCLApplication.Prop.getProperty("about-a","null://");
-        }
-        if (v == about_b) {
-            url = FCLApplication.Prop.getProperty("about-b","null://");
-        }
-        if (v == about_c) {
-            url = FCLApplication.Prop.getProperty("about-c","null://");
-        }
-        if (v == community_a) {
-            url = FCLApplication.Prop.getProperty("community-a","null://");
-        }
-        if (v == community_b) {
-            url = FCLApplication.Prop.getProperty("community-b","null://");
-        }
-        if (v == community_c) {
-            url = FCLApplication.Prop.getProperty("community-c","null://");
+        @Override
+        public int getItemViewType(int position) {
+            return position == 0 ? TYPE_DESC : TYPE_LINK;
         }
 
-        if (url != null) {
-            AndroidUtils.openLink(getContext(), url);
+        @NonNull
+        @Override
+        public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            int layout = viewType == TYPE_DESC ? R.layout.item_about_desc : R.layout.item_about;
+            return new Holder(LayoutInflater.from(parent.getContext()).inflate(layout, parent, false), viewType);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull Holder holder, int position) {
+            holder.bind(position);
+        }
+
+        @Override
+        public int getItemCount() {
+            return TITLES.length;
+        }
+
+        class Holder extends RecyclerView.ViewHolder {
+            private final TextView title;
+            private final boolean link;
+
+            Holder(@NonNull View itemView, int viewType) {
+                super(itemView);
+                title = itemView.findViewById(R.id.title);
+                link = viewType == TYPE_LINK;
+                if (link) {
+                    itemView.setOnClickListener(v -> openLink(getBindingAdapterPosition()));
+                }
+            }
+
+            void bind(int position) {
+                title.setText(TITLES[position]);
+            }
+        }
+    }
+
+    private void openLink(int position) {
+        switch (position) {
+            case 1:
+                AndroidUtils.openLink(getContext(), FCLApplication.Prop.getProperty("about-link-a","null://"));
+                break;
+            case 2:
+                AndroidUtils.openLink(getContext(), FCLApplication.Prop.getProperty("about-link-b","null://"));
+                break;
+            case 3:
+                AndroidUtils.openLink(getContext(), FCLApplication.Prop.getProperty("about-link-c","null://"));
+                break;
+            case 4:
+                AndroidUtils.openLink(getContext(), FCLApplication.Prop.getProperty("about-link-d","null://"));
+                break;
+            case 5:
+                AndroidUtils.openLink(getContext(), FCLApplication.Prop.getProperty("about-link-e","null://"));
+                break;
         }
     }
 }

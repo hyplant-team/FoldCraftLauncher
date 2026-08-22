@@ -24,7 +24,7 @@ import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fclcore.util.io.IOUtils;
 import com.tungsten.fclcore.util.io.NetworkUtils;
 import com.tungsten.fcllibrary.component.FCLFragment;
-import com.tungsten.fcllibrary.component.theme.Theme;
+import com.tungsten.fcllibrary.component.theme.ThemeData;
 import com.tungsten.fcllibrary.component.theme.ThemeEngine;
 import com.tungsten.fcllibrary.component.view.FCLButton;
 import com.tungsten.fcllibrary.component.view.FCLProgressBar;

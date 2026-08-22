@@ -19,7 +19,7 @@ import com.tungsten.fclauncher.utils.Architecture
 import com.tungsten.fclauncher.utils.FCLPath
 import com.tungsten.fclcore.util.Logging
 import com.tungsten.fcllibrary.component.FCLFragment
-import com.tungsten.fcllibrary.component.theme.Theme
+import com.tungsten.fcllibrary.component.theme.ThemeData
 import com.tungsten.fcllibrary.component.theme.ThemeEngine
 import com.tungsten.fcllibrary.component.dialog.FCLAlertDialog
 import kotlinx.coroutines.Dispatchers

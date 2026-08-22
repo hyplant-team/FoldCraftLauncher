@@ -29,6 +29,7 @@ public class FCLApplication extends Application implements Application.ActivityL
         **/
         FCLPath.loadProp(this);
         Prop = FCLPath.Prop;
+        FCLPath.loadPaths(this);
 
         this.registerActivityLifecycleCallbacks(this);
 //        PerfUtil.install();

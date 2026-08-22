@@ -930,7 +930,6 @@
 
     <string name="installed">Установлено</string>
     <string name="message_install_plugin">Плагины можно получить следующими способами.</string>
-    <string name="message_install_java">Java можно получить следующими способами.</string>
 
     <string name="shaderpack">Шейдеры</string>
     <string name="recommend_version">Рекомендуемая версия</string>

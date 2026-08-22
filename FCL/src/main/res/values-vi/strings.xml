@@ -1184,7 +1184,6 @@
     <string name="wiki_game_search">Java_Edition_%s</string>
     <string name="installed">Đã cài đặt</string>
     <string name="message_install_plugin">Bạn có thể nhận plugin thông qua các cách sau.</string>
-    <string name="message_install_java">Bạn có thể nhận Java thông qua các cách sau.</string>
 
     <string name="shaderpack">Gói Shader</string>
     <string name="recommend_version">Phiên bản được đề xuất</string>

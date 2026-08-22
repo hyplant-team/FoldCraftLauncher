@@ -876,7 +876,6 @@
 
     <string name="installed">Installiert</string>
     <string name="message_install_plugin">Plugins können auf folgende Weise erhalten werden.</string>
-    <string name="message_install_java">Java kann auf folgende Weise erhalten werden.</string>
 
     <string name="shaderpack">Shader</string>
     <string name="recommend_version">Empfohlene Version</string>

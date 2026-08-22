@@ -30,217 +30,212 @@ import com.google.gson.annotations.JsonAdapter
 import com.mio.JavaManager
 import com.mio.data.Renderer
 import com.tungsten.fclauncher.utils.FCLPath
-import com.tungsten.fclcore.fakefx.beans.InvalidationListener
-import com.tungsten.fclcore.fakefx.beans.property.BooleanProperty
-import com.tungsten.fclcore.fakefx.beans.property.IntegerProperty
-import com.tungsten.fclcore.fakefx.beans.property.ObjectProperty
-import com.tungsten.fclcore.fakefx.beans.property.SimpleBooleanProperty
-import com.tungsten.fclcore.fakefx.beans.property.SimpleIntegerProperty
-import com.tungsten.fclcore.fakefx.beans.property.SimpleObjectProperty
-import com.tungsten.fclcore.fakefx.beans.property.SimpleStringProperty
-import com.tungsten.fclcore.fakefx.beans.property.StringProperty
 import com.tungsten.fclcore.util.Lang
 import com.tungsten.fclcore.util.platform.MemoryUtils
 import java.lang.reflect.Type
 
+/**
+ * 版本设置数据模型。
+ *
+ * 使用普通类型字段替代原 fakefx property，属性变化通过 [addOnChangeListener] 通知
+ * （用于自动保存与页面刷新），不再依赖 fakefx 监听机制。
+ */
 @JsonAdapter(VersionSetting.Serializer::class)
 class VersionSetting : Cloneable {
-    var isGlobal: Boolean = false
 
-    val usesGlobalProperty: BooleanProperty =
-        SimpleBooleanProperty(this, "usesGlobal", true)
-    var isUsesGlobal: Boolean
-        /**
-         * FCL Version Settings have been divided into 2 parts.
-         * 1. Global settings.
-         * 2. Version settings.
-         * If a version claims that it uses global settings, its version setting will be disabled.
-         *
-         *
-         * Defaults false because if one version uses global first, custom version file will not be generated.
-         */
-        get() = usesGlobalProperty.get()
-        set(usesGlobal) {
-            usesGlobalProperty.set(usesGlobal)
+    /**
+     * FCL Version Settings have been divided into 2 parts.
+     * 1. Global settings.
+     * 2. Version settings.
+     * If a version claims that it uses global settings, its version setting will be disabled.
+     *
+     * Defaults false because if one version uses global first, custom version file will not be generated.
+     */
+    var isUsesGlobal: Boolean = true
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
         }
 
     // java
-    val javaProperty: StringProperty =
-        SimpleStringProperty(this, "java", VersionSettingDefault.getJava())
-    var java: String
-        get() = javaProperty.get()
-        set(java) {
-            javaProperty.set(java)
-        }
-
-    val uuidProperty: StringProperty = SimpleStringProperty(this, "uuid", VersionSettingDefault.getUuid())
-    var uuid: String
-        get() = uuidProperty.get()
+    var java: String = VersionSettingDefault.getJava()
         set(value) {
-            uuidProperty.set(value)
+            if (field == value) return
+            field = value
+            changed()
         }
 
-    val maxMemoryProperty: IntegerProperty =
-        SimpleIntegerProperty(this, "maxMemory", VersionSettingDefault.getMaxMemory())
-    var maxMemory: Int
-        /**
-         * The maximum memory/MB that JVM can allocate for heap.
-         */
-        get() = maxMemoryProperty.get()
-        set(maxMemory) {
-            maxMemoryProperty.set(maxMemory)
+    var uuid: String = VersionSettingDefault.getUuid()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
+        }
+
+    /**
+     * The maximum memory/MB that JVM can allocate for heap.
+     */
+    var maxMemory: Int = VersionSettingDefault.getMaxMemory()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
         }
 
     /**
      * The minimum memory that JVM can allocate for heap.
      */
-    val minMemoryProperty: ObjectProperty<Int?> =
-        SimpleObjectProperty(this, "minMemory", null)
-    var minMemory: Int?
-        get() = minMemoryProperty.get()
-        set(minMemory) {
-            minMemoryProperty.set(minMemory)
+    var minMemory: Int? = null
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
         }
 
-    val autoMemoryProperty: BooleanProperty = SimpleBooleanProperty(this, "autoMemory", VersionSettingDefault.getAutoMemory())
-    var isAutoMemory: Boolean
-        get() = autoMemoryProperty.get()
-        set(memory) {
-            autoMemoryProperty.set(memory)
+    var isAutoMemory: Boolean = VersionSettingDefault.getAutoMemory()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
         }
 
     // options
-    val javaArgsProperty: StringProperty = SimpleStringProperty(this, "javaArgs", VersionSettingDefault.getJavaArgs())
-    var javaArgs: String
-        /**
-         * The user customized arguments passed to JVM.
-         */
-        get() = javaArgsProperty.get()
-        set(javaArgs) {
-            javaArgsProperty.set(javaArgs)
+    /**
+     * The user customized arguments passed to JVM.
+     */
+    var javaArgs: String = VersionSettingDefault.getJavaArgs()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
         }
 
-    val minecraftArgsProperty: StringProperty =
-        SimpleStringProperty(this, "minecraftArgs", VersionSettingDefault.getMinecraftArgs())
-    var minecraftArgs: String
-        /**
-         * The user customized arguments passed to Minecraft.
-         */
-        get() = minecraftArgsProperty.get()
-        set(minecraftArgs) {
-            minecraftArgsProperty.set(minecraftArgs)
+    /**
+     * The user customized arguments passed to Minecraft.
+     */
+    var minecraftArgs: String = VersionSettingDefault.getMinecraftArgs()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
         }
 
-    val notCheckJVMProperty: BooleanProperty =
-        SimpleBooleanProperty(this, "notCheckJVM", VersionSettingDefault.getNotCheckJVM())
-    var isNotCheckJVM: Boolean
-        /**
-         * True if FCL does not check JVM validity.
-         */
-        get() = notCheckJVMProperty.get()
-        set(notCheckJVM) {
-            notCheckJVMProperty.set(notCheckJVM)
+    /**
+     * True if FCL does not check JVM validity.
+     */
+    var isNotCheckJVM: Boolean = VersionSettingDefault.getNotCheckJVM()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
         }
 
-    val notCheckGameProperty: BooleanProperty =
-        SimpleBooleanProperty(this, "notCheckGame", VersionSettingDefault.getNotCheckGame())
-    var isNotCheckGame: Boolean
-        /**
-         * True if FCL does not check game's completeness.
-         */
-        get() = notCheckGameProperty.get()
-        set(notCheckGame) {
-            notCheckGameProperty.set(notCheckGame)
+    /**
+     * True if FCL does not check game's completeness.
+     */
+    var isNotCheckGame: Boolean = VersionSettingDefault.getNotCheckGame()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
         }
 
     // Minecraft settings.
-    val serverIpProperty: StringProperty = SimpleStringProperty(this, "serverIp", VersionSettingDefault.getServerIp())
-    var serverIp: String
-        /**
-         * The server ip that will be entered after Minecraft successfully loaded ly.
-         *
-         *
-         * Format: ip:port or without port.
-         */
-        get() = serverIpProperty.get()
-        set(serverIp) {
-            serverIpProperty.set(serverIp)
+    /**
+     * The server ip that will be entered after Minecraft successfully loaded.
+     *
+     * Format: ip:port or without port.
+     */
+    var serverIp: String = VersionSettingDefault.getServerIp()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
         }
 
     /**
      * 0 - .minecraft<br></br>
      * 1 - .minecraft/versions/&lt;version&gt;/<br></br>
      */
-    val isolateGameDirProperty: BooleanProperty =
-        SimpleBooleanProperty(this, "isolateGameDir", VersionSettingDefault.getIsolateGameDir())
-    var isIsolateGameDir: Boolean
-        get() = isolateGameDirProperty.get()
-        set(isolate) {
-            isolateGameDirProperty.set(isolate)
-        }
-
-    val graphicsBackendProperty: StringProperty = SimpleStringProperty(this, "graphicsBackend", VersionSettingDefault.getGraphicsBackend())
-    var graphicsBackend: String
-        get() = graphicsBackendProperty.get()
-        set(v) {
-            graphicsBackendProperty.set(v)
-        }
-
-    val vkDriverSystemProperty: BooleanProperty =
-        SimpleBooleanProperty(this, "vulkanDriverSystem", VersionSettingDefault.getVulkanDriverSystem())
-    var isVKDriverSystem: Boolean
-        get() = vkDriverSystemProperty.get()
-        set(vulkanDriverSystem) {
-            vkDriverSystemProperty.set(vulkanDriverSystem)
-        }
-
-    val controllerProperty: StringProperty =
-        SimpleStringProperty(this, "controller", VersionSettingDefault.getController())
-    var controller: String
-        get() = controllerProperty.get()
-        set(controller) {
-            controllerProperty.set(controller)
-        }
-
-    val rendererProperty: StringProperty =
-        SimpleStringProperty(this, "render", VersionSettingDefault.getRenderer())
-    var renderer: String
-        get() = rendererProperty.get()
-        set(renderer) {
-            rendererProperty.set(renderer)
-        }
-
-    val driverProperty: StringProperty =
-        SimpleStringProperty(this, "driver", VersionSettingDefault.getDriver())
-    var driver: String
-        get() = driverProperty.get()
-        set(driver) {
-            driverProperty.set(driver)
-        }
-
-    val pojavBigCoreProperty: BooleanProperty =
-        SimpleBooleanProperty(this, "pojavBigCore", VersionSettingDefault.getPojavBigCore())
-    var isPojavBigCore: Boolean
-        get() = pojavBigCoreProperty.get()
-        set(pojavBigCore) {
-            pojavBigCoreProperty.set(pojavBigCore)
-        }
-
-    var debugLogProperty: BooleanProperty =
-        SimpleBooleanProperty(this, "debugLog", VersionSettingDefault.getDebugLog())
-    var isDebugLog: Boolean
-        get() = debugLogProperty.get()
+    var isIsolateGameDir: Boolean = VersionSettingDefault.getIsolateGameDir()
         set(value) {
-            debugLogProperty.set(value)
+            if (field == value) return
+            field = value
+            changed()
         }
 
-    var forceResolutionProperty: BooleanProperty =
-        SimpleBooleanProperty(this, "forceResolution", VersionSettingDefault.getForceResolution())
-    var isForceResolution: Boolean
-        get() = forceResolutionProperty.get()
+    var graphicsBackend: String = VersionSettingDefault.getGraphicsBackend()
         set(value) {
-            forceResolutionProperty.set(value)
+            if (field == value) return
+            field = value
+            changed()
         }
+
+    var isVKDriverSystem: Boolean = VersionSettingDefault.getVulkanDriverSystem()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
+        }
+
+    var controller: String = VersionSettingDefault.getController()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
+        }
+
+    var renderer: String = VersionSettingDefault.getRenderer()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
+        }
+
+    var driver: String = VersionSettingDefault.getDriver()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
+        }
+
+    var isPojavBigCore: Boolean = VersionSettingDefault.getPojavBigCore()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
+        }
+
+    var isDebugLog: Boolean = VersionSettingDefault.getDebugLog()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
+        }
+
+    var isForceResolution: Boolean = VersionSettingDefault.getForceResolution()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
+        }
+
+    private val changeListeners = mutableListOf<Runnable>()
+
+    /** 注册属性变化监听（替代原 fakefx property 监听，用于自动保存与页面刷新） */
+    fun addOnChangeListener(listener: Runnable) {
+        changeListeners.add(listener)
+    }
+
+    fun removeOnChangeListener(listener: Runnable) {
+        changeListeners.remove(listener)
+    }
+
+    private fun changed() {
+        // 复制后遍历：回调内可能增删监听，避免并发修改
+        changeListeners.toList().forEach { it.run() }
+    }
 
     fun checkController() {
         Controllers.addCallback {
@@ -251,29 +246,6 @@ class VersionSetting : Cloneable {
                 .orElse(Controllers.getControllers()[0])
             this.controller = controller.id
         }
-    }
-
-    fun addPropertyChangedListener(listener: InvalidationListener?) {
-        usesGlobalProperty.addListener(listener)
-        javaProperty.addListener(listener)
-        maxMemoryProperty.addListener(listener)
-        minMemoryProperty.addListener(listener)
-        autoMemoryProperty.addListener(listener)
-        javaArgsProperty.addListener(listener)
-        minecraftArgsProperty.addListener(listener)
-        notCheckGameProperty.addListener(listener)
-        notCheckJVMProperty.addListener(listener)
-        serverIpProperty.addListener(listener)
-        isolateGameDirProperty.addListener(listener)
-        graphicsBackendProperty.addListener(listener)
-        vkDriverSystemProperty.addListener(listener)
-        controllerProperty.addListener(listener)
-        rendererProperty.addListener(listener)
-        driverProperty.addListener(listener)
-        pojavBigCoreProperty.addListener(listener)
-        uuidProperty.addListener(listener)
-        debugLogProperty.addListener(listener)
-        forceResolutionProperty.addListener(listener)
     }
 
     public override fun clone(): VersionSetting {

@@ -893,7 +893,6 @@
 
     <string name="installed">Встановлено</string>
     <string name="message_install_plugin">Плагіни можна отримати наступними способами.</string>
-    <string name="message_install_java">Java можна отримати наступними способами.</string>
 
     <string name="shaderpack">Шейдери</string>
     <string name="recommend_version">Рекомендована версія</string>

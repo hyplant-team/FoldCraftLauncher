@@ -997,7 +997,6 @@
     <string name="wiki_game_search">Java版%s</string>
     <string name="installed">已安裝</string>
     <string name="message_install_plugin">你可以通過以下方式獲取插件。</string>
-    <string name="message_install_java">你可以通過以下方式獲取Java。</string>
 
     <string name="shaderpack">光影</string>
     <string name="recommend_version">推薦嘅版本</string>

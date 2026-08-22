@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
 import com.google.gson.Gson;
@@ -32,7 +33,6 @@ import com.tungsten.fcllibrary.component.theme.ThemeEngine;
 import com.tungsten.fcllibrary.component.ui.FCLCommonUI;
 import com.tungsten.fcllibrary.component.view.FCLButton;
 import com.tungsten.fcllibrary.component.view.FCLTextView;
-import com.tungsten.fcllibrary.component.view.FCLUILayout;
 import com.tungsten.fcllibrary.skin.SkinRenderer;
 import com.tungsten.fcllibrary.skin.SkinViewer;
 import com.tungsten.fcllibrary.util.LocaleUtils;
@@ -64,8 +64,8 @@ public class MainUI extends FCLCommonUI implements View.OnClickListener {
 
     private ObjectProperty<Account> currentAccount;
 
-    public MainUI(Context context, FCLUILayout parent, int id) {
-        super(context, parent, id);
+    public MainUI(Context context, int id) {
+        super(context, id);
     }
 
     @Override
@@ -85,12 +85,33 @@ public class MainUI extends FCLCommonUI implements View.OnClickListener {
         skinViewer.setRenderer(renderer, 5f);
 
         setupSkinDisplay();
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        checkAnnouncement();
+        // 皮肤渲染随页面挂载/回收恢复与暂停（替代原 onStart/onStop 生命周期）
+        getContentView().addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(@NonNull View v) {
+                // if (skinViewer != null) {
+                //     if (!ThemeEngine.getInstance().getTheme().isCloseSkinModel()) {
+                //         skinViewer.setVisibility(View.VISIBLE);
+                //         skinViewer.onResume();
+                //         renderer.updateTexture(renderer.getTexture()[0], renderer.getTexture()[1]);
+                //     } else {
+                //         skinViewer.onPause();
+                //         skinViewer.setVisibility(View.GONE);
+                //     }
+                // }
+                checkAnnouncement();
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(@NonNull View v) {
+                // if (skinViewer != null) {
+                //     skinViewer.onPause();
+                //     skinViewer.setVisibility(View.GONE);
+                // }
+                checkSkinDisplay(false);
+            }
+        });
     }
 
     @Override
@@ -105,15 +126,9 @@ public class MainUI extends FCLCommonUI implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        checkSkinDisplay();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (skinViewer != null) {
-            skinViewer.onPause();
-            skinViewer.setVisibility(View.GONE);
+        if (skinViewer != null && isShowing() && !ThemeEngine.getInstance().getTheme().isCloseSkinModel()) {
+            skinViewer.setVisibility(View.VISIBLE);
+            skinViewer.onResume();
         }
     }
 
@@ -133,7 +148,7 @@ public class MainUI extends FCLCommonUI implements View.OnClickListener {
             announcementView.setText(getContext().getString(R.string.announcement_loading));
             date.setText(new String(ANNOUNCEMENT_URL));
             announcementContainer.setVisibility(View.VISIBLE);
-            checkSkinDisplay();
+            checkSkinDisplay(false);
             CompletableFuture<Announcement> future = CompletableFuture.supplyAsync(() -> {
                 try {
                     String remoteData;
@@ -172,7 +187,7 @@ public class MainUI extends FCLCommonUI implements View.OnClickListener {
                 try {
                     if (!announcement.shouldDisplay(getContext())) {
                         announcementContainer.setVisibility(View.GONE);
-                        checkSkinDisplay();
+                        checkSkinDisplay(true);
                         isChecking = false;
                         return;
                     }
@@ -188,7 +203,7 @@ public class MainUI extends FCLCommonUI implements View.OnClickListener {
                 isChecking = false;
             }));
         } else {
-            checkSkinDisplay();
+            checkSkinDisplay(false);
         }
     }
 
@@ -197,7 +212,7 @@ public class MainUI extends FCLCommonUI implements View.OnClickListener {
         if (announcement != null) {
             announcement.hide(getContext());
         }
-        checkSkinDisplay();
+        checkSkinDisplay(true);
     }
 
     private void setupSkinDisplay() {
@@ -217,17 +232,16 @@ public class MainUI extends FCLCommonUI implements View.OnClickListener {
         currentAccount.bind(Accounts.selectedAccountProperty());
     }
 
-    private void checkSkinDisplay() {
-        if (skinViewer == null) {
-            return;
-        }
-        if (isShowing() && !ThemeEngine.getInstance().theme.isCloseSkinModel() && announcementContainer.getVisibility() == View.GONE) {
-            skinViewer.setVisibility(View.VISIBLE);
-            skinViewer.onResume();
-            renderer.updateTexture(renderer.getTexture()[0], renderer.getTexture()[1]);
-        } else {
-            skinViewer.onPause();
-            skinViewer.setVisibility(View.GONE);
+    private void checkSkinDisplay(boolean visible) {
+        if (skinViewer != null) {
+            if (visible && !ThemeEngine.getInstance().getTheme().isCloseSkinModel()) {
+                skinViewer.setVisibility(View.VISIBLE);
+                skinViewer.onResume();
+                renderer.updateTexture(renderer.getTexture()[0], renderer.getTexture()[1]);
+            } else {
+                skinViewer.onPause();
+                skinViewer.setVisibility(View.GONE);
+            }
         }
     }
 

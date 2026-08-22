@@ -17,8 +17,6 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import com.tungsten.fclcore.fakefx.beans.property.BooleanProperty;
 import com.tungsten.fclcore.fakefx.beans.property.BooleanPropertyBase;
-import com.tungsten.fclcore.fakefx.beans.property.IntegerProperty;
-import com.tungsten.fclcore.fakefx.beans.property.IntegerPropertyBase;
 import com.tungsten.fclcore.task.Schedulers;
 import com.tungsten.fcl.R;
 import com.tungsten.fcllibrary.component.theme.ThemeEngine;
@@ -35,37 +33,29 @@ public class FCLButton extends AppCompatButton {
     private GradientDrawable drawableNormal;
     private GradientDrawable drawablePress;
 
-    private final IntegerProperty theme = new IntegerPropertyBase() {
+    /** 同时设置文字颜色与图标（compound drawable）颜色，保证图标随文字主题色渲染 */
+    private void applyTextColor(int color) {
+        setTextColor(color);
+        setCompoundDrawableTintList(new ColorStateList(new int[][]{{}}, new int[]{color}));
+    }
 
-        @Override
-        protected void invalidated() {
-            get();
+    /** 主题刷新回调（registerEvent 注册，主题变化时全量执行） */
+    private void refreshTheme() {
             drawableNormal.setColor(Color.TRANSPARENT);
             drawablePress.setColor(ThemeEngine.getInstance().getTheme().getLtColor());
             if (!ripple) {
                 if (isDown) {
                     setBackgroundDrawable(drawablePress);
-                    setTextColor(ThemeEngine.getInstance().getTheme().getAutoTint());
+                    applyTextColor(ThemeEngine.getInstance().getTheme().getAutoTint());
                 }
                 else {
                     setBackgroundDrawable(drawableNormal);
-                    setTextColor(ThemeEngine.getInstance().getTheme().getLtColor());
+                    applyTextColor(ThemeEngine.getInstance().getTheme().getLtColor());
                 }
             } else {
                 setRipple();
             }
-        }
-
-        @Override
-        public Object getBean() {
-            return this;
-        }
-
-        @Override
-        public String getName() {
-            return "theme";
-        }
-    };
+    }
 
     private void init(int shape, boolean autoPadding) {
         setSingleLine(true);
@@ -99,7 +89,7 @@ public class FCLButton extends AppCompatButton {
         super(context);
         this.ripple = false;
         init(GradientDrawable.RECTANGLE, true);
-        theme.bind(ThemeEngine.getInstance().getTheme().colorProperty());
+        ThemeEngine.getInstance().registerEvent(this, this::refreshTheme);
     }
 
     public FCLButton(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -111,7 +101,7 @@ public class FCLButton extends AppCompatButton {
         this.ripple = ripple;
         init(shape, autoPadding);
         typedArray.recycle();
-        theme.bind(ThemeEngine.getInstance().getTheme().colorProperty());
+        ThemeEngine.getInstance().registerEvent(this, this::refreshTheme);
     }
 
     public FCLButton(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -123,7 +113,7 @@ public class FCLButton extends AppCompatButton {
         this.ripple = ripple;
         init(shape, autoPadding);
         typedArray.recycle();
-        theme.bind(ThemeEngine.getInstance().getTheme().colorProperty());
+        ThemeEngine.getInstance().registerEvent(this, this::refreshTheme);
     }
 
     @Override
@@ -132,12 +122,12 @@ public class FCLButton extends AppCompatButton {
             if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
                 isDown = true;
                 setBackgroundDrawable(drawablePress);
-                setTextColor(ThemeEngine.getInstance().getTheme().getAutoTint());
+                applyTextColor(ThemeEngine.getInstance().getTheme().getAutoTint());
             }
             if (event.getActionMasked() == MotionEvent.ACTION_UP || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
                 isDown = false;
                 setBackgroundDrawable(drawableNormal);
-                setTextColor(ThemeEngine.getInstance().getTheme().getLtColor());
+                applyTextColor(ThemeEngine.getInstance().getTheme().getLtColor());
             }
         }
         return super.onTouchEvent(event);
@@ -155,7 +145,7 @@ public class FCLButton extends AppCompatButton {
                 ThemeEngine.getInstance().getTheme().getColor()
         };
         setBackgroundTintList(new ColorStateList(state, color));
-        setTextColor(ThemeEngine.getInstance().getTheme().getAutoTint());
+        applyTextColor(ThemeEngine.getInstance().getTheme().getAutoTint());
     }
 
     public boolean isRipple() {

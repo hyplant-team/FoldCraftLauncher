@@ -58,8 +58,8 @@ android {
         applicationId = pkgName
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1326
-        versionName = "1.3.2.6"
+        versionCode = 1327
+        versionName = "1.3.2.7"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -228,6 +228,7 @@ dependencies {
     implementation(libs.opennbt)
     implementation(libs.gson)
     implementation(libs.appcompat)
+    implementation(libs.androidx.viewpager2)
     implementation(libs.core.splashscreen)
     implementation(libs.material)
     implementation(libs.constraintlayout)
