@@ -19,7 +19,7 @@ import java.util.logging.Level;
 
 public class UpdateChecker {
 
-    public static final String UPDATE_CHECK_URL = FCLApplication.Prop.getProperty("update-detection-url","null://");
+    public static final String UPDATE_CHECK_URL = FCLPath.Prop.getProperty("update-detection-url","null://");
 
     private static UpdateChecker instance;
 

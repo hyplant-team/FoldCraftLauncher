@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tungsten.fcl.R;
-import com.tungsten.fcl.FCLApplication;
-import com.tungsten.fcl.util.AndroidUtils;
+import com.mio.util.AndroidUtilKt;
+import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fclcore.task.Task;
 import com.tungsten.fcllibrary.component.ui.FCLPage;
 
@@ -99,19 +99,19 @@ public class AboutPage extends FCLPage {
     private void openLink(int position) {
         switch (position) {
             case 1:
-                AndroidUtils.openLink(getContext(), FCLApplication.Prop.getProperty("about-link-a","null://"));
+                AndroidUtilKt.openLink(getContext(), FCLPath.Prop.getProperty("about-link-a","null://"));
                 break;
             case 2:
-                AndroidUtils.openLink(getContext(), FCLApplication.Prop.getProperty("about-link-b","null://"));
+                AndroidUtilKt.openLink(getContext(), FCLPath.Prop.getProperty("about-link-b","null://"));
                 break;
             case 3:
-                AndroidUtils.openLink(getContext(), FCLApplication.Prop.getProperty("about-link-c","null://"));
+                AndroidUtilKt.openLink(getContext(), FCLPath.Prop.getProperty("about-link-c","null://"));
                 break;
             case 4:
-                AndroidUtils.openLink(getContext(), FCLApplication.Prop.getProperty("about-link-d","null://"));
+                AndroidUtilKt.openLink(getContext(), FCLPath.Prop.getProperty("about-link-d","null://"));
                 break;
             case 5:
-                AndroidUtils.openLink(getContext(), FCLApplication.Prop.getProperty("about-link-e","null://"));
+                AndroidUtilKt.openLink(getContext(), FCLPath.Prop.getProperty("about-link-e","null://"));
                 break;
         }
     }

@@ -47,7 +47,6 @@ import static java.util.stream.Collectors.toList;
 import android.content.Context;
 
 import com.google.gson.reflect.TypeToken;
-import com.tungsten.fcl.FCLApplication;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.game.OAuthServer;
 import com.tungsten.fclauncher.utils.FCLPath;
@@ -346,7 +345,7 @@ public final class Accounts {
             });
         }
 
-        if (FCLApplication.Prop.getProperty("download-online-authlib-injector", "false").equals("true")) {
+        if (FCLPath.Prop.getProperty("download-online-authlib-injector", "false").equals("true")) {
             triggerAuthlibInjectorUpdateCheck();
         }
 

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <float name="fps_x" value="0.0" />
+    <float name="fps_y" value="0.0" />
+    <float name="memory_y" value="0.0" />
+    <float name="memory_x" value="0.0" />
+</map>

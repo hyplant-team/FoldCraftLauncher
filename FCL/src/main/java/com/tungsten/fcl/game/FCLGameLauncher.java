@@ -26,7 +26,7 @@ import com.mio.util.LauncherUtilKt;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.util.RuntimeUtils;
 import com.tungsten.fclauncher.bridge.FCLBridge;
-import com.tungsten.fclauncher.utils.FCLPath;
+import com.tungsten.fcl.FCLApp;
 import com.tungsten.fclcore.auth.AuthInfo;
 import com.tungsten.fclcore.game.GameRepository;
 import com.tungsten.fclcore.game.LaunchOptions;

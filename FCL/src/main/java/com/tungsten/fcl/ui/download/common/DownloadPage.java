@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tungsten.fcl.R;
-import com.tungsten.fcl.FCLApplication;
 import com.tungsten.fcl.databinding.PageDownloadBinding;
 import com.tungsten.fcl.game.LocalizedRemoteModRepository;
 import com.tungsten.fcl.setting.DownloadProviders;
@@ -34,9 +33,10 @@ import com.tungsten.fcl.ui.UIManager;
 import com.tungsten.fcl.ui.download.TranslationDialog;
 import com.tungsten.fcl.ui.manage.ManageUI;
 import com.tungsten.fcl.ui.version.Versions;
-import com.tungsten.fcl.util.AndroidUtils;
+import com.mio.util.AndroidUtilKt;
 import com.tungsten.fcl.util.FXUtils;
 import com.tungsten.fcl.util.TaskCancellationAction;
+import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fclcore.download.DownloadProvider;
 import com.tungsten.fclcore.fakefx.beans.InvalidationListener;
 import com.tungsten.fclcore.fakefx.beans.property.BooleanProperty;
@@ -238,12 +238,12 @@ public class DownloadPage extends FCLPage implements ManageUI.VersionLoadable, V
         showIncompatible.setVisibility(View.VISIBLE);
         showIncompatible.setOnClickListener(v -> {
             try {
-                String url = FCLApplication.Prop.getProperty("mod-compatibility-url","null://");
+                String url = FCLPath.Prop.getProperty("mod-compatibility-url","null://");
                 FCLAlertDialog dialog = new FCLAlertDialog(getContext());
                 String message = IOUtils.readFullyAsString(getContext().getAssets().open("incompatible_mod_list.html"));
                 dialog.setMessage(Html.fromHtml(message, 0));
                 dialog.setPositiveButton(getContext().getString(R.string.view_incompatible_online), () -> {
-                    AndroidUtils.openLink(getContext(), url);
+                    AndroidUtilKt.openLink(getContext(), url);
                 });
                 dialog.setNegativeButton(getContext().getString(R.string.dialog_positive), null);
                 dialog.show();
@@ -752,9 +752,9 @@ public class DownloadPage extends FCLPage implements ManageUI.VersionLoadable, V
             if (pageId == PAGE_ID_DOWNLOAD_RESOURCE_PACK) {
                 key = key.replaceAll("\\+", "");
             }
-            return AndroidUtils.getLocalizedText(getContext(), key);
+            return AndroidUtilKt.getLocalizedText(getContext(), key);
         }
-        return AndroidUtils.getLocalizedText(getContext(), "curse_category_" + category);
+        return AndroidUtilKt.getLocalizedText(getContext(), "curse_category_" + category);
     }
 
     public void jumpToModPage(RemoteMod mod) {

@@ -14,11 +14,9 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import com.tungsten.fcl.FCLApplication;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.game.TexturesLoader;
 import com.tungsten.fcl.setting.Accounts;
-import com.tungsten.fcl.util.AndroidUtils;
 import com.tungsten.fcl.util.ReadTools;
 import com.tungsten.fclcore.auth.Account;
 import com.tungsten.fclcore.fakefx.beans.property.ObjectProperty;
@@ -48,7 +46,7 @@ import java.util.logging.Level;
 
 public class MainUI extends FCLCommonUI implements View.OnClickListener {
 
-    public static final String ANNOUNCEMENT_URL = FCLApplication.Prop.getProperty("announcement-url","null://");
+    public static final String ANNOUNCEMENT_URL = FCLPath.Prop.getProperty("announcement-url","null://");
 
     private LinearLayoutCompat announcementContainer;
     private LinearLayoutCompat announcementLayout;
@@ -119,7 +117,7 @@ public class MainUI extends FCLCommonUI implements View.OnClickListener {
         super.onPause();
         if (skinViewer != null) {
             skinViewer.onPause();
-            skinViewer.setVisibility(View.GONE);
+            // skinViewer.setVisibility(View.GONE);
         }
     }
 
@@ -127,8 +125,9 @@ public class MainUI extends FCLCommonUI implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         if (skinViewer != null && isShowing() && !ThemeEngine.getInstance().getTheme().isCloseSkinModel()) {
-            skinViewer.setVisibility(View.VISIBLE);
-            skinViewer.onResume();
+            if (skinViewer.getVisibility() == View.VISIBLE) {
+                skinViewer.onResume();
+            }
         }
     }
 
@@ -140,7 +139,7 @@ public class MainUI extends FCLCommonUI implements View.OnClickListener {
     }
 
     private void checkAnnouncement() {
-        if(FCLApplication.Prop.getProperty("enable-announcement-component","false").equals("true")){
+        if(FCLPath.Prop.getProperty("enable-announcement-component","false").equals("true")){
             isChecking = true;
             AtomicReference<String> remoteDataRef = new AtomicReference<>();
             AtomicReference<Announcement> announcementDataRef = new AtomicReference<>();

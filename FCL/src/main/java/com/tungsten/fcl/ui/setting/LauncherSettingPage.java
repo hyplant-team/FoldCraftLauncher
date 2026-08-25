@@ -26,14 +26,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.mio.ui.adapter.SpacingItemDecoration;
 import com.tungsten.fcl.R;
-import com.tungsten.fcl.FCLApplication;
 import com.tungsten.fcl.activity.MainActivity;
 import com.tungsten.fcl.databinding.PageSettingLauncherBinding;
 import com.tungsten.fcl.setting.DownloadProviders;
 import com.tungsten.fcl.upgrade.UpdateChecker;
-import com.tungsten.fcl.util.AndroidUtils;
-import com.tungsten.fcl.util.FXUtils;
 import com.tungsten.fcl.util.RuntimeUtils;
+import com.mio.util.AndroidUtilKt;
 import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fclcore.task.FetchTask;
 import com.tungsten.fclcore.task.Schedulers;
@@ -84,8 +82,18 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
         PageSettingLauncherBinding binding = PageSettingLauncherBinding.bind(getContentView());
         LauncherSettingAdapter adapter = new LauncherSettingAdapter(getContext(), this);
         binding.settingList.setLayoutManager(new LinearLayoutManager(getContext()));
-        // 行间用间距分隔（ItemDecoration），最后一行不加
-        binding.settingList.addItemDecoration(new SpacingItemDecoration((int) (8 * getContext().getResources().getDisplayMetrics().density)));
+        // 行间用间距分隔（ItemDecoration），最后一行不加；同组相邻行留 1dp 缝并绘制次要色分割线
+        int rowSpacing = (int) (8 * getContext().getResources().getDisplayMetrics().density);
+        int groupDivider = (int) (1 * getContext().getResources().getDisplayMetrics().density);
+        final int finalRowSpacing = rowSpacing;
+        final int finalGroupDivider = groupDivider;
+        binding.settingList.addItemDecoration(new SpacingItemDecoration(rowSpacing,
+                (parent, position) -> ((LauncherSettingAdapter) parent.getAdapter()).isNextInSameGroup(position)
+                        ? finalGroupDivider : finalRowSpacing,
+                () -> ThemeEngine.getInstance().getTheme().getColor()));
+        // 主题切换时重绘分割线颜色
+        ThemeEngine.getInstance().registerEvent(
+                binding.settingList, binding.settingList::invalidate);
         binding.settingList.setAdapter(adapter);
         adapter.rebuild();
     }
@@ -174,13 +182,13 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
                 selectMenuIcon();
                 break;
             case THEME_COLOR_RESET:
-                ThemeEngine.getInstance().applyAndSave(getContext(), Color.parseColor(FCLApplication.Prop.getProperty("default-theme-first-color","#CF686868")));
+                ThemeEngine.getInstance().applyAndSave(getContext(), Color.parseColor(FCLPath.Prop.getProperty("default-theme-first-color","#CF686868")));
                 break;
             case THEME_COLOR2_RESET:
-                ThemeEngine.getInstance().applyAndSave2(getContext(), Color.parseColor(FCLApplication.Prop.getProperty("default-theme-second-color","#000000")));
+                ThemeEngine.getInstance().applyAndSave2(getContext(), Color.parseColor(FCLPath.Prop.getProperty("default-theme-second-color","#000000")));
                 break;
             case THEME_COLOR2_DARK_RESET:
-                ThemeEngine.getInstance().applyAndSave2Dark(getContext(), Color.parseColor(FCLApplication.Prop.getProperty("default-theme-second-color-dark","#FFFFFF")));
+                ThemeEngine.getInstance().applyAndSave2Dark(getContext(), Color.parseColor(FCLPath.Prop.getProperty("default-theme-second-color-dark","#FFFFFF")));
                 break;
             case BACKGROUND_LIVE_RESET:
                 try {
@@ -233,7 +241,7 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
                 FCLAlertDialog.Builder builder = new FCLAlertDialog.Builder(getContext());
                 builder.setCancelable(false);
                 builder.setAlertLevel(FCLAlertDialog.AlertLevel.INFO);
-                builder.setMessage(AndroidUtils.getLocalizedText(getContext(), "settings_launcher_launcher_log_export_success", logFile));
+                builder.setMessage(getContext().getString(R.string.settings_launcher_launcher_log_export_success, logFile));
                 builder.setNegativeButton(getContext().getString(com.tungsten.fcl.R.string.dialog_positive), null);
                 builder.create().show();
             });
@@ -269,8 +277,8 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
             if (files == null) return;
             String path = files.get(0);
             Uri uri = Uri.parse(path);
-            if (AndroidUtils.isDocUri(uri)) {
-                path = AndroidUtils.copyFileToDir(getActivity(), uri, new File(FCLPath.CACHE_DIR));
+            if (AndroidUtilKt.isDocUri(uri)) {
+                path = AndroidUtilKt.copyFileToDir(getActivity(), uri, new File(FCLPath.CACHE_DIR));
             }
             ThemeEngine.getInstance().applyAndSave(getContext(), ((MainActivity) getActivity()).binding.background, isDk ? null : path, isDk ? path : null);
         });
@@ -283,8 +291,8 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
             if (files == null) return;
             String path = files.get(0);
             Uri uri = Uri.parse(path);
-            if (AndroidUtils.isDocUri(uri)) {
-                AndroidUtils.copyFile(getActivity(), uri, new File(FCLPath.LIVE_BACKGROUND_PATH));
+            if (AndroidUtilKt.isDocUri(uri)) {
+                AndroidUtilKt.copyFile(getActivity(), uri, new File(FCLPath.LIVE_BACKGROUND_PATH));
             } else {
                 try {
                     FileUtils.copyFile(new File(path), new File(FCLPath.LIVE_BACKGROUND_PATH));
@@ -303,15 +311,15 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
             if (files == null) return;
             String path = files.get(0);
             Uri uri = Uri.parse(path);
-            String type = AndroidUtils.getFileName(getContext(), uri);
+            String type = AndroidUtilKt.getFileName(getContext(), uri);
             if (type.endsWith(".gif")) {
                 type = "gif";
             } else {
                 type = "png";
             }
             deleteCursorFile();
-            if (AndroidUtils.isDocUri(uri)) {
-                AndroidUtils.copyFile(getActivity(), uri, new File(FCLPath.FILES_DIR, "cursor." + type));
+            if (AndroidUtilKt.isDocUri(uri)) {
+                AndroidUtilKt.copyFile(getActivity(), uri, new File(FCLPath.FILES_DIR, "cursor." + type));
             } else {
                 try {
                     FileUtils.copyFile(new File(path), new File(FCLPath.FILES_DIR, "cursor." + type));
@@ -329,15 +337,15 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
             if (files == null) return;
             String path = files.get(0);
             Uri uri = Uri.parse(path);
-            String type = AndroidUtils.getFileName(getContext(), uri);
+            String type = AndroidUtilKt.getFileName(getContext(), uri);
             if (type.endsWith(".gif")) {
                 type = "gif";
             } else {
                 type = "png";
             }
             deleteMenuIconFile();
-            if (AndroidUtils.isDocUri(uri)) {
-                AndroidUtils.copyFile(getActivity(), uri, new File(FCLPath.FILES_DIR, "menu_icon." + type));
+            if (AndroidUtilKt.isDocUri(uri)) {
+                AndroidUtilKt.copyFile(getActivity(), uri, new File(FCLPath.FILES_DIR, "menu_icon." + type));
             } else {
                 try {
                     FileUtils.copyFile(new File(path), new File(FCLPath.FILES_DIR, "menu_icon." + type));

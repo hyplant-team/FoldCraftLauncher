@@ -38,12 +38,13 @@ import com.mio.manager.RendererManager
 import com.mio.ui.dialog.RendererSelectDialog
 import com.mio.util.AnimUtil
 import com.mio.util.AnimUtil.Companion.interpolator
-import com.tungsten.fcl.FCLApplication
 import com.mio.util.AnimUtil.Companion.startAfter
 import com.mio.util.DisplayUtil
 import com.mio.util.GuideUtil
 import com.mio.util.GuideUtil.Companion.guideTarget
 import com.mio.util.ImageUtil
+import com.mio.util.getLocalizedText
+import com.mio.util.hasStringId
 import com.mio.util.showWarningDialog
 import com.tungsten.fcl.R
 import com.tungsten.fcl.activity.JVMCrashActivity;
@@ -60,7 +61,6 @@ import com.tungsten.fcl.ui.download.modpack.LocalModpackPage
 import com.tungsten.fcl.ui.main.MainUI
 import com.tungsten.fcl.ui.version.Versions
 import com.tungsten.fcl.upgrade.UpdateChecker
-import com.tungsten.fcl.util.AndroidUtils
 import com.tungsten.fcl.util.RequestCodes
 import com.tungsten.fclauncher.plugins.DriverPlugin
 import com.tungsten.fclauncher.utils.FCLPath
@@ -720,13 +720,13 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                     val libraryId = mark.libraryId
                     val libraryVersion = mark.libraryVersion
                     if (libraryId == LibraryType.MINECRAFT.patchId) continue
-                    if (AndroidUtils.hasStringId(
+                    if (hasStringId(
                             this@MainActivity,
                             "install_installer_" + libraryId.replace("-", "_")
                         )
                     ) {
                         libraries.append(", ").append(
-                            AndroidUtils.getLocalizedText(
+                            getLocalizedText(
                                 this@MainActivity,
                                 "install_installer_" + libraryId.replace("-", "_")
                             )
@@ -956,7 +956,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
             this,
             FCLPage.PAGE_ID_TEMP,
             R.layout.page_modpack,
-            profile,
+            if (::profile.isInitialized) profile else Profiles.getSelectedProfile(),
             null,
             file
         )

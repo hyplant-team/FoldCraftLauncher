@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.tungsten.fcl.FCLApplication;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.control.download.ControllerCategory;
 import com.tungsten.fcl.control.download.ControllerIndex;
@@ -63,8 +62,8 @@ import java.util.stream.Collectors;
 
 public class ControllerRepoPage extends FCLPage implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    public static final String CONTROLLER_REPO_A = FCLApplication.Prop.getProperty("controller-repo-a","null://");
-    public static final String CONTROLLER_REPO_B = FCLApplication.Prop.getProperty("controller-repo-b","null://");
+    public static final String CONTROLLER_REPO_A = FCLPath.Prop.getProperty("controller-repo-a","null://");
+    public static final String CONTROLLER_REPO_B = FCLPath.Prop.getProperty("controller-repo-b","null://");
 
     private final ObjectProperty<ControllerCategory> categoryProperty = new SimpleObjectProperty<>(new ControllerCategory(0, null));
     private boolean refreshCategory = true;

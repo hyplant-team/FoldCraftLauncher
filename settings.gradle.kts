@@ -18,8 +18,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "FCL"
 include(":FCL")
-include(":FCLCore")
-include(":FCLauncher")
 include(":Terracotta")
 include(":ZipFileSystem")
 include(":LWJGL")

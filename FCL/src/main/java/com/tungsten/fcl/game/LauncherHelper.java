@@ -18,8 +18,8 @@
 package com.tungsten.fcl.game;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.tungsten.fcl.util.AndroidUtils.getLocalizedText;
-import static com.tungsten.fcl.util.AndroidUtils.hasStringId;
+import static com.mio.util.AndroidUtilKt.getLocalizedText;
+import static com.mio.util.AndroidUtilKt.hasStringId;
 import static com.tungsten.fclcore.util.Logging.LOG;
 import static java.util.stream.Collectors.toList;
 
@@ -36,7 +36,7 @@ import com.mio.JavaManager;
 import com.mio.data.Renderer;
 import com.mio.manager.RendererManager;
 import com.mio.util.ParseUtil;
-import com.tungsten.fcl.FCLApplication;
+import com.tungsten.fcl.FCLApp;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.activity.JVMActivity;
 import com.tungsten.fcl.activity.MainActivity;
@@ -108,7 +108,6 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 public final class LauncherHelper {
 
@@ -232,7 +231,7 @@ public final class LauncherHelper {
                                 MainActivity.getInstance().binding.videoView.stopPlayback();
                             }
                             if (context.getSharedPreferences("launcher", MODE_PRIVATE).getBoolean("autoExitLauncher", false)) {
-                                Activity activity = FCLApplication.getCurrentActivity();
+                                Activity activity = FCLApp.getActivity();
                                 if (activity != null)
                                     activity.finish();
                             }
@@ -257,57 +256,51 @@ public final class LauncherHelper {
                             String message;
                             if (ex instanceof ModpackCompletionException) {
                                 if (ex.getCause() instanceof FileNotFoundException)
-                                    message = getLocalizedText(context, "modpack_type_curse_not_found");
+                                    message = context.getString(R.string.modpack_type_curse_not_found);
                                 else
-                                    message = getLocalizedText(context, "modpack_type_curse_error");
+                                    message = context.getString(R.string.modpack_type_curse_error);
                             } else if (ex instanceof LibraryDownloadException) {
-                                message = getLocalizedText(context, "launch_failed_download_library", ((LibraryDownloadException) ex).getLibrary().getName()) + "\n";
+                                message = context.getString(R.string.launch_failed_download_library, ((LibraryDownloadException) ex).getLibrary().getName()) + "\n";
                                 if (ex.getCause() instanceof ResponseCodeException rce) {
                                     int responseCode = rce.getResponseCode();
                                     URL url = rce.getUrl();
                                     if (responseCode == 404)
-                                        message += getLocalizedText(context, "download_code_404", url);
+                                        message += context.getString(R.string.download_code_404, url);
                                     else
-                                        message += getLocalizedText(context, "download_failed", url, responseCode);
+                                        message += context.getString(R.string.download_failed, url, responseCode);
                                 } else {
                                     message += StringUtils.getStackTrace(ex.getCause());
                                 }
                             } else if (ex instanceof DownloadException) {
                                 URL url = ((DownloadException) ex).getUrl();
                                 if (ex.getCause() instanceof SocketTimeoutException) {
-                                    message = getLocalizedText(context, "install_failed_downloading_timeout", url);
+                                    message = context.getString(R.string.install_failed_downloading_timeout, url);
                                 } else if (ex.getCause() instanceof ResponseCodeException responseCodeException) {
                                     if (hasStringId(context, "download_code_" + responseCodeException.getResponseCode())) {
                                         message = getLocalizedText(context, "download_code_" + responseCodeException.getResponseCode(), url);
                                     } else {
-                                        message = getLocalizedText(context, "install_failed_downloading_detail", url) + "\n" + StringUtils.getStackTrace(ex.getCause());
+                                        message = context.getString(R.string.install_failed_downloading_detail, url) + "\n" + StringUtils.getStackTrace(ex.getCause());
                                     }
                                 } else {
-                                    message = getLocalizedText(context, "install_failed_downloading_detail", url) + "\n" + StringUtils.getStackTrace(ex.getCause());
+                                    message = context.getString(R.string.install_failed_downloading_detail, url) + "\n" + StringUtils.getStackTrace(ex.getCause());
                                 }
                             } else if (ex instanceof GameAssetIndexDownloadTask.GameAssetIndexMalformedException) {
-                                message = getLocalizedText(context, "assets_index_malformed");
+                                message = context.getString(R.string.assets_index_malformed);
                             } else if (ex instanceof AuthlibInjectorDownloadException) {
-                                message = getLocalizedText(context, "account_failed_injector_download_failure");
+                                message = context.getString(R.string.account_failed_injector_download_failure);
                             } else if (ex instanceof CharacterDeletedException) {
-                                message = getLocalizedText(context, "account_failed_character_deleted");
+                                message = context.getString(R.string.account_failed_character_deleted);
                             } else if (ex instanceof ResponseCodeException rce) {
                                 int responseCode = rce.getResponseCode();
                                 URL url = rce.getUrl();
                                 if (responseCode == 404)
-                                    message = getLocalizedText(context, "download_code_404", url);
+                                    message = context.getString(R.string.download_code_404, url);
                                 else
-                                    message = getLocalizedText(context, "download_failed", url, responseCode);
+                                    message = context.getString(R.string.download_failed, url, responseCode);
                             } else if (ex instanceof AccessDeniedException) {
-                                message = getLocalizedText(context, "exception_access_denied", ((AccessDeniedException) ex).getFile());
+                                message = context.getString(R.string.exception_access_denied, ((AccessDeniedException) ex).getFile());
                             } else if (ex instanceof IllegalArgumentException) {
-                                if (ex.getMessage().startsWith("exception_no_suitable_java")) {
-                                    message = getLocalizedText(context, "exception_no_suitable_java");
-                                } else if (ex.getMessage().startsWith("exception_invalid_custom_info")) {
-                                    message = getLocalizedText(context, "exception_invalid_custom_info");
-                                } else {
-                                    message = StringUtils.getStackTrace(ex);
-                                }
+                                message = context.getString(R.string.exception_no_suitable_java);
                             } else {
                                 message = StringUtils.getStackTrace(ex);
                             }

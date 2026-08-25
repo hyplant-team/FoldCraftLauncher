@@ -29,7 +29,7 @@ import com.google.gson.JsonSerializer
 import com.google.gson.annotations.JsonAdapter
 import com.mio.JavaManager
 import com.mio.data.Renderer
-import com.tungsten.fclauncher.utils.FCLPath
+import com.tungsten.fcl.FCLApp
 import com.tungsten.fclcore.util.Lang
 import com.tungsten.fclcore.util.platform.MemoryUtils
 import java.lang.reflect.Type
@@ -60,13 +60,6 @@ class VersionSetting : Cloneable {
 
     // java
     var java: String = VersionSettingDefault.getJava()
-        set(value) {
-            if (field == value) return
-            field = value
-            changed()
-        }
-
-    var uuid: String = VersionSettingDefault.getUuid()
         set(value) {
             if (field == value) return
             field = value
@@ -267,7 +260,6 @@ class VersionSetting : Cloneable {
             it.renderer = renderer
             it.driver = driver
             it.isPojavBigCore = isPojavBigCore
-            it.uuid = uuid
             it.isDebugLog = isDebugLog
             it.isForceResolution = isForceResolution
         }
@@ -286,7 +278,7 @@ class VersionSetting : Cloneable {
                 addProperty("minecraftArgs", src.minecraftArgs)
                 addProperty(
                     "maxMemory",
-                    if (src.maxMemory <= 0) MemoryUtils.findBestRAMAllocation(FCLPath.CONTEXT) else src.maxMemory
+                    if (src.maxMemory <= 0) MemoryUtils.findBestRAMAllocation(FCLApp.getAppContext()) else src.maxMemory
                 )
                 addProperty("minMemory", src.minMemory)
                 addProperty("autoMemory", src.isAutoMemory)
@@ -301,7 +293,6 @@ class VersionSetting : Cloneable {
                 addProperty("driver", src.driver)
                 addProperty("isolateGameDir", src.isIsolateGameDir)
                 addProperty("pojavBigCore", src.isPojavBigCore)
-                addProperty("uuid", src.uuid)
                 addProperty("debugLog", src.isDebugLog)
                 addProperty("forceResolution", src.isForceResolution)
             }
@@ -319,7 +310,7 @@ class VersionSetting : Cloneable {
                 json["maxMemory"]?.asJsonPrimitive,
                 VersionSettingDefault.getMaxMemory()
             )
-            if (maxMemoryN <= 0) maxMemoryN = MemoryUtils.findBestRAMAllocation(FCLPath.CONTEXT)
+            if (maxMemoryN <= 0) maxMemoryN = MemoryUtils.findBestRAMAllocation(FCLApp.getAppContext())
             return VersionSetting().also { vs ->
                 vs.isUsesGlobal = json["usesGlobal"]?.asBoolean ?: false
                 vs.javaArgs = json["javaArgs"]?.asString ?: VersionSettingDefault.getJavaArgs()
@@ -341,7 +332,6 @@ class VersionSetting : Cloneable {
                 vs.driver = json["driver"]?.asString ?: VersionSettingDefault.getDriver()
                 vs.isIsolateGameDir = json["isolateGameDir"]?.asBoolean ?: VersionSettingDefault.getIsolateGameDir()
                 vs.isPojavBigCore = json["pojavBigCore"]?.asBoolean ?: VersionSettingDefault.getPojavBigCore()
-                vs.uuid = json["uuid"]?.asString ?: VersionSettingDefault.getUuid()
                 vs.isDebugLog = json["debugLog"]?.asBoolean ?: VersionSettingDefault.getDebugLog()
                 vs.isForceResolution = json["forceResolution"]?.asBoolean ?: VersionSettingDefault.getForceResolution()
             }

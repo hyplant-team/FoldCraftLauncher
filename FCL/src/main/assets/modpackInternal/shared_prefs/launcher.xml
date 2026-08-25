@@ -3,10 +3,14 @@
     <int name="ignore_update" value="-1" />
     <int name="ignore_announcement" value="-1" />
     <int name="lang" value="0" />
+    <int name="themeMode" value="0" />
+    <int name="videoBackgroundVolume" value="10" />
+    <int name="vibrationDuration" value="100" />
     <boolean name="is_first_launch" value="true" />
     <boolean name="is_agree" value="false" />
-    <boolean name="allow_screenshots" value="true" />
-    <boolean name="check_notification_permission" value="false" />
+    <boolean name="allowScreenshots" value="true" />
+    <boolean name="disableFullscreenInput" value="true" />
+    <boolean name="check_notification_permission" value="true" />
     <boolean name="show_jarExecutor_warn_dialog" value="true" />
     <string name="custom_launcher_name" value="" />
     <string name="env" value="" />

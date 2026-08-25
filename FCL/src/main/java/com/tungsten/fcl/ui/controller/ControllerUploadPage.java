@@ -7,7 +7,6 @@ import android.view.View;
 
 import androidx.core.content.FileProvider;
 
-import com.tungsten.fcl.FCLApplication;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.control.download.ControllerIndex;
 import com.tungsten.fcl.control.download.ControllerVersion;
@@ -126,7 +125,7 @@ public class ControllerUploadPage extends FCLPage implements View.OnClickListene
 
     public boolean joinCommunity() {
         Intent intent = new Intent();
-        Uri uri = Uri.parse(FCLApplication.Prop.getProperty("community-controller","null://"));
+        Uri uri = Uri.parse(FCLPath.Prop.getProperty("community-controller","null://"));
         intent.setData(uri);
         try {
             getContext().startActivity(intent);

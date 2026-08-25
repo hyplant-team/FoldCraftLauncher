@@ -17,7 +17,7 @@ import androidx.core.content.FileProvider;
 
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.ui.TaskDialog;
-import com.tungsten.fcl.util.AndroidUtils;
+import com.mio.util.AndroidUtilKt;
 import com.tungsten.fcl.util.TaskCancellationAction;
 import com.tungsten.fclauncher.bridge.FCLBridge;
 import com.tungsten.fclauncher.utils.Architecture;
@@ -91,7 +91,7 @@ public class UpdateDialog extends FCLDialog implements View.OnClickListener {
         positive.setOnLongClickListener(view -> {
             String upgradeUrl = getTargetArchUrl();
             if (upgradeUrl != null) {
-                AndroidUtils.openLink(getContext(), upgradeUrl);
+                AndroidUtilKt.openLink(getContext(), upgradeUrl);
             }
             return true;
         });
@@ -147,7 +147,7 @@ public class UpdateDialog extends FCLDialog implements View.OnClickListener {
                                 builder.setMessage(getContext().getString(R.string.update_failed) + "\n" + exception.getMessage());
                                 builder.setNegativeButton(getContext().getString(R.string.dialog_positive), null);
                                 builder.setPositiveButton(getContext().getString(R.string.update_netdisk), ()->{
-                                    AndroidUtils.openLink(getContext(), version.getNetdiskUrl());
+                                    AndroidUtilKt.openLink(getContext(), version.getNetdiskUrl());
                                 });
                                 builder.create().show();
                             }
@@ -166,11 +166,11 @@ public class UpdateDialog extends FCLDialog implements View.OnClickListener {
         if (v == netdisk) {
             String upgradeNetdiskPasswd = version.getNetdiskPasswd();
             if (upgradeNetdiskPasswd != null) {
-                AndroidUtils.copyText(getContext(), upgradeNetdiskPasswd);
+                AndroidUtilKt.copyText(getContext(), upgradeNetdiskPasswd);
             }
             String upgradeNetdiskUrl = version.getNetdiskUrl();
             if (upgradeNetdiskUrl != null) {
-                AndroidUtils.openLink(getContext(), upgradeNetdiskUrl);
+                AndroidUtilKt.openLink(getContext(), upgradeNetdiskUrl);
             }
             dismiss();
         }

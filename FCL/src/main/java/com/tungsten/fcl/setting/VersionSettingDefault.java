@@ -1,5 +1,6 @@
 package com.tungsten.fcl.setting;
 
+import com.tungsten.fcl.FCLApp;
 import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fclcore.util.Logging;
 import com.tungsten.fclcore.util.platform.MemoryUtils;
@@ -15,7 +16,7 @@ import java.util.logging.Level;
 public class VersionSettingDefault {
     private static String javaArgs = "";
     private static String minecraftArgs = "";
-    private static int maxMemory = MemoryUtils.findBestRAMAllocation(FCLPath.CONTEXT);
+    private static int maxMemory = MemoryUtils.findBestRAMAllocation(FCLApp.getAppContext());
     private static boolean autoMemory = true;
     private static String serverIp = "";
     private static String java = "Auto";
@@ -28,7 +29,6 @@ public class VersionSettingDefault {
     private static String driver = "Turnip";
     private static boolean isolateGameDir = false;
     private static boolean pojavBigCore = false;
-    private static String uuid = "";
     private static boolean debugLog = false;
     private static boolean forceResolution = false;
 
@@ -81,9 +81,6 @@ public class VersionSettingDefault {
     public static boolean getPojavBigCore() {
         return pojavBigCore;
     }
-    public static String getUuid() {
-        return uuid;
-    }
     public static boolean getDebugLog() {
         return debugLog;
     }
@@ -111,7 +108,6 @@ public class VersionSettingDefault {
             driver = defaultConfig.has("driver") ? defaultConfig.get("driver").getAsString() : driver;
             isolateGameDir = defaultConfig.has("isolateGameDir") ? defaultConfig.get("isolateGameDir").getAsBoolean() : isolateGameDir;
             pojavBigCore = defaultConfig.has("pojavBigCore") ? defaultConfig.get("pojavBigCore").getAsBoolean() : pojavBigCore;
-            uuid = defaultConfig.has("uuid") ? defaultConfig.get("uuid").getAsString() : uuid;
             debugLog = defaultConfig.has("debugLog") ? defaultConfig.get("debugLog").getAsBoolean() : debugLog;
             forceResolution = defaultConfig.has("forceResolution") ? defaultConfig.get("forceResolution").getAsBoolean() : forceResolution;
         } catch (Exception e) {

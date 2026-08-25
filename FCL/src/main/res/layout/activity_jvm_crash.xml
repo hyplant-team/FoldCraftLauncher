@@ -37,6 +37,15 @@
         app:layout_constraintStart_toEndOf="@id/title"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.tungsten.fcllibrary.component.view.FCLTextView
+        android:id="@+id/hint"
+        style="@style/FCLCrashSidebarTitle"
+        android:singleLine="false"
+        android:text="@string/crash_reporter_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/split"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.tungsten.fcllibrary.component.view.FCLButton
         android:id="@+id/restart"
         style="@style/FCLCrashButton"

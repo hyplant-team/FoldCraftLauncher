@@ -24,10 +24,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.target.CustomViewTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.tungsten.fcl.FCLApplication;
+import com.tungsten.fcl.FCLApp;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.control.GameMenu;
-import com.tungsten.fcl.util.AndroidUtils;
+import com.mio.util.AndroidUtilKt;
 import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fcllibrary.util.ConvertUtils;
 
@@ -48,20 +48,20 @@ public class MenuView extends View {
 
     public MenuView(Context context) {
         super(context);
-        this.screenWidth = AndroidUtils.getScreenWidth();
-        this.screenHeight = AndroidUtils.getScreenHeight();
+        this.screenWidth = AndroidUtilKt.getScreenWidth();
+        this.screenHeight = AndroidUtilKt.getScreenHeight();
     }
 
     public MenuView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        this.screenWidth = AndroidUtils.getScreenWidth();
-        this.screenHeight = AndroidUtils.getScreenHeight();
+        this.screenWidth = AndroidUtilKt.getScreenWidth();
+        this.screenHeight = AndroidUtilKt.getScreenHeight();
     }
 
     public MenuView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.screenWidth = AndroidUtils.getScreenWidth();
-        this.screenHeight = AndroidUtils.getScreenHeight();
+        this.screenWidth = AndroidUtilKt.getScreenWidth();
+        this.screenHeight = AndroidUtilKt.getScreenHeight();
     }
 
     public void setup(GameMenu gameMenu) {
@@ -122,7 +122,7 @@ public class MenuView extends View {
             });
         }
         if (!isGif && icon == null) {
-            AssetManager assetManager = FCLApplication.getCurrentActivity().getAssets();
+            AssetManager assetManager = FCLApp.getAppContext().getAssets();
             try (InputStream inputStream = assetManager.open("img/game_menu/menu_icon.png")) {
                 icon = BitmapFactory.decodeStream(inputStream);
             } catch (Exception e) {

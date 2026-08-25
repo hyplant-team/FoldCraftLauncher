@@ -15,10 +15,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.tungsten.fcl.FCLApplication;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.activity.SplashActivity;
-import com.tungsten.fcl.util.AndroidUtils;
 import com.tungsten.fcl.util.ReadTools;
 import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fclcore.util.io.IOUtils;
@@ -35,7 +33,7 @@ import java.io.IOException;
 
 public class EulaFragment extends FCLFragment implements View.OnClickListener {
 
-    public static final String EULA_URL = FCLApplication.Prop.getProperty("eula-url","null://");
+    public static final String EULA_URL = FCLPath.Prop.getProperty("eula-url","null://");
 
     private FCLProgressBar progressBar;
     private FCLTextView eula;

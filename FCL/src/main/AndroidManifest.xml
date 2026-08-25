@@ -32,7 +32,7 @@
         tools:replace="android:name" />
 
     <application
-        android:name=".FCLApplication"
+        android:name=".FCLApp"
         android:allowBackup="true"
         android:allowNativeHeapPointerTagging="false"
         android:appCategory="game"

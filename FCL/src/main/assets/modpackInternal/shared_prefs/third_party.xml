@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <int name="terracotta_user_notice" value="1" />
+    <boolean name="terracotta" value="true" />
+</map>
