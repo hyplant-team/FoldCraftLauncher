@@ -51,7 +51,8 @@ enum class RightMenuTag {
     GYRO, GYRO_INVERT, GYRO_SENSITIVITY,
 
     // 调试
-    SHOW_MEMORY, PERFORMANCE_MODE, SHOW_LOG, AUTO_SHOW_LOG, FORCE_EXIT
+    SHOW_MEMORY, PERFORMANCE_MODE, SHOW_LOG, AUTO_SHOW_LOG,
+    FORCE_EXIT
 }
 
 /**
@@ -108,12 +109,6 @@ class RightMenuAdapter(
     }
 
     private fun buildRows(): List<Row> = when (currentCategory) {
-        null -> listOf(
-            Row.ButtonRow(
-                R.string.menu_settings_force_exit,
-                listOf(R.string.menu_settings_force_exit_button to RightMenuTag.FORCE_EXIT)
-            )
-        ) + RightMenuCategory.entries.map { Row.CategoryRow(it) }
 
         RightMenuCategory.FUNCTION -> listOfNotNull(
             Row.SwitchRow(
@@ -298,6 +293,13 @@ class RightMenuAdapter(
                 R.string.menu_settings_show_log_auto,
                 { menuSetting.isAutoShowLog },
                 RightMenuTag.AUTO_SHOW_LOG
+            )
+        )
+        
+        null -> RightMenuCategory.entries.map { Row.CategoryRow(it) } + listOf(
+            Row.ButtonRow(
+                R.string.menu_settings_force_exit,
+                listOf(R.string.menu_settings_force_exit_button to RightMenuTag.FORCE_EXIT)
             )
         )
     }
