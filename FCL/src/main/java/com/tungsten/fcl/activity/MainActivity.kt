@@ -590,7 +590,7 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 uiManager.onBackPressed()
             }
             if (view === jar) {
-                if (sharedPreferences.getBoolean("showJarExecutorWarnDialog", true)) {
+                if (sharedPreferences.getBoolean("show_jarExecutor_warn_dialog", true)) {
                     showWarningDialog(this@MainActivity, getString(R.string.jar_executor_warn)) {
                         sharedPreferences.edit {
                             putBoolean("show_jarExecutor_warn_dialog", false)

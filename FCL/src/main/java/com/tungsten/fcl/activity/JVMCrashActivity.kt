@@ -35,7 +35,7 @@ class JVMCrashActivity : FCLActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityJvmCrashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (!getSharedPreferences("launcher", MODE_PRIVATE).getBoolean("allow_screenshots", true)) {
+        if (!getSharedPreferences("launcher", MODE_PRIVATE).getBoolean("allowScreenshots", true)) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 

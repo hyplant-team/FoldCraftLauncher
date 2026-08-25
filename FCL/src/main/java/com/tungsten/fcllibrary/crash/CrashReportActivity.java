@@ -34,7 +34,7 @@ public class CrashReportActivity extends FCLActivity implements View.OnClickList
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crash);
-        if (!getSharedPreferences("launcher", MODE_PRIVATE).getBoolean("allow_screenshots", true)) {
+        if (!getSharedPreferences("launcher", MODE_PRIVATE).getBoolean("allowScreenshots", true)) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
 
