@@ -105,6 +105,12 @@
     <string name="account_methods_microsoft_hint">Please click on the "Login" button, a piece of code will be automatically copied later, enter the code in the opened browser to finish the login process.</string>
     <string name="account_login_refresh">Re-login</string>
     <string name="account_login_refresh_microsoft_hint">Because the account authorization is invalid, you need to re-add your Microsoft account\nPlease click on the "OK" button, a piece of code will be automatically copied later, enter the code in the opened browser to finish the login process.</string>
+    <string name="login_state_microsoft_wait_browser">Waiting for browser authorization…</string>
+    <string name="login_state_microsoft_xbox">Authenticating with Xbox Live…</string>
+    <string name="login_state_microsoft_xsts">Acquiring Xbox XSTS token…</string>
+    <string name="login_state_microsoft_minecraft">Signing in to Minecraft services…</string>
+    <string name="login_state_microsoft_ownership">Verifying game ownership…</string>
+    <string name="login_state_microsoft_profile">Fetching player profile…</string>
     <string name="account_select_character">Select character</string>
     <string name="account_skin">Skin</string>
     <string name="account_skin_type_default">Default</string>
@@ -525,6 +531,14 @@
     <string name="install_installer_install">Install %s</string>
     <string name="install_installer_install_offline">Install/Update from Local File</string>
     <string name="install_installer_install_offline_extension">Forge/OptiFine installer</string>
+    <string name="installer_running_processor">Running installer (Java %s)…</string>
+    <string name="installer_recent_logs">Recent logs:</string>
+    <string name="installer_process_retrying">Installer process timed out, retrying (%1$d/%2$d)…</string>
+    <string name="installer_process_start_error">Failed to start installer process</string>
+    <string name="installer_process_no_exit_code">Installer process did not return an exit code, it may have exited abnormally</string>
+    <string name="installer_process_no_response">Installer process is not responding, forcibly terminated</string>
+    <string name="installer_process_failed_to_start">Installer process failed to start</string>
+    <string name="installer_exit_code_invalid">Invalid installer exit code: %1$s</string>
     <string name="install_installer_liteloader" translatable="false">LiteLoader</string>
     <string name="install_installer_not_installed">Not Selected</string>
     <string name="install_installer_optifine" translatable="false">OptiFine</string>
@@ -982,7 +996,9 @@
     <string name="settings_launcher_theme_mode_light">Light Mode</string>
     <string name="settings_launcher_theme_mode_dark">Dark Mode</string>
     <string name="settings_launcher_theme">Main Theme Color</string>
-    <string name="settings_launcher_theme_desc">Customize the main color of the launcher theme.</string>
+    <string name="settings_launcher_theme_desc">Customize the main color (light theme).</string>
+    <string name="settings_launcher_theme_dark">Main Theme Color</string>
+    <string name="settings_launcher_theme_dark_desc">Customize the main color (dark theme).</string>
     <string name="settings_launcher_theme2">Secondary Theme Color</string>
     <string name="settings_launcher_theme2_desc">Customize the secondary color (light theme).</string>
     <string name="settings_launcher_theme2_dark">Secondary Theme Color</string>
@@ -1305,7 +1321,6 @@
     <string name="message_check_plugin">The current plugin %s does not support this game version. Continuing to use it may cause the game to crash! Do you want to continue?</string>
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
-    <string name="message_warn_restart_after_change">The changes will take effect after restarting.</string>
     <string name="message_check_path_valid">The currently selected game file path (%s) may contain illegal characters, which could cause the game to crash upon launching. It is recommended to check the game directory or rename the version. Do you want to continue launching?</string>
     <string name="message_data_is_loading">The data is still loading and cannot be modified.</string>
     <string name="exception_no_suitable_java">Failed to find a suitable Java!</string>
@@ -1358,4 +1373,5 @@
     <string name="log_upload_share">Share Link</string>
     <string name="log_upload_share_template">I encountered a problem in the launcher, here is the log link:\n%s</string>
     <string name="close">Close</string>
+    <string name="create_account_first">Please create a game account before launching</string>
 </resources>

@@ -64,8 +64,8 @@ public class VersionInstallInfoPage extends FCLPage implements View.OnClickListe
     private FCLImageButton install;
     private boolean nameManuallyModified = false;
 
-    public VersionInstallInfoPage(Context context, int id, int resId, final String gameVersion) {
-        super(context, id, resId);
+    public VersionInstallInfoPage(Context context, int id, final String gameVersion) {
+        super(context, id, R.layout.page_installer);
         this.gameVersion = gameVersion;
         onCreate(gameVersion);
 
@@ -123,7 +123,7 @@ public class VersionInstallInfoPage extends FCLPage implements View.OnClickListe
                 }
 
                 if (library.incompatibleLibraryName.get() == null) {
-                    InstallerListPage page = new InstallerListPage(getContext(), FCLPage.PAGE_ID_TEMP, R.layout.page_install_version, gameVersion, libraryId, remoteVersion -> {
+                    InstallerListPage page = new InstallerListPage(getContext(), FCLPage.PAGE_ID_TEMP, gameVersion, libraryId, remoteVersion -> {
                         map.put(libraryId, remoteVersion);
                         refreshVersionName();
                         reload();

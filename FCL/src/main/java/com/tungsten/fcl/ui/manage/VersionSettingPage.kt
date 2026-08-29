@@ -65,9 +65,8 @@ import com.mio.util.openLink
 class VersionSettingPage(
     context: Context?,
     id: Int,
-    resId: Int,
     private val globalSetting: Boolean
-) : FCLPage(context, id, resId), VersionLoadable, VersionSettingAdapter.Listener {
+) : FCLPage(context, id, R.layout.page_version_setting), VersionLoadable, VersionSettingAdapter.Listener {
     private lateinit var lastVersionSetting: VersionSetting
     private lateinit var profile: Profile
     private lateinit var listenerHolder: WeakListenerHolder
@@ -104,7 +103,7 @@ class VersionSettingPage(
                     val adapter = parent.adapter as? VersionSettingAdapter
                     if (adapter?.isNextInSameGroup(position) == true) groupDivider else rowSpacing
                 },
-                { ThemeEngine.getInstance().getTheme().color }
+                { ThemeEngine.getInstance().getTheme().getColor() }
             )
         )
         // 主题切换时重绘分割线颜色
@@ -219,8 +218,9 @@ class VersionSettingPage(
                 lastIsolateGameDir = versionSetting.isIsolateGameDir
                 UIManager.instance.manageUI.onRunDirectoryChange(profile, versionId)
             }
-            // usesGlobal 变化时刷新设置项
-            if (enableSpecificSettings.get() != !versionSetting.isUsesGlobal) {
+            // usesGlobal 同步仅对特定版本页有意义；全局页恒显示全部设置项，
+            // 若不跳过，每次输入都会触发全量重建列表导致输入框失焦
+            if (versionId != null && enableSpecificSettings.get() != !versionSetting.isUsesGlobal) {
                 enableSpecificSettings.set(!versionSetting.isUsesGlobal)
                 Schedulers.androidUIThread().execute {
                     adapter.update(

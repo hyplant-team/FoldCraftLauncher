@@ -58,8 +58,8 @@ android {
         applicationId = pkgName
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1328
-        versionName = "1.3.2.8"
+        versionCode = 1329
+        versionName = "1.3.2.9"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
@@ -251,6 +251,11 @@ dependencies {
     implementation(libs.core.splashscreen)
     implementation(libs.material)
     implementation(libs.constraintlayout)
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.recyclerview)
+    implementation(libs.coroutines.android)
     implementation(libs.glide)
     implementation(libs.touchcontroller)
     implementation(libs.palette.ktx)

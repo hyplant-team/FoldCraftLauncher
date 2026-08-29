@@ -45,8 +45,8 @@ public class ControllerDownloadPage extends FCLPage implements View.OnClickListe
     private ControllerVersion controllerVersion;
     private PageControllerDownloadBinding binding;
 
-    public ControllerDownloadPage(Context context, int id, int resId, int source, ArrayList<String> categories, ControllerIndex index) {
-        super(context, id, resId);
+    public ControllerDownloadPage(Context context, int id, int source, ArrayList<String> categories, ControllerIndex index) {
+        super(context, id, R.layout.page_controller_download);
         this.categories = categories;
         this.index = index;
         this.url = (source == 0 ? ControllerRepoPage.CONTROLLER_REPO_A : ControllerRepoPage.CONTROLLER_REPO_B) + "repo_json/" + index.getId() + "/";

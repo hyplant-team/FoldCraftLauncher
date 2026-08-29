@@ -14,13 +14,11 @@ import com.tungsten.fcl.setting.Profile;
 import com.tungsten.fcl.setting.Profiles;
 import com.tungsten.fcl.ui.TaskDialog;
 import com.tungsten.fcl.ui.UIManager;
-import com.tungsten.fcl.ui.account.CreateAccountDialog;
 import com.tungsten.fcl.ui.download.modpack.LocalModpackPage;
 import com.tungsten.fcl.ui.download.modpack.ModpackSelectionPage;
 import com.tungsten.fcl.ui.manage.ModpackTypeSelectionPage;
 import com.tungsten.fcl.util.TaskCancellationAction;
 import com.tungsten.fclcore.auth.Account;
-import com.tungsten.fclcore.auth.AccountFactory;
 import com.tungsten.fclcore.download.game.GameAssetDownloadTask;
 import com.tungsten.fclcore.mod.RemoteMod;
 import com.tungsten.fclcore.task.FileDownloadTask;
@@ -48,7 +46,7 @@ public class Versions {
     public static void importModpack(Context context) {
         Profile profile = Profiles.getSelectedProfile();
         if (profile.getRepository().isLoaded()) {
-            ModpackSelectionPage page = new ModpackSelectionPage(context, FCLPage.PAGE_ID_TEMP, R.layout.page_modpack_selection, profile, null);
+            ModpackSelectionPage page = new ModpackSelectionPage(context, FCLPage.PAGE_ID_TEMP, profile, null);
             UIManager.getInstance().getDownloadUI().showTempPage(page);
         }
     }
@@ -75,7 +73,7 @@ public class Versions {
         TaskExecutor executor = new FileDownloadTask(downloadURL, modpack.toFile())
                 .whenComplete(Schedulers.androidUIThread(), e -> {
                     if (e == null) {
-                        LocalModpackPage page = new LocalModpackPage(context, FCLPage.PAGE_ID_TEMP, R.layout.page_modpack, profile, null, modpack.toFile());
+                        LocalModpackPage page = new LocalModpackPage(context, FCLPage.PAGE_ID_TEMP, profile, null, modpack.toFile());
                         UIManager.getInstance().getDownloadUI().showTempPage(page);
                     } else if (e instanceof CancellationException) {
                         Toast.makeText(context, context.getString(R.string.message_cancelled), Toast.LENGTH_SHORT).show();
@@ -138,7 +136,7 @@ public class Versions {
     }
 
     public static void exportVersion(Context context, Profile profile, String version) {
-        ModpackTypeSelectionPage page = new ModpackTypeSelectionPage(context, FCLPage.PAGE_ID_TEMP, R.layout.page_modpack_type, profile, version);
+        ModpackTypeSelectionPage page = new ModpackTypeSelectionPage(context, FCLPage.PAGE_ID_TEMP, profile, version);
         UIManager.getInstance().getManageUI().showTempPage(page);
     }
 
@@ -167,7 +165,7 @@ public class Versions {
     }
 
     public static void updateVersion(Context context, Profile profile, String version) {
-        ModpackSelectionPage page = new ModpackSelectionPage(context, FCLPage.PAGE_ID_TEMP, R.layout.page_modpack_selection, profile, version);
+        ModpackSelectionPage page = new ModpackSelectionPage(context, FCLPage.PAGE_ID_TEMP, profile, version);
         UIManager.getInstance().getManageUI().showTempPage(page);
     }
 
@@ -242,20 +240,14 @@ public class Versions {
 
     private static void ensureSelectedAccount(Context context, Consumer<Account> action) {
         Account account = Accounts.getSelectedAccount();
-        if (account == null) {
-            CreateAccountDialog dialog = new CreateAccountDialog(context, (AccountFactory<?>) null);
-            dialog.setOnDismissListener(dialogInterface -> {
-                Account newAccount = Accounts.getSelectedAccount();
-                if (newAccount == null) {
-                    // user cancelled operation
-                } else {
-                    action.accept(newAccount);
-                }
-            });
-            dialog.show();
-        } else {
+        if (account != null) {
             action.accept(account);
+            return;
         }
+        // 未创建账户：提示后跳转账户管理页，中止本次启动
+        Toast.makeText(context, R.string.create_account_first, Toast.LENGTH_SHORT).show();
+        UIManager uiManager = UIManager.getInstance();
+        uiManager.switchUI(uiManager.getAccountUI());
     }
 
 }

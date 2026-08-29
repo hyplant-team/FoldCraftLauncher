@@ -21,6 +21,7 @@ import com.tungsten.fcl.databinding.ItemVersionSettingValueBinding
 import com.tungsten.fcl.game.FCLGameRepository
 import com.tungsten.fcl.setting.Controllers
 import com.tungsten.fcl.setting.VersionSetting
+import com.tungsten.fcl.ui.setting.SettingGroup
 import com.tungsten.fclcore.util.platform.MemoryUtils
 import com.tungsten.fcllibrary.component.theme.ThemeEngine
 import com.tungsten.fcllibrary.component.view.FCLTextView
@@ -75,13 +76,6 @@ class VersionSettingAdapter(
     private val TYPE_EDIT = 2
     private val TYPE_MEMORY = 3
     private val TYPE_ICON = 4
-
-    /** 设置行分组：同组相邻行连成一块（行间无间距、去中间圆角） */
-    private sealed class SettingGroup {
-        /** 渲染相关设置（图形后端/渲染器/大核/Vulkan 驱动等） */
-        object Render : SettingGroup()
-        object Check : SettingGroup()
-    }
 
     private lateinit var versionSetting: VersionSetting
     private var modpack = false
@@ -142,6 +136,7 @@ class VersionSettingAdapter(
                 VersionSettingTag.EDIT_JAVA,
                 VersionSettingTag.INSTALL_JAVA,
                 descriptionRes = R.string.settings_game_java_version_desc,
+                group = SettingGroup.Common
             )
             result += Row.SwitchRow(
                 R.string.settings_game_working_directory,
@@ -149,6 +144,7 @@ class VersionSettingAdapter(
                 { versionSetting.isIsolateGameDir = it },
                 disabled = modpack,
                 descriptionRes = R.string.settings_game_working_directory_desc,
+                group = SettingGroup.Common
             )
             result += Row.MemoryRow(R.string.settings_memory_desc)
             result += Row.EditRow(
@@ -157,6 +153,7 @@ class VersionSettingAdapter(
                 { versionSetting.serverIp = it },
                 hintRes = R.string.settings_advanced_server_ip_prompt,
                 descriptionRes = R.string.settings_advanced_server_ip_desc,
+                group = SettingGroup.Common
             )
             result += Row.ValueRow(
                 R.string.settings_fcl_controller,
@@ -164,6 +161,7 @@ class VersionSettingAdapter(
                 VersionSettingTag.EDIT_CONTROLLER,
                 VersionSettingTag.INSTALL_CONTROLLER,
                 descriptionRes = R.string.settings_fcl_controller_desc,
+                group = SettingGroup.Common
             )
             result += Row.ValueRow(
                 R.string.settings_fcl_graphics_backend,
@@ -225,6 +223,7 @@ class VersionSettingAdapter(
                 { versionSetting.isDebugLog },
                 { versionSetting.isDebugLog = it },
                 descriptionRes = R.string.settings_advanced_debug_log_desc,
+                group = SettingGroup.Check
             )
             result += Row.EditRow(
                 R.string.settings_advanced_minecraft_arguments,
@@ -234,7 +233,7 @@ class VersionSettingAdapter(
                 hintRes = R.string.settings_advanced_minecraft_arguments_prompt,
                 longPressEdit = true,
                 descriptionRes = R.string.settings_advanced_minecraft_arguments_desc,
-                group = SettingGroup.Check
+                group = SettingGroup.Argument
             )
             result += Row.EditRow(
                 R.string.settings_advanced_jvm_args,
@@ -243,7 +242,7 @@ class VersionSettingAdapter(
                 tag = VersionSettingTag.JVM_ARGS,
                 longPressEdit = true,
                 descriptionRes = R.string.settings_advanced_jvm_args_desc,
-                group = SettingGroup.Check
+                group = SettingGroup.Argument
             )
             result += Row.ValueRow(
                 R.string.settings_advanced_env,
@@ -251,7 +250,7 @@ class VersionSettingAdapter(
                 VersionSettingTag.EDIT_ENV,
                 null,
                 descriptionRes = R.string.settings_advanced_env_desc,
-                group = SettingGroup.Check
+                group = SettingGroup.Argument
             )
             result += Row.SwitchRow(
                 R.string.settings_advanced_force_resolution,
@@ -512,7 +511,10 @@ class VersionSettingAdapter(
         if (versionSetting.java == "Auto") context.getString(R.string.settings_game_java_version_auto) else versionSetting.java
 
     private fun controllerName(): String =
-        Controllers.findControllerById(versionSetting.controller).name
+        if (Controllers.isInitialized())
+            Controllers.findControllerById(versionSetting.controller).name
+        else "Default"
+
 
     private fun rendererText(): String = getRenderer(versionSetting.renderer).des
 }

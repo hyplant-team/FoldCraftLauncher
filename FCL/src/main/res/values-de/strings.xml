@@ -76,6 +76,12 @@
     <string name="account_methods_microsoft_hint">Klicken Sie auf „Anmelden“, der Code wird automatisch kopiert. Fügen Sie ihn im Browser ein.</string>
     <string name="account_login_refresh">Erneut anmelden</string>
     <string name="account_login_refresh_microsoft_hint">"Da die Kontoauthentifizierung ungültig ist, müssen Sie Ihr Microsoft-Konto erneut hinzufügen.\nKlicken Sie auf „OK“, fügen Sie den Code im Browser ein, um den Anmeldevorgang abzuschließen."</string>
+    <string name="login_state_microsoft_wait_browser">Warten auf Autorisierung im Browser …</string>
+    <string name="login_state_microsoft_xbox">Authentifizierung mit Xbox Live …</string>
+    <string name="login_state_microsoft_xsts">Xbox-XSTS-Token wird abgerufen …</string>
+    <string name="login_state_microsoft_minecraft">Anmeldung bei den Minecraft-Diensten …</string>
+    <string name="login_state_microsoft_ownership">Spielbesitz wird überprüft …</string>
+    <string name="login_state_microsoft_profile">Spielerprofil wird abgerufen …</string>
     <string name="account_select_character">Charakter auswählen</string>
     <string name="account_skin">Skin</string>
     <string name="account_skin_type_default">Standard</string>
@@ -653,6 +659,8 @@
     <string name="settings_launcher_launcher_log_export_failed">Protokolle können nicht exportiert werden</string>
     <string name="settings_launcher_launcher_log_export_success">Protokolle exportiert nach %s</string>
     <string name="settings_launcher_theme">Hauptfarbe des Themes</string>
+    <string name="settings_launcher_theme_dark">Hauptfarbe des Themes (dunkel)</string>
+    <string name="settings_launcher_theme_dark_desc">Theme-Hauptfarbe für den dunklen Modus anpassen.</string>
     <string name="settings_launcher_theme2">Zusätzliche Theme-Farbe</string>
     <string name="settings_launcher_theme_fetch_background">Hintergrundfarbe</string>
     <string name="settings_launcher_background_lt">Hintergrund im hellen Theme (max. 5120x5120)</string>
@@ -880,4 +888,5 @@
 
     <string name="menu_settings_item_bar_scale_width">Hotbar-Skalierung (Breite)</string>
     <string name="menu_settings_item_bar_scale_height">Hotbar-Skalierung (Höhe)</string>
+    <string name="create_account_first">Bitte erstelle ein Spielkonto, bevor du das Spiel startest</string>
 </resources>

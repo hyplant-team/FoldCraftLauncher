@@ -40,28 +40,28 @@
 - [x] Integrate features into FCL shell using sh scripts
 
 <details>
-<summary markdown='1'>📂 <strong>原版FCL功能</strong></summary>
+<summary markdown='1'>📂 <strong>Vanilla FCL Features</strong></summary>
 
 ---
 
-###  ✨ Vanilla FCL Features
+###  🎮 Vanilla FCL Features
 
-> ~~I agree with what you say, but「FCL」is a Minecraft Java Edition launcher made by FCL-Team, built upon the core functionalities of [HMCL](https://github.com/HMCL-dev/HMCL) and integrating the [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) backends. The launcher is used in a system called「Android」, where the person selected by the system will be authorized to use 「JVM」, operating the power of 「Java」. You are going to act a mysterious user called「Greenhand」. During the freely use of the launcher, you can install different versions, make various mods work together and find out the reason of crash, discover the truth of「xxException:」.~~  
+> ~~I agree with what you said, but「FCL」is a Minecraft Java Edition launcher made by FCL-Team, built upon the core functionalities of [HMCL](https://github.com/HMCL-dev/HMCL) and integrating the [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) backends. The launcher is used in a system called「Android」, where the person selected by the system will be authorized to use 「JVM」, operating the power of 「Java」. You are going to act a mysterious user called「Greenhand」. During the freely use of the launcher, you can install different versions, make various mods work together and find out the reason of crash, discover the truth of「xxException:」.~~  
 
-> **Project Introduction**  
-> 「Fold Craft Launcher」 is a Minecraft: Java Edition launcher for Android platforms developed by the FCL Team. Built upon the core functionalities of [HMCL](https://github.com/HMCL-dev/HMCL) and integrating the [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) backends, it enables users to enjoy Java Edition MC on mobile devices, supporting mod loading and operation across all versions.
+#### ✨ Project Introduction  
+「Fold Craft Launcher」 is a Minecraft: Java Edition launcher for Android platforms developed by the FCL Team. Built upon the core functionalities of [HMCL](https://github.com/HMCL-dev/HMCL) and using the [Amethyst-Android](https://github.com/AngelAuraMC/Amethyst-Android) backend, it enables users to enjoy Java Edition MC on mobile devices, supporting mod loading and operation across all versions.
 
-#### ✅ Full Version Support
+#### ✅ Full Version Support  
 - Native support for all Minecraft versions (including latest snapshots)
 - Mod loader support: Forge/NeoForge/LiteLoader/OptiFine/Fabric/Quilt/Cleanroom...
 
-#### ⚙️ Key Highlights
+#### ⚙️ Key Highlights  
 - Built-in multi-version Java runtimes (Java 8/17/21/25) with custom Java import support
 - Virtual mouse and customizable key mapping
 - Shaders support (requires VirGL/Zink/MG renderers)
 - Dynamic resource management (mods/modpacks/textures/shaders/saves)
 - Personalized theme customization (background/color schemes)
-- Supports renderer and driver pluginization
+- Supports [renderer pluginization](https://github.com/ShirosakiMio/FCLRendererPlugin)
 
 </details>
 
@@ -95,6 +95,8 @@ You can use Android Studio to automate configuration and build
   - build-tools: `34.0.0`
   - ndk: `27.0.12077973`
   - cmake: `3.22.1`
+- More...
+  - See [libs version file](gradle/libs.versions.toml) for details.  
   > Differs to the vanilla version, `targetSdk` has been set to `28` to implement the FCL Shell extension
   > ```Toml
   > compileSdk = "35"
@@ -128,50 +130,52 @@ You can use Android Studio to automate configuration and build
 Vanilla FCL is licensed under **[GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.html)**
 
 ### 🔗 Related Projects
-- [Vanilla FCL](https://github.com/FCL-Team/FoldCraftLauncher)
-  - [HMCL](https://github.com/HMCL-dev/HMCL)
-  - ~~[Boat and related projects](https://github.com/AOF-Dev/Boat)~~ (Deprecated)
-  - [PojavLauncher and related projects](https://github.com/PojavLauncherTeam/PojavLauncher)
+- **[Vanilla FCL](https://github.com/FCL-Team/FoldCraftLauncher)**
+  - [HMCL](https://github.com/HMCL-dev/HMCL): source of core functionality (fclcore ported from `org.jackhuang.hmcl`)
+  - [Boat and related projects](https://github.com/AOF-Dev/Boat)
+  - [Amethyst-Android](https://github.com/AngelAuraMC/Amethyst-Android) (PojavLauncher's Android fork): JVM launching and rendering backend
   - [authlib-injector](https://github.com/yushijinhun/authlib-injector)
+  - [EasyTier](https://github.com/EasyTier/EasyTier): underlying mesh networking for LAN play
+  - [Terracotta](https://github.com/burningtnt/Terracotta): LAN play solution based on EasyTier (Terracotta module JNI wrapper)
+  - [TouchController](https://github.com/TouchController/TouchController): touch controller dependency
+  - [NG-GL4ES](https://github.com/ShirosakiMio/NG-GL4ES): gl4es fork renderer (prebuilt aar shipped with FCL)
+  - [FCLRendererPlugin](https://github.com/ShirosakiMio/FCLRendererPlugin): renderer plugin extension
+  - [FCLDriverPlugin](https://github.com/FCL-Team/FCLDriverPlugin): driver (Turnip etc.) plugin extension
+- **[root-S7 FCL-Server](https://github.com/root-S7/FoldCraftLauncher)**
+  - Old commits have been deleted, Some are reserved in [my old repo](https://github.com/hyplant/FoldCraftLauncherModpack-old)
+- **Other Dependencies**
+  - [Amethyst-Android](https://github.com/AngelAuraMC/Amethyst-Android) (PojavLauncher's Android fork): [GPL-3.0]
   - Android Support Libraries: [Apache License 2.0](https://android.googlesource.com/platform/prebuilts/maven_repo/android/+/master/NOTICE.txt)
-  - [GL4ES](https://github.com/AngelAuraMC/gl4es): [MIT License](https://github.com/ptitSeb/gl4es/blob/master/LICENSE)
-  - [NG-GL4ES (Krypton Wrapper)](https://github.com/BZLZHH/NG-GL4ES)
-  - [ANGLE](https://chromium.googlesource.com/angle/angle): [All Rights Reserved](app_pojavlauncher/src/main/assets/licenses/ANGLE_LICENSE)
-  - [OpenJDK](https://github.com/AngelAuraMC/openjdk-multiarch-jdk8u): [GNU GPLv2 License](https://openjdk.java.net/legal/gplv2+ce.html)
-  - [LWJGL3](https://github.com/AngelAuraMC/lwjgl3): [BSD-3 License](https://github.com/LWJGL/lwjgl3/blob/master/LICENSE.md)
+  - [GL4ES](https://github.com/ptitSeb/gl4es): [MIT License](https://github.com/ptitSeb/gl4es/blob/master/LICENSE)
+  - [NG-GL4ES](https://github.com/ShirosakiMio/NG-GL4ES) (gl4es fork derived from Krypton Wrapper, used as a prebuilt aar)
+  - [ANGLE](https://chromium.googlesource.com/angle/angle): [BSD-3 License](https://chromium.googlesource.com/angle/angle/+/refs/heads/main/LICENSE)
+  - [OpenJDK](https://github.com/AngelAuraMC/openjdk-multiarch-jdk8u): [GNU GPLv2 License](https://openjdk.java.net/legal/gplv2+ce.html) (runtimes built and released by FCL-Team)
+  - [LWJGL3](https://github.com/LWJGL/lwjgl3) (official jars + Android source patches): [BSD-3 License](https://github.com/LWJGL/lwjgl3/blob/master/LICENSE.md)
   - [LWJGLX](https://github.com/AngelAuraMC/lwjglx) (LWJGL2 API compatibility layer for LWJGL3): unknown license
   - [Mesa 3D Graphics Library](https://gitlab.freedesktop.org/mesa/mesa): [MIT License](https://docs.mesa3d.org/license.html)
-  - [bhook](https://github.com/bytedance/bhook) (Used for exit code trapping): [MIT license](https://github.com/bytedance/bhook/blob/main/LICENSE).
+  - [SPIRV-Cross](https://github.com/KhronosGroup/SPIRV-Cross) (SPIR-V reflection/translation, natives packaged as aar): [Apache License 2.0](https://github.com/KhronosGroup/SPIRV-Cross/blob/master/LICENSE)
+  - [bhook](https://github.com/bytedance/bhook) (Used for exit code
+    trapping): [MIT license](https://github.com/bytedance/bhook/blob/main/LICENSE).
   - [libepoxy](https://github.com/anholt/libepoxy): [MIT License](https://github.com/anholt/libepoxy/blob/master/COPYING).
   - [virglrenderer](https://github.com/AngelAuraMC/virglrenderer): [MIT License](https://gitlab.freedesktop.org/virgl/virglrenderer/-/blob/master/COPYING).
-  - [OpenAL-Soft](https://github.com/kcat/openal-soft): [GNU GPLv2](app_pojavlauncher/src/main/assets/licenses/OPENAL-SOFT_GPL2)
-    - [oboe](https://github.com/google/oboe): [Apache License 2.0](app_pojavlauncher/src/main/assets/licenses/OBOE_APACHE2).
-    - [pfffft](https://bitbucket.org/jpommier/pffft/src/master/): [ARR](app_pojavlauncher/src/main/assets/licenses/PFFFT_LICENSE)
+  - [OpenAL-Soft](https://github.com/kcat/openal-soft): [GNU LGPLv2.1](https://github.com/kcat/openal-soft/blob/master/COPYING)
+    - [oboe](https://github.com/google/oboe): [Apache License 2.0](https://github.com/google/oboe/blob/main/LICENSE).
+    - [pfffft](https://bitbucket.org/jpommier/pffft/src/master/): [ARR]
+  - [EasyTier](https://github.com/EasyTier/EasyTier) (embedded networking layer in the Terracotta module): [LGPL-3.0](https://github.com/EasyTier/EasyTier/blob/main/LICENSE)
+  - [Terracotta](https://github.com/burningtnt/Terracotta) (`net.burningtnt.terracotta` JNI wrapper): [AGPL-3.0](https://github.com/burningtnt/Terracotta/blob/main/LICENSE)
+  - [TouchController](https://github.com/TouchController/TouchController) (touch controller): [LGPL-3.0](https://github.com/TouchController/TouchController/blob/main/LICENSE)
+  - [discord-rpc](https://github.com/discord/discord-rpc) (libdiscord-rpc.so): [MIT License](https://github.com/discord/discord-rpc/blob/master/LICENSE)
   - [control-converter](https://github.com/NingZeStudio/control-converter) (FCL→ZL2 control layout converter, Go implementation, packaged as `libcc.so`): [MIT License](https://opensource.org/licenses/MIT)
-- [root-S7 FCL-Server](https://github.com/root-S7/FoldCraftLauncher)
-  - Old commits have been deleted, Some are reserved in [my old repo](https://github.com/hyplant/FoldCraftLauncherModpack-old)
+
 <details>
 <summary>📂 About The README.md</summary>
 
 ---
 
-<<<<<<< HEAD
-### 📝 About The README.md
-This document refers to the README.md of the original FCL and root-S7 FCL-Server
+### 📝 About The README_EN.md
+This document refers to the README.md of the original FCL and root-S7 FCL-Server  
+Some parts are translated by AI or online translators
 </details>
-=======
-## 🌍 Translation
-
-We'd love your help with translations! The project's localization is managed on [Weblate](https://hosted.weblate.org/projects/foldcraftlauncher/) — no tools needed, just translate in your browser.
-
----
-
-## 🤝 Contributions & Acknowledgements
-### Contributors Wall
-<a href="https://github.com/FCL-Team/FoldCraftLauncher/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=FCL-Team/FoldCraftLauncher" />
-</a>
->>>>>>> df8ffe9b30ca43ec419f5fc67941a4205a89385c
 
 ---
 

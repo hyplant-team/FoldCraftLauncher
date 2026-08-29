@@ -21,9 +21,10 @@ import com.tungsten.fcllibrary.util.ConvertUtils;
 @OptIn(kotlinx.serialization.InternalSerializationApi::class)
 @Serializable
 data class ThemePreference(
-    val color: Int = Color.parseColor(FCLPath.Prop.getProperty("default-theme-first-color", "#7F7797CF")),
-    val color2: Int = Color.parseColor(FCLPath.Prop.getProperty("default-theme-second-color", "#FF7F7F7F")),
-    val color2Dark: Int = Color.parseColor(FCLPath.Prop.getProperty("default-theme-second-color-dark", "#FF7F7F7F")),
+    val color: Int = Color.parseColor(FCLPath.Prop.getProperty("default-theme-first-color", "#807F7F7F")),
+    val colorDark: Int = Color.parseColor(FCLPath.Prop.getProperty("default-theme-first-color-dark", "#807F7F7F")),
+    val color2: Int = Color.parseColor(FCLPath.Prop.getProperty("default-theme-second-color", "#000000")),
+    val color2Dark: Int = Color.parseColor(FCLPath.Prop.getProperty("default-theme-second-color-dark", "#FFFFFF")),
     val fullscreen: Boolean = FCLPath.Prop.getProperty("default-fullscreen", "false").equals("true"),
     val closeSkinModel: Boolean = FCLPath.Prop.getProperty("default-close-skin-model", "false").equals("true"),
     val animationSpeed: Int = ConvertUtils.getIntFromStr(FCLPath.Prop.getProperty("default-animation-speed", "0"))
