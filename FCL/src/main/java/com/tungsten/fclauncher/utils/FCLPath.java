@@ -40,6 +40,7 @@ public class FCLPath {
     public static String SHARED_COMMON_DIR;
     public static String CONTROLLER_DIR;
     public static String ACCOUNTS_DIR;
+    public static String SKIN_DIR;
     public static String LOG_DIR;
     public static String SHARE_DIR;
 
@@ -49,6 +50,7 @@ public class FCLPath {
         NATIVE_LIB_DIR = context.getApplicationInfo().nativeLibraryDir;
 
         FILES_DIR = context.getFilesDir().getAbsolutePath();
+        SKIN_DIR = FILES_DIR + "/skin";
         INTERNAL_DIR = new File(FILES_DIR).getParentFile().getAbsolutePath();
         CACHE_DIR = INTERNAL_DIR + "/cache";
 
@@ -109,6 +111,7 @@ public class FCLPath {
         init(SHARED_COMMON_DIR);
         init(CONTROLLER_DIR);
         init(ACCOUNTS_DIR);
+        init(SKIN_DIR);
         init(LOG_DIR);
         init(SHARE_DIR);
     }

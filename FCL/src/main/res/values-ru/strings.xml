@@ -109,6 +109,7 @@
     <string name="button_cancel">Отменить</string>
     <string name="button_copy">Копировать</string>
     <string name="button_download">Загрузить</string>
+    <string name="button_download_all">Скачать всё</string>
     <string name="button_export">Экспорт</string>
     <string name="button_hide">Скрыть</string>
     <string name="button_install">Установить</string>
@@ -488,6 +489,12 @@
     <string name="message_copy">Скопировано успешно!</string>
     <string name="message_doing">Подождите</string>
     <string name="message_downloading">Загрузка</string>
+    <string name="mods_dependency_skipped_note">%1$d зависимостей не удалось разрешить и они пропущены</string>
+    <string name="download_ready_to_install">Загружено · нажмите для установки</string>
+    <string name="mods_already_installed">Мод уже установлен</string>
+    <string name="mods_installed_skipped_note">%1$d зависимостей уже установлены и пропущены</string>
+    <string name="mods_dependency_resolving">Разрешение обязательных зависимостей…</string>
+    <string name="download_manager">Менеджер загрузок</string>
     <string name="message_error">Ошибка</string>
     <string name="message_failed">Операция не удалась</string>
     <string name="message_file_exist">Файл уже существует</string>
@@ -709,6 +716,10 @@
     <string name="settings_launcher_download_threads_auto">Автоматически определять</string>
     <string name="settings_launcher_download_source">Источник</string>
     <string name="settings_launcher_download_source_auto">Автоматический выбор зеркала загрузки</string>
+    <string name="settings_launcher_mod_cache">Кэш модов</string>
+    <string name="settings_launcher_mod_cache_clear">Очистить</string>
+    <string name="settings_launcher_mod_cache_desc">Очистить кэшированные результаты запросов CurseForge / Modrinth.</string>
+    <string name="settings_launcher_mod_cache_cleared">Кэш модов очищен</string>
     <string name="settings_launcher_language">Язык</string>
     <string name="settings_launcher_language_system">Системный</string>
     <string name="settings_launcher_launcher_log_export">Экспортировать</string>
@@ -945,4 +956,5 @@
     <string name="log_upload_share_template">Я столкнулся с проблемой в лаунчере, вот ссылка на журнал:\n%s</string>
     <string name="close">Закрыть</string>
     <string name="create_account_first">Создайте игровой аккаунт перед запуском игры</string>
+    <string name="version_list_refreshing">Получение списка удалённых версий…</string>
 </resources>

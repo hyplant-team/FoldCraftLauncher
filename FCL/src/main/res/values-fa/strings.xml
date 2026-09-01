@@ -104,6 +104,7 @@
     <string name="button_cancel">لغو</string>
     <string name="button_copy">کپی</string>
     <string name="button_download">دانلود</string>
+    <string name="button_download_all">دانلود همه</string>
     <string name="button_export">خروجی گرفتن</string>
     <string name="button_hide">پنهان کردن</string>
     <string name="button_install">نصب</string>
@@ -506,6 +507,12 @@
     <string name="message_copy">با موفقیت کپی شد!</string>
     <string name="message_doing">لطفا صبر کنید</string>
     <string name="message_downloading">در حال دانلود</string>
+    <string name="mods_dependency_skipped_note">%1$d وابستگی قابل حل نبود و نادیده گرفته شد</string>
+    <string name="download_ready_to_install">دانلود شد · برای نصب ضربه بزنید</string>
+    <string name="mods_already_installed">ماد از قبل نصب شده است</string>
+    <string name="mods_installed_skipped_note">%1$d وابستگی از قبل نصب شده و نادیده گرفته شد</string>
+    <string name="mods_dependency_resolving">در حال شناسایی وابستگی‌های ضروری…</string>
+    <string name="download_manager">مدیریت دانلود</string>
     <string name="message_error">خطا</string>
     <string name="message_failed">عملیات ناموفق بود</string>
     <string name="message_file_exist">فایل از قبل وجود دارد</string>
@@ -875,4 +882,5 @@
     <string name="world_show_all">نمایش همه</string>
     <string name="world_time">EEE, MMM d, yyyy HH:mm:ss</string>
     <string name="create_account_first">لطفاً پیش از اجرای بازی یک حساب بازی بسازید</string>
+    <string name="version_list_refreshing">در حال دریافت فهرست نسخه‌های راه دور…</string>
 </resources>

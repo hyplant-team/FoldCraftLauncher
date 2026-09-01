@@ -54,18 +54,15 @@ class RemoteModListAdapter(
                 }.getOrNull() ?: emptyList<LocalModFile>()
                 for (localModFile in modFiles) {
                     try {
-                        val size = localModFile.file.toFile().length()
-                        if (size > 104857600) continue
                         val remoteVersionOptional = downloadPage.getRepository()
                             .getRemoteVersionByLocalFile(localModFile, localModFile.file)
                         remoteVersionOptional.ifPresent {
                             localModFile.remoteVersion = it
                         }
                         localModFile.remoteVersion?.let {
-                            modIdList.add(it.modid)
+                            modIdList.add(it.modid())
                         }
                     } catch (e: Throwable) {
-                        System.gc()
                         Logging.LOG.log(Level.SEVERE, e.toString())
                     }
                 }

@@ -35,6 +35,7 @@ enum class LauncherSettingTag {
     CLEAR_CACHE,
     EXPORT_LOG,
     REQUEST_AUDIO,
+    CLEAR_MOD_CACHE,
     THEME_COLOR_RESET,
     THEME_COLOR_FETCH,
     THEME_COLOR_SET,
@@ -335,6 +336,12 @@ class LauncherSettingAdapter(
                 { config.autoDownloadThreads },
                 { config.downloadThreads },
                 R.string.settings_launcher_download_threads_desc,
+                group = SettingGroup.Download
+            ),
+            Row.ButtonRow(
+                R.string.settings_launcher_mod_cache,
+                listOf(Triple(0, R.string.settings_launcher_mod_cache_clear, LauncherSettingTag.CLEAR_MOD_CACHE)),
+                R.string.settings_launcher_mod_cache_desc,
                 group = SettingGroup.Download
             )
         )

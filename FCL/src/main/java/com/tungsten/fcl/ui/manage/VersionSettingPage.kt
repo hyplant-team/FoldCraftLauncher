@@ -5,7 +5,6 @@ import android.content.Context.MODE_PRIVATE
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.edit
-import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mio.ui.adapter.SpacingItemDecoration
@@ -53,9 +52,7 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 import java.util.logging.Level
-import com.mio.util.copyFileToDir
 import com.mio.util.isAdrenoGPU
-import com.mio.util.isDocUri
 import com.mio.util.openLink
 
 /**
@@ -269,13 +266,8 @@ class VersionSettingPage(
         if (versionId == null) return
 
         MainActivity.getInstance().fileLauncher.launchSingleSelection(null, listOf(".png")) {
-            var path = it?.get(0) ?: return@launchSingleSelection
-            val uri = path.toUri()
-            if (isDocUri(uri)) {
-                path =
-                    copyFileToDir(activity, uri, File(FCLPath.CACHE_DIR))
-            }
-            val selectedFile = File(path)
+            val selected = it?.get(0) ?: return@launchSingleSelection
+            val selectedFile = selected.toFile(activity, File(FCLPath.CACHE_DIR))
             val iconFile = profile.repository.getVersionIconFile(versionId)
             try {
                 FileUtils.copyFile(selectedFile, iconFile)
