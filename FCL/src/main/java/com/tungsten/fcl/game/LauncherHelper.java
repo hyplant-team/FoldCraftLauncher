@@ -224,7 +224,7 @@ public final class LauncherHelper {
                             fclBridge.setController(repository.getVersionSetting(selectedVersion).getController());
                             fclBridge.setGameDir(repository.getRunDirectory(selectedVersion).getAbsolutePath());
                             fclBridge.setJava(Integer.toString(javaVersionRef.get().getVersion()));
-                            checkTouchMod(fclBridge, repository.getRunDirectory(selectedVersion).getAbsolutePath());
+                            checkTouchMod(fclBridge, setting);
                             JVMActivity.setFCLBridge(fclBridge, MenuType.GAME);
                             Bundle bundle = new Bundle();
                             bundle.putString("controller", repository.getVersionSetting(selectedVersion).getController());
@@ -327,15 +327,17 @@ public final class LauncherHelper {
         executor.start();
     }
 
-    private void checkTouchMod(FCLBridge bridge, String GameDir) {
+    private void checkTouchMod(FCLBridge bridge, VersionSetting setting) {
         try {
-            File touchModEnableFile = new File(GameDir, "TOUCH_MOD_ENABLED");
-            if (touchModEnableFile.exists()) {
-                LOG.log(Level.INFO, "Found TOUCH_MOD_ENABLED flag file, enabling touch controller.");
+            if (setting.isTouchMod()) {
+                LOG.log(Level.INFO, "CheckTouchMod(): Touch mod enabled.");
                 bridge.setHasTouchController(true);
+            } else {
+                LOG.log(Level.INFO, "CheckTouchMod(): Touch mod disabled.");
+                bridge.setHasTouchController(false);
             }
         } catch (Exception e) {
-            LOG.log(Level.WARNING, "CheckTouchMod() failed", e);
+            LOG.log(Level.WARNING, "CheckTouchMod(): failed", e);
         }
     }
 

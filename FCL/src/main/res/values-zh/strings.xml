@@ -850,6 +850,8 @@
     <string name="settings_advanced_force_resolution_desc">强制游戏以指定分辨率运行（宽x高），实验性选项，谨慎使用</string>
     <string name="settings_fcl_controller">控制</string>
     <string name="settings_fcl_controller_desc">选择此版本使用的控制器布局</string>
+    <string name="settings_touch_mod">启用触控模组</string>
+    <string name="settings_touch_mod_desc">是否启用触控模组支持，用于 TouchController 模组</string>
     <string name="settings_fcl_vulkan_driver_system">使用系统Vulkan驱动</string>
     <string name="settings_fcl_vulkan_driver_system_desc">使用系统 Vulkan 驱动，性能更好但存在兼容性风险</string>
     <string name="settings_fcl_graphics_backend">图形后端</string>
@@ -1101,10 +1103,6 @@
     <string name="version_manage_rename_fail">重命名失败</string>
     <string name="version_new_profile">新建目录</string>
     <string name="version_update">更新整合包</string>
-    <string name="version_touch_mod">触控模组</string>
-    <string name="version_touch_mod_enabled">触控模组已启用</string>
-    <string name="version_touch_mod_disabled">触控模组已禁用</string>
-    <string name="version_touch_mod_failed">切换触控模组失败</string>
 
     <string name="view_info_visibility">可视性</string>
     <string name="view_info_visibility_always">总是可见</string>

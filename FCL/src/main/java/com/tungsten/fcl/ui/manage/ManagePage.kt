@@ -139,12 +139,6 @@ class ManagePage(context: Context?, id: Int) : FCLPage(context, id, R.layout.pag
                         R.string.version_manage_clean
                     ) {
                         clearJunkFiles()
-                    },
-                    ManageItem(
-                        R.drawable.ic_baseline_input_24,
-                        R.string.version_touch_mod
-                    ) {
-                        switchTouchMod()
                     }
                 ))
         }
@@ -232,10 +226,6 @@ class ManagePage(context: Context?, id: Int) : FCLPage(context, id, R.layout.pag
             .thenApply {
                 instance.manageUI.preferredVersionName = it
             }
-    }
-
-    private fun switchTouchMod() {
-        Versions.switchTouchMod(context, profile, version)
     }
 
     private fun duplicate() {

@@ -134,6 +134,16 @@ class VersionSetting : Cloneable {
             changed()
         }
 
+    /**
+     * True if FCL enable touch mod.
+     */
+    var isTouchMod: Boolean = VersionSettingDefault.getTouchMod()
+        set(value) {
+            if (field == value) return
+            field = value
+            changed()
+        }
+
     // Minecraft settings.
     /**
      * The server ip that will be entered after Minecraft successfully loaded.
@@ -245,6 +255,7 @@ class VersionSetting : Cloneable {
             it.minecraftArgs = minecraftArgs
             it.isNotCheckGame = isNotCheckGame
             it.isNotCheckJVM = isNotCheckJVM
+            it.isTouchMod = isTouchMod
             it.serverIp = serverIp
             it.isIsolateGameDir = isIsolateGameDir
             it.graphicsBackend = graphicsBackend
@@ -278,6 +289,7 @@ class VersionSetting : Cloneable {
                 addProperty("java", src.java)
                 addProperty("notCheckGame", src.isNotCheckGame)
                 addProperty("notCheckJVM", src.isNotCheckJVM)
+                addProperty("enableTouchMod", src.isTouchMod)
                 addProperty("graphicsBackend", src.graphicsBackend)
                 addProperty("vulkanDriverSystem", src.isVKDriverSystem)
                 addProperty("controller", src.controller)
@@ -315,6 +327,7 @@ class VersionSetting : Cloneable {
                         ?: VersionSettingDefault.getJava()
                 vs.isNotCheckGame = json["notCheckGame"]?.asBoolean ?: VersionSettingDefault.getNotCheckGame()
                 vs.isNotCheckJVM = json["notCheckJVM"]?.asBoolean ?: VersionSettingDefault.getNotCheckJVM()
+                vs.isTouchMod = json["enableTouchMod"]?.asBoolean ?: VersionSettingDefault.getTouchMod()
                 vs.graphicsBackend = json["graphicsBackend"]?.asString ?: VersionSettingDefault.getGraphicsBackend()
                 vs.isVKDriverSystem = json["vulkanDriverSystem"]?.asBoolean ?: VersionSettingDefault.getVulkanDriverSystem()
                 vs.controller = json["controller"]?.asString ?: VersionSettingDefault.getController()

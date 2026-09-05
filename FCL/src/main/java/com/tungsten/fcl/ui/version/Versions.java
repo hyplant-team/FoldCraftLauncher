@@ -196,19 +196,6 @@ public class Versions {
         }
     }
 
-    public static void switchTouchMod(Context context, Profile profile, String id) {
-        try {
-            if (profile.getRepository().switchTouchMod(id)) {
-                Toast.makeText(context, context.getString(R.string.version_touch_mod_enabled), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(context, context.getString(R.string.version_touch_mod_disabled), Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            Toast.makeText(context, context.getString(R.string.version_touch_mod_failed), Toast.LENGTH_LONG).show();
-            Logging.LOG.log(Level.WARNING, "Failed to switch touch controller", e);
-        }
-    }
-
     public static void launch(Context context, Profile profile) {
         launch(context, profile, profile.getSelectedVersion());
     }

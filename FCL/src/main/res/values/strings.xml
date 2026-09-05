@@ -947,6 +947,8 @@
 
     <string name="settings_fcl_controller">Controller</string>
     <string name="settings_fcl_controller_desc">Choose the controller layout used by this version.</string>
+    <string name="settings_touch_mod">Enable Touch Mod</string>
+    <string name="settings_touch_mod_desc">Whether enable touch mod support. For TouchController mod.</string>
     <string name="settings_fcl_vulkan_driver_system">Use System Vulkan driver</string>
     <string name="settings_fcl_vulkan_driver_system_desc">Use the system Vulkan driver. Better performance but may cause compatibility issues.</string>
     <string name="settings_fcl_graphics_backend">Graphics Backend</string>
@@ -1225,10 +1227,6 @@
     <string name="version_manage_rename_fail">Rename failed</string>
     <string name="version_new_profile">New Directory</string>
     <string name="version_update">Update Modpack</string>
-    <string name="version_touch_mod">Touch controller mod</string>
-    <string name="version_touch_mod_enabled">Touch controller enabled.</string>
-    <string name="version_touch_mod_disabled">Touch controller disabled.</string>
-    <string name="version_touch_mod_failed">Failed to switch touch controller!</string>
 
     <string name="view_info_visibility">Visibility Option</string>
     <string name="view_info_visibility_always">Always Visible</string>

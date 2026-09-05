@@ -163,6 +163,13 @@ class VersionSettingAdapter(
                 descriptionRes = R.string.settings_fcl_controller_desc,
                 group = SettingGroup.Common
             )
+            result += Row.SwitchRow(
+                R.string.settings_touch_mod,
+                { versionSetting.isTouchMod },
+                { versionSetting.isTouchMod = it },
+                descriptionRes = R.string.settings_touch_mod_desc,
+                group = SettingGroup.Common
+            )
             result += Row.ValueRow(
                 R.string.settings_fcl_graphics_backend,
                 { versionSetting.graphicsBackend },
