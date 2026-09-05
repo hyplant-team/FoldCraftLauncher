@@ -193,13 +193,6 @@ class VersionSetting : Cloneable {
             changed()
         }
 
-    var isPojavBigCore: Boolean = VersionSettingDefault.getPojavBigCore()
-        set(value) {
-            if (field == value) return
-            field = value
-            changed()
-        }
-
     var isDebugLog: Boolean = VersionSettingDefault.getDebugLog()
         set(value) {
             if (field == value) return
@@ -259,7 +252,6 @@ class VersionSetting : Cloneable {
             it.controller = controller
             it.renderer = renderer
             it.driver = driver
-            it.isPojavBigCore = isPojavBigCore
             it.isDebugLog = isDebugLog
             it.isForceResolution = isForceResolution
         }
@@ -292,7 +284,6 @@ class VersionSetting : Cloneable {
                 addProperty("renderer", src.renderer)
                 addProperty("driver", src.driver)
                 addProperty("isolateGameDir", src.isIsolateGameDir)
-                addProperty("pojavBigCore", src.isPojavBigCore)
                 addProperty("debugLog", src.isDebugLog)
                 addProperty("forceResolution", src.isForceResolution)
             }
@@ -331,7 +322,6 @@ class VersionSetting : Cloneable {
                     json["renderer"]?.asString ?: VersionSettingDefault.getRenderer()
                 vs.driver = json["driver"]?.asString ?: VersionSettingDefault.getDriver()
                 vs.isIsolateGameDir = json["isolateGameDir"]?.asBoolean ?: VersionSettingDefault.getIsolateGameDir()
-                vs.isPojavBigCore = json["pojavBigCore"]?.asBoolean ?: VersionSettingDefault.getPojavBigCore()
                 vs.isDebugLog = json["debugLog"]?.asBoolean ?: VersionSettingDefault.getDebugLog()
                 vs.isForceResolution = json["forceResolution"]?.asBoolean ?: VersionSettingDefault.getForceResolution()
             }

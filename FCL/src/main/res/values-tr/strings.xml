@@ -29,8 +29,6 @@
     <string name="multiplayer">Çok oyunculu</string>
     <string name="setting">Ayar</string>
     <string name="about">Hakkında</string>
-    <string name="about_sponsor">Sponsor</string>
-    <string name="about_source">Açık Kaynak</string>
     <string name="about_desc">Fold Craft Launcher, kullanıcıların Android cihazlarda Minecraft: Java Edition\'ı çalıştırmasına olanak tanıyan bir Android Minecraft başlatıcısıdır.\n\nFold Craft Launcher, FCL-Team tarafından geliştirilmiştir.\n\nFold Craft Launcher\'ın özelliklerinin çoğu HMCLCore temel alınarak değiştirilmiştir.\n\nUygulamada PojavLauncher ve Boat\'ın bazı kodları kullanılmış ve alıntılanmıştır. Bu nedenle, bu uygulamayı dağıtacaksanız lütfen GPL-v3 Lisansına uyun.</string>
     <string name="account_add_server">Kimlik Doğrulama Sunucusu Ekle</string>
     <string name="account_add_server_url">Sunucu URL</string>
@@ -144,9 +142,6 @@
     <string name="button_set">Ayarla</string>
     <string name="button_reset">Sıfırla</string>
     <string name="button_overwrite">Üstüne yaz</string>
-    <string name="community">Topluluk</string>
-    <string name="community_hint">En yeni sürümü indirmek, hata bildirmek ve daha fazlası için topluluğumuza katılın. Katılırsanız lütfen topluluk kurallarına uyun.</string>
-    <string name="community_qq">QQ-Grubu</string>
     <string name="control_create">Kontrolcü Oluştur</string>
     <string name="control_delete">Bu kontrolcüyü silmek istediğinden emin misin?</string>
     <string name="control_download">Kontrolcü indir</string>
@@ -154,7 +149,6 @@
     <string name="control_download_history">Eski Sürümleri İndir</string>
     <string name="control_download_history_empty">Eski Sürüm Yok</string>
     <string name="control_download_lang_current">Şuanki Dil</string>
-    <string name="control_download_source_cn">Gitee</string>
     <string name="control_download_device_phone">Telefon</string>
     <string name="control_download_device_pad">Tablet</string>
     <string name="control_download_device_other">Diğerleri</string>
@@ -190,6 +184,7 @@
     <string name="control_converting">Dönüştürülüyor…</string>
     <string name="control_convert_failed">Dönüştürme başarısız oldu!</string>
     <string name="control_convert_unsupported">Bu cihazda ZL2 dönüştürmesi desteklenmiyor (arm64 gerekli)</string>
+    <string name="control_import_zl2_converted">ZalithLauncher2 düzeni algılandı ve otomatik dönüştürülerek içe aktarıldı</string>
     <string name="control_upload">Kontrolcü Yükle</string>
     <string name="curse_category_0">Hepsi</string>
     <string name="curse_category_4474">Bilim Kurgu</string>
@@ -263,4 +258,6 @@
     <string name="curse_category_404">Animasyon</string>
     <string name="curse_category_4465">Mod Desteği</string>
     <string name="curse_category_402">Ortaçağ</string>
+    <string name="renderer_source">Kaynak:</string>
+    <string name="renderer_source_builtin">Yerleşik</string>
 </resources>

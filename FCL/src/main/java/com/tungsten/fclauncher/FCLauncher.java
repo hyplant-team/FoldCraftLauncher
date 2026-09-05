@@ -14,11 +14,11 @@ import android.system.Os;
 import android.util.ArrayMap;
 
 import com.mio.data.Renderer;
+import com.mio.plugin.DriverPlugin;
+import com.mio.plugin.FFmpegPlugin;
+import com.mio.plugin.NativeLibPlugin;
 import com.oracle.dalvik.VMLauncher;
 import com.tungsten.fclauncher.bridge.FCLBridge;
-import com.tungsten.fclauncher.plugins.DriverPlugin;
-import com.tungsten.fclauncher.plugins.FFmpegPlugin;
-import com.tungsten.fclauncher.plugins.NativeLibPlugin;
 import com.tungsten.fclauncher.utils.Architecture;
 import com.tungsten.fclauncher.utils.FCLPath;
 
@@ -209,9 +209,6 @@ public class FCLauncher {
         if (config.getUseVKDriverSystem()) {
             envMap.put("VULKAN_DRIVER_SYSTEM", "1");
         }
-        if (config.getPojavBigCore()) {
-            envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
-        }
     }
 
     private static void addModLoaderEnv(FCLConfig config, HashMap<String, String> envMap) {
@@ -244,6 +241,9 @@ public class FCLauncher {
     private static void addRendererEnv(FCLConfig config, HashMap<String, String> envMap) {
         Renderer renderer = config.getRenderer();
         if (!renderer.getPath().isEmpty()) {
+            if (!renderer.getPojavRendererId().isEmpty()) {
+                envMap.put("POJAV_RENDERER", renderer.getPojavRendererId());
+            }
             String eglName = renderer.getEglName();
             if (eglName.startsWith("/")) {
                 eglName = renderer.getPath() + eglName;

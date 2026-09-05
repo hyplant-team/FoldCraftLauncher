@@ -37,6 +37,7 @@ import androidx.core.view.postDelayed
 import androidx.lifecycle.lifecycleScope
 import com.mio.download.DownloadManager
 import com.mio.manager.RendererManager
+import com.mio.plugin.DriverPlugin
 import com.mio.ui.dialog.RendererSelectDialog
 import com.mio.ui.view.DownloadSlidePanel
 import com.mio.util.AnimUtil
@@ -65,7 +66,6 @@ import com.tungsten.fcl.ui.main.MainUI
 import com.tungsten.fcl.ui.version.Versions
 import com.tungsten.fcl.upgrade.UpdateChecker
 import com.tungsten.fcl.util.RequestCodes
-import com.tungsten.fclauncher.plugins.DriverPlugin
 import com.tungsten.fclauncher.utils.FCLPath
 import com.tungsten.fclcore.auth.Account
 import com.tungsten.fclcore.auth.authlibinjector.AuthlibInjectorAccount
@@ -138,6 +138,9 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
 
     /** 下载管理面板（左侧菜单开关按钮控制，有任务时自动显示） */
     private lateinit var downloadPanel: DownloadSlidePanel
+
+    /** 通知点击进入后待执行的"定位到下载页"请求（uiManager 初始化前先排队） */
+    private var pendingOpenDownload = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -381,7 +384,31 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 binding.downloadWaveProgress.setProgress(progress)
             }
         }
+        // 通知点击进入：定位到下载页并展开面板（此时 uiManager 可能尚未初始化，先排队）
+        handleNotificationIntent(intent)
+        applyPendingOpenDownload()
         setupLiveBackground()
+    }
+
+    /** 通知点击进入启动器时，切换到下载页并展开面板 */
+    private fun handleNotificationIntent(intent: Intent?) {
+        if (intent?.getBooleanExtra(DownloadManager.EXTRA_OPEN_PANEL, false) == true) {
+            pendingOpenDownload = true
+            applyPendingOpenDownload()
+        }
+    }
+
+    private fun applyPendingOpenDownload() {
+        if (!pendingOpenDownload) return
+        if (_uiManager == null) return
+        uiManager.switchUI(uiManager.downloadUI)
+        downloadPanel.open()
+        pendingOpenDownload = false
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleNotificationIntent(intent)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

@@ -53,6 +53,22 @@
     <string name="about_link_d">About D</string>
     <string name="about_link_e">About E</string>
     <string name="community_controller">Controller Community</string>
+    <string name="settings_plugin">Plugins</string>
+    <string name="plugin_empty">No plugins detected</string>
+    <string name="plugin_type_renderer">Renderer</string>
+    <string name="plugin_type_driver">Driver</string>
+    <string name="plugin_type_native">Native Library</string>
+    <string name="plugin_enable">Enable</string>
+    <string name="plugin_uninstall">Uninstall</string>
+    <string name="plugin_miolibpatcher_name">MioLibPatcher</string>
+    <string name="plugin_miolibpatcher_desc">JVM bytecode patch that fixes mod compatibility issues on Android</string>
+    <string name="plugin_miolibpatcher_alc10">ALC10 patch</string>
+    <string name="plugin_miolibpatcher_alc10_desc">Replaces alcGetCurrentContext to fix the no-audio issue in Mite (1.6.4)</string>
+    <string name="plugin_miolibpatcher_sable">Sable Rapier patch</string>
+    <string name="plugin_miolibpatcher_sable_desc">Enabled by default (no property is set); disable to force-disable the Rapier patch</string>
+    <string name="plugin_miolibpatcher_asm">ASM backdoor</string>
+    <string name="plugin_miolibpatcher_asm_desc">Removes the ASM 5.0.4 API check to support older mods like AE1 (affects all ASM 5.0.4 mods, use with caution)</string>
+    <string name="plugin_env_config">Configure</string>
 
     <string name="account_add_server">Add Authentication Server</string>
     <string name="account_add_server_url">Server URL</string>
@@ -231,6 +247,7 @@
     <string name="control_converting">Converting…</string>
     <string name="control_convert_failed">Conversion failed!</string>
     <string name="control_convert_unsupported">ZL2 conversion is not supported on this device (arm64 required)</string>
+    <string name="control_import_zl2_converted">ZalithLauncher2 layout detected and converted</string>
     <string name="control_upload">Upload Controller</string>
 
     <string name="curse_category_0">All</string>
@@ -936,8 +953,6 @@
     <string name="settings_fcl_graphics_backend_desc">Choose the graphics rendering backend. Only effective for 26.2+.</string>
     <string name="settings_fcl_renderer">OpenGL Implementation</string>
     <string name="settings_fcl_renderer_desc">Choose the OpenGL renderer implementation.</string>
-    <string name="settings_fcl_pojav_bigcore">Force the renderer to run on the big core</string>
-    <string name="settings_fcl_pojav_bigcore_desc">Force the renderer to run on performance big cores.</string>
     <string name="settings_fcl_renderer_gl4es" translatable="false">Holy GL4ES (OpenGL 2.1, 1.21.5-)</string>
     <string name="settings_fcl_renderer_virgl" translatable="false">VirGLRenderer (OpenGL 4.3)</string>
     <string name="settings_fcl_renderer_vgpu">VGPU (OpenGL 2.1+, only support 1.17-)</string>
@@ -998,6 +1013,9 @@
     <string name="settings_launcher_language_ukrainian" translatable="false">Українська Мова</string>
     <string name="settings_launcher_language_german" translatable="false">Deutsch</string>
     <string name="settings_launcher_language_traditional_chinese_hk" translatable="false">繁體中文（香港）</string>
+    <string name="settings_launcher_language_japanese" translatable="false">日本語</string>
+    <string name="settings_launcher_language_turkish" translatable="false">Türkçe</string>
+    <string name="settings_launcher_language_traditional_chinese_tw" translatable="false">繁體中文（台灣）</string>
     <string name="settings_launcher_launcher_log_export">Export launcher logs</string>
     <string name="settings_launcher_launcher_log_export_failed">Unable to export logs</string>
     <string name="settings_launcher_launcher_log_export_success">Logs have been exported to %s</string>
@@ -1328,6 +1346,8 @@
     <string name="message_warn_renderer_global_setting">The version you have currently selected has enabled per-instance settings, so the renderer selected here cannot be applied to the current version. Suggest long pressing the "Launch" button to select the renderer.</string>
     <string name="message_select_url">Please select a link to download (it will open in your browser).</string>
     <string name="supported_mc_version">Supported MC version:</string>
+    <string name="renderer_source">Source:</string>
+    <string name="renderer_source_builtin">Built-in</string>
     <string name="message_check_renderer">The current renderer %s does not support this game version. Continuing to use it may cause rendering errors or game crashes! Do you want to continue?</string>
     <string name="message_check_plugin">The current plugin %s does not support this game version. Continuing to use it may cause the game to crash! Do you want to continue?</string>
     <string name="enabled">Enabled</string>

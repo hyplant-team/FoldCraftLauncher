@@ -28,7 +28,6 @@ public class VersionSettingDefault {
     private static String renderer = "e7b90ed6-e518-4d4e-93dc-5c7133cd5b31";
     private static String driver = "Turnip";
     private static boolean isolateGameDir = false;
-    private static boolean pojavBigCore = false;
     private static boolean debugLog = false;
     private static boolean forceResolution = false;
 
@@ -78,9 +77,6 @@ public class VersionSettingDefault {
     public static boolean getIsolateGameDir() {
         return isolateGameDir;
     }
-    public static boolean getPojavBigCore() {
-        return pojavBigCore;
-    }
     public static boolean getDebugLog() {
         return debugLog;
     }
@@ -107,7 +103,6 @@ public class VersionSettingDefault {
             renderer = defaultConfig.has("renderer") ? defaultConfig.get("renderer").getAsString() : renderer;
             driver = defaultConfig.has("driver") ? defaultConfig.get("driver").getAsString() : driver;
             isolateGameDir = defaultConfig.has("isolateGameDir") ? defaultConfig.get("isolateGameDir").getAsBoolean() : isolateGameDir;
-            pojavBigCore = defaultConfig.has("pojavBigCore") ? defaultConfig.get("pojavBigCore").getAsBoolean() : pojavBigCore;
             debugLog = defaultConfig.has("debugLog") ? defaultConfig.get("debugLog").getAsBoolean() : debugLog;
             forceResolution = defaultConfig.has("forceResolution") ? defaultConfig.get("forceResolution").getAsBoolean() : forceResolution;
         } catch (Exception e) {

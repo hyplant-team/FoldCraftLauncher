@@ -14,6 +14,5 @@
   "driver": "Turnip",
   "isolateGameDir": false,
   "customRenderer": "",
-  "pojavBigCore": false,
   "debugLog": false
 }

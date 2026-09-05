@@ -2,10 +2,10 @@ package com.mio.manager
 
 import android.content.Context
 import com.mio.data.Renderer
-import com.tungsten.fcl.R
-import com.tungsten.fclauncher.plugins.DriverPlugin
-import com.tungsten.fclauncher.plugins.RendererPlugin
+import com.mio.plugin.DriverPlugin
+import com.mio.plugin.RendererPlugin
 import com.tungsten.fcl.FCLApp
+import com.tungsten.fcl.R
 
 object RendererManager {
     lateinit var RENDERER_GL4ES: Renderer
@@ -126,6 +126,13 @@ object RendererManager {
         RendererPlugin.refresh(context)
         rendererList.clear()
         addRenderer()
+    }
+
+    /** 原位替换同 id 的插件渲染器实例（v2 环境变量配置变化后调用），已初始化时才生效 */
+    fun replaceRenderer(renderer: Renderer) {
+        if (!isInit) return
+        rendererList.removeIf { it.id == renderer.id }
+        rendererList.add(renderer)
     }
 
     @JvmStatic
