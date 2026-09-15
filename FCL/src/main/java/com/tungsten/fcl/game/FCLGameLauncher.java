@@ -54,8 +54,8 @@ public final class FCLGameLauncher extends DefaultLauncher {
     @Override
     protected Map<String, String> getConfigurations() {
         Map<String, String> res = super.getConfigurations();
-        res.put("${launcher_name}", "");
-        res.put("${launcher_version}", "");
+        // res.put("${launcher_name}", "");
+        // res.put("${launcher_version}", "");
         return res;
     }
 
@@ -73,7 +73,7 @@ public final class FCLGameLauncher extends DefaultLauncher {
 
     @Override
     public FCLBridge launch() throws IOException, InterruptedException {
-        FileUtils.deleteDirectoryQuietly(new File(String.valueOf(context.getCacheDir()).replaceAll("cache","code_cache")));
+        // FileUtils.deleteDirectoryQuietly(new File(String.valueOf(context.getCacheDir()).replaceAll("cache","code_cache")));
         generateOptionsTxt();
         return super.launch();
     }

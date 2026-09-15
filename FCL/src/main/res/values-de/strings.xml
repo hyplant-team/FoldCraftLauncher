@@ -6,10 +6,6 @@
     <string name="splash_permission_close">Launcher schließen</string>
     <string name="splash_permission_settings">Einstellungen</string>
     <string name="splash_permission_settings_msg">Sie haben „Verweigern“ gewählt. Bitte gewähren Sie den Speicherzugriff manuell in den Einstellungen.</string>
-    <string name="splash_loading_renderer">Renderer wird initialisiert...</string>
-    <string name="splash_loading_java">Java-Laufzeit wird initialisiert...</string>
-    <string name="splash_loading_config">Konfiguration und Versionen werden geladen...</string>
-    <string name="splash_loading_cache">Cache wird bereinigt...</string>
     <string name="splash_title">Willkommen bei Fold Craft Launcher</string>
     <string name="splash_eula_error">Die Lizenz konnte aufgrund von Verbindungsproblemen nicht überprüft werden.</string>
     <string name="splash_eula_next">Akzeptieren und fortfahren</string>
@@ -271,6 +267,7 @@
     <string name="edit_button_text">Schaltflächentext</string>
     <string name="edit_button_event_follow">Berührung durchlassen</string>
     <string name="edit_button_event_movable">Bewegliche Schaltfläche</string>
+    <string name="edit_button_event_swipable">Wisch-Verknüpfung</string>
     <string name="edit_button_event_press">Drücken</string>
     <string name="edit_button_event_long_press">Langes Drücken</string>
     <string name="edit_button_event_click">Klicken</string>
@@ -294,6 +291,9 @@
     <string name="edit_direction_event_left">Linke Schaltfläche</string>
     <string name="edit_direction_event_right">Rechte Schaltfläche</string>
     <string name="edit_direction_event_follow">Stick</string>
+    <string name="edit_direction_event_dead_zone">Toter Bereich</string>
+    <string name="edit_direction_event_can_lock">Vorwärts-Arretierung</string>
+    <string name="edit_direction_event_lock_threshold">Arretierungsschwelle</string>
     <string name="edit_direction_event_follow_fix">Fest</string>
     <string name="edit_direction_event_follow_center">Halb-dynamisch</string>
     <string name="edit_direction_event_follow_always">Dynamisch</string>
@@ -419,6 +419,7 @@
     <string name="menu_controls_current">Aktuelle Steuerung</string>
     <string name="menu_controls_edit_mode">Bearbeitungsmodus</string>
     <string name="menu_controls_show_boundary">Schaltflächengrenzen anzeigen</string>
+    <string name="menu_controls_edit_hint">Zum Auswählen tippen, zum Verschieben ziehen, zum Skalieren die Eckgriffe ziehen</string>
     <string name="menu_controls_hide_all">Alle Elemente ausblenden</string>
     <string name="menu_controls_auto_fit">Automatische Positionierung</string>
     <string name="menu_controls_auto_fit_dist">Automatischer Abstand zur Position</string>
@@ -653,8 +654,8 @@
     <string name="settings_fcl_controller">Controller</string>
     <string name="settings_fcl_vulkan_driver_system">System-Vulkan-Treiber verwenden</string>
     <string name="settings_fcl_renderer">OpenGL-Implementierung (Renderer)</string>
-    <string name="settings_fcl_renderer_vgpu">VGPU (OpenGL 2.1+, nur 1.17-)</string>
-    <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, nur für GPU a616-a660)</string>
+    <string name="settings_fcl_renderer_vgpu">VGPU (OpenGL 2.1+)</string>
+    <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, nur für adreno616-660)</string>
     <string name="settings_fcl_driver">Vulkan-Treiber</string>
     <string name="settings_download_netdisk">Netdisk(Qıtayda qullanğanlar içün tevsiye etile)</string>
     <string name="settings_game">Spieleinstellungen</string>
@@ -911,6 +912,7 @@
     <string name="close">Schließen</string>
     <string name="menu_settings_item_bar_scale_width">Hotbar-Skalierung (Breite)</string>
     <string name="menu_settings_item_bar_scale_height">Hotbar-Skalierung (Höhe)</string>
+    <string name="menu_settings_controls_opacity">Deckkraft der Tasten</string>
     <string name="create_account_first">Bitte erstelle ein Spielkonto, bevor du das Spiel startest</string>
     <string name="version_list_refreshing">Remote-Versionsliste wird abgerufen…</string>
     <string name="renderer_source">Quelle:</string>

@@ -6,10 +6,6 @@
     <string name="splash_permission_close">بستن</string>
     <string name="splash_permission_settings">تنظیمات</string>
     <string name="splash_permission_settings_msg">شما گزینه هرگز اجازه داده نشود را انتخاب کرده اید، لطفا به صورت دستی مجوز های دسترسی به حافظه را در تنظیمات فعال کنید.</string>
-    <string name="splash_loading_renderer">در حال راه‌اندازی رندرر...</string>
-    <string name="splash_loading_java">در حال راه‌اندازی جاوا...</string>
-    <string name="splash_loading_config">در حال بارگذاری پیکربندی و نسخه‌ها...</string>
-    <string name="splash_loading_cache">در حال پاک‌سازی حافظه پنهان...</string>
     <string name="splash_title">به فولد کرفت لانچر خوش آمدید</string>
     <string name="splash_eula_error">خطا در دریافت قرارداد مجوز کاربر نهایی، لطفا اتصال به اینترنت را بررسی کنید.</string>
     <string name="splash_eula_next">پذیرفتن و ادامه</string>
@@ -302,6 +298,7 @@
     <string name="edit_button_text">متن نمایشی</string>
     <string name="edit_button_event_follow">نشانگر انگشت را دنبال می کند</string>
     <string name="edit_button_event_movable">متحرک</string>
+    <string name="edit_button_event_swipable">اتصال کشیدنی</string>
     <string name="edit_button_event_press">فشردن</string>
     <string name="edit_button_event_long_press">فشار طولانی</string>
     <string name="edit_button_event_click">کلیک</string>
@@ -325,6 +322,9 @@
     <string name="edit_direction_event_left">کد کلید چپ</string>
     <string name="edit_direction_event_right">کد کلید راست</string>
     <string name="edit_direction_event_follow">دنبال کردن (فقط برای استایل جوی استیک)</string>
+    <string name="edit_direction_event_dead_zone">ناحیه مرده</string>
+    <string name="edit_direction_event_can_lock">قفل رو به جلو</string>
+    <string name="edit_direction_event_lock_threshold">آستانه قفل</string>
     <string name="edit_direction_event_follow_fix">دنبال کردن ثابت</string>
     <string name="edit_direction_event_follow_center">دنبال کردن انگشت</string>
     <string name="edit_direction_event_follow_always">همه قسمت ها انگشت را دنبال می کنند</string>
@@ -451,6 +451,7 @@
     <string name="menu_controls_current">کنترلر فعلی</string>
     <string name="menu_controls_edit_mode">حالت ویرایش</string>
     <string name="menu_controls_show_boundary">نمایش مرز های ویو</string>
+    <string name="menu_controls_edit_hint">برای انتخاب ضربه بزنید، برای جابه‌جایی بکشید، برای تغییر اندازه دستگیره های گوشه را بکشید</string>
     <string name="menu_controls_hide_all">پنهان کردن همه ویو ها</string>
     <string name="menu_controls_auto_fit">موقعیت تناسب خودکار</string>
     <string name="menu_controls_auto_fit_dist">فاصله موقعیت تناسب خودکار</string>
@@ -516,6 +517,7 @@
     <string name="menu_settings_item_bar_scale">اندازه نوار آیتم</string>
     <string name="menu_settings_item_bar_scale_width">اندازه نوار آیتم (عرض)</string>
     <string name="menu_settings_item_bar_scale_height">اندازه نوار آیتم (ارتفاع)</string>
+    <string name="menu_settings_controls_opacity">شفافیت کنترل ها</string>
     <string name="menu_settings_show_log">نمایش لاگ</string>
     <string name="message_cancelled">عملیات لغو شد</string>
     <string name="message_copy">با موفقیت کپی شد!</string>

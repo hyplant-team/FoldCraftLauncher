@@ -11,11 +11,6 @@
     <string name="splash_permission_settings_msg">You have chosen "Never Allow" Please manually grant storage permissions in settings.</string>
     <string name="notification_permission">FCL requires permission to post notifications to prevent issues with normal game installation or startup.</string>
 
-    <string name="splash_loading_renderer">Initializing renderer...</string>
-    <string name="splash_loading_java">Initializing Java runtime...</string>
-    <string name="splash_loading_config">Loading configuration and versions...</string>
-    <string name="splash_loading_cache">Clearing cache...</string>
-
     <string name="splash_title">Welcome to Fold Craft Launcher</string>
     <string name="splash_eula_title">Please wait until the eula loaded and then read it carefully. \nYou must agree it in order to use the app.</string>
     <string name="splash_eula_error">Cannot get EULA, please check the network.\n\nYou can view it later by going to the doc branch of the github repository.</string>
@@ -60,7 +55,7 @@
     <string name="plugin_type_native">Native Library</string>
     <string name="plugin_enable">Enable</string>
     <string name="plugin_uninstall">Uninstall</string>
-    <string name="plugin_miolibpatcher_name">MioLibPatcher</string>
+    <string name="plugin_miolibpatcher_name" translatable="false">MioLibPatcher</string>
     <string name="plugin_miolibpatcher_desc">JVM bytecode patch that fixes mod compatibility issues on Android</string>
     <string name="plugin_miolibpatcher_alc10">ALC10 patch</string>
     <string name="plugin_miolibpatcher_alc10_desc">Replaces alcGetCurrentContext to fix the no-audio issue in Mite (1.6.4)</string>
@@ -406,6 +401,8 @@
     <string name="edit_button_text">Displayed Text</string>
     <string name="edit_button_event_follow">Pointer Follows Finger</string>
     <string name="edit_button_event_movable">Movable</string>
+    <string name="edit_button_event_swipable">Swipe Link</string>
+    <string name="edit_button_event_tabs_hint">The button supports all four trigger types at the same time. Switch the tabs below to configure each one.</string>
     <string name="edit_button_event_press">Press</string>
     <string name="edit_button_event_long_press">Long Press</string>
     <string name="edit_button_event_click">Click</string>
@@ -430,6 +427,9 @@
     <string name="edit_direction_event_left">Left Keycode</string>
     <string name="edit_direction_event_right">Right Keycode</string>
     <string name="edit_direction_event_follow">Follow Option (Only for rocker style)</string>
+    <string name="edit_direction_event_dead_zone">Dead Zone</string>
+    <string name="edit_direction_event_can_lock">Forward Lock</string>
+    <string name="edit_direction_event_lock_threshold">Lock Threshold</string>
     <string name="edit_direction_event_follow_fix">Fixed</string>
     <string name="edit_direction_event_follow_center">Center Follows Finger</string>
     <string name="edit_direction_event_follow_always">All Parts Follow Finger</string>
@@ -597,6 +597,7 @@
     <string name="menu_controls_current">Current Controller</string>
     <string name="menu_controls_edit_mode">Edit Mode</string>
     <string name="menu_controls_show_boundary">Show View Boundaries</string>
+    <string name="menu_controls_edit_hint">Tap to select, drag to move, drag the corner handles to resize</string>
     <string name="menu_controls_hide_all">Hide All Views</string>
     <string name="menu_controls_auto_fit">Auto Fit Position</string>
     <string name="menu_controls_auto_fit_dist">Auto Fit Position Distance</string>
@@ -621,6 +622,9 @@
     <string name="menu_control_style_add">Add Style</string>
     <string name="menu_control_style_edit">Edit Style</string>
     <string name="menu_control_view_group_add">Add View Group</string>
+    <string name="menu_control_view_group_copy">Copy view group</string>
+    <string name="menu_control_view_group_copy_suffix"> - copy</string>
+    <string name="menu_control_view_group_copy_failed">Failed to copy view group</string>
     <string name="menu_control_view_group_delete">Are you sure to delete this view group?</string>
     <string name="menu_control_view_group_name">Name</string>
     <string name="menu_control_view_group_visibility">Initial Visibility</string>
@@ -684,6 +688,7 @@
     <string name="menu_settings_item_bar_scale">ItemBarScale</string>
     <string name="menu_settings_item_bar_scale_width">ItemBarScale (Width)</string>
     <string name="menu_settings_item_bar_scale_height">ItemBarScale (Height)</string>
+    <string name="menu_settings_controls_opacity">Controls Opacity</string>
     <string name="menu_settings_show_log">Show Log</string>
     <string name="menu_settings_show_log_auto">Show Log Automatically</string>
     <string name="menu_settings_performance_mode">Sustained Performance Mode</string>
@@ -899,6 +904,8 @@
     <string name="mods_mcmod_page">MCMOD Page</string>
     <string name="mods_mcmod_search">Search in MCMOD</string>
     <string name="mods_modrinth">Modrinth</string>
+    <string name="mods_aggregate">Aggregated</string>
+    <string name="search_aggregate_partial">Failed to connect to %1$s, currently only showing results from %2$s. Results may be incomplete.</string>
     <string name="mods_name">Name</string>
     <string name="mods_not_modded">You must install a mod loader (Fabric, Forge or LiteLoader) first to manage your mods!</string>
     <string name="message_broken_mods">The following mod files are corrupted. Do you want to delete them?\n%s</string>
@@ -964,12 +971,12 @@
     <string name="settings_fcl_graphics_backend_desc">Choose the graphics rendering backend. Only effective for 26.2+.</string>
     <string name="settings_fcl_renderer">OpenGL Implementation</string>
     <string name="settings_fcl_renderer_desc">Choose the OpenGL renderer implementation.</string>
-    <string name="settings_fcl_renderer_gl4es" translatable="false">Holy GL4ES (OpenGL 2.1, 1.21.5-)</string>
+    <string name="settings_fcl_renderer_gl4es" translatable="false">Holy GL4ES (OpenGL 2.1)</string>
     <string name="settings_fcl_renderer_virgl" translatable="false">VirGLRenderer (OpenGL 4.3)</string>
-    <string name="settings_fcl_renderer_vgpu">VGPU (OpenGL 2.1+, only support 1.17-)</string>
+    <string name="settings_fcl_renderer_vgpu">VGPU (OpenGL 2.1+)</string>
     <string name="settings_fcl_renderer_zink" translatable="false">Kopper Zink (OpenGL 4.6)</string>
-    <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, only support GPU a616-a660)</string>
-    <string name="settings_fcl_renderer_nggl4es">Krypton Wrapper (OpenGL 3.1+, built-in)</string>
+    <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, only support adreno616-a660)</string>
+    <string name="settings_fcl_renderer_nggl4es">Krypton Wrapper (OpenGL 3.1+)</string>
 
     <string name="settings_fcl_driver">Vulkan Driver</string>
     <string name="settings_fcl_driver_desc">Choose the Vulkan driver implementation.</string>
@@ -1007,8 +1014,14 @@
     <string name="settings_launcher_download_threads_desc">Set the number of concurrent download threads.</string>
     <string name="settings_launcher_download_threads_auto">Automatically Determine</string>
     <string name="settings_launcher_download_source">Download Source</string>
-    <string name="settings_launcher_download_source_desc">Choose the download source. Auto mode matches per version.</string>
+    <string name="settings_launcher_download_source_desc">Choose the preferred source for version lists and file downloads.</string>
+    <string name="settings_launcher_download_source_version_list">Version List Source</string>
+    <string name="settings_launcher_download_source_file">File Download Source</string>
     <string name="settings_launcher_download_source_auto">Auto Choose Download Mirror</string>
+    <string name="download_source_default">Auto (matches your network)</string>
+    <string name="download_source_official">Official</string>
+    <string name="download_source_mirror">Mirror</string>
+    <string name="exception_dns_pollution">SSL connection failed, possibly due to DNS pollution.</string>
     <string name="settings_launcher_mod_cache">Mod Cache</string>
     <string name="settings_launcher_mod_cache_clear">Clear</string>
     <string name="settings_launcher_mod_cache_desc">Clear cached CurseForge / Modrinth query results.</string>

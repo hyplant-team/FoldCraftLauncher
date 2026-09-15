@@ -201,3 +201,87 @@ target_link_libraries(
         PRIVATE
         pojavexec
 )
+
+# 模块：jsound - OpenJDK libjsound 核心 + OpenAL 平台后端
+# 为四套 JRE（jre8/17/21/25）提供 javax.sound.sampled 的原生实现，
+# 核心 .c/.h 文件 vendor 自 openjdk/jdk17u
+# （https://github.com/openjdk/jdk17u/blob/master/src/java.desktop/share/native/libjsound，
+# GPL-2.0 + Classpath 异常，与本项目 GPL-3.0 兼容；8u 与 17u 的该目录字节级一致，
+# 故一套源码可同时服务两代 ABI）。PORT/MIDI 子系统关闭（桩返回 0 设备），
+# 音频路径由 jsound_openal.c 桥接 OpenAL，JDK8 的 Platform 额外 native 由 jdk8_compat.c 补齐
+add_library(
+        jsound
+        SHARED
+        jsound/Utilities.c
+        jsound/Platform.c
+        jsound/DirectAudioDevice.c
+        jsound/DirectAudioDeviceProvider.c
+        jsound/PortMixer.c
+        jsound/PortMixerProvider.c
+        jsound/MidiOutDevice.c
+        jsound/MidiOutDeviceProvider.c
+        jsound/MidiInDevice.c
+        jsound/MidiInDeviceProvider.c
+        jsound/PlatformMidi.c
+        jsound/jsound_openal.c
+        jsound/jdk8_compat.c
+)
+
+target_include_directories(
+        jsound
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/jsound
+)
+
+target_compile_definitions(
+        jsound
+        PRIVATE
+        X_PLATFORM=X_LINUX
+        _LITTLE_ENDIAN
+        USE_DAUDIO=TRUE
+        USE_PORTS=FALSE
+        USE_PLATFORM_MIDI_OUT=FALSE
+        USE_PLATFORM_MIDI_IN=FALSE
+)
+
+target_link_libraries(
+        jsound
+        PRIVATE
+        log
+        dl
+)
+
+# 模块：flite 系列 shim —— 游戏 text2speech 经 JNA 按名加载的 flite 语音引擎接口，
+# 桥接到安卓系统 TTS（核心见 flite/flite_bridge.c 与 com.mio.flite.FliteTts，
+# 依赖启动器注入的 DALVIK_JAVAVM / DALVIK_APPLICATION 环境变量）
+add_library(
+        flite
+        SHARED
+        flite/flite_bridge.c
+)
+
+target_link_libraries(
+        flite
+        PRIVATE
+        log
+)
+
+# fliteWrapper：text2speech 1.13.9 及更早的接口名（init/say），转发 libflite
+add_library(
+        fliteWrapper
+        SHARED
+        flite/flite_wrapper.c
+)
+
+target_link_libraries(
+        fliteWrapper
+        PRIVATE
+        flite
+)
+
+# flite_cmu_us_kal16：仅提供非空 voice 指针的占位符号
+add_library(
+        flite_cmu_us_kal16
+        SHARED
+        flite/flite_cmu_us_kal16.c
+)

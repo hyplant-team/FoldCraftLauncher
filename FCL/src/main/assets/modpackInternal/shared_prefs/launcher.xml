@@ -6,8 +6,8 @@
     <int name="themeMode" value="0" />
     <int name="videoBackgroundVolume" value="10" />
     <int name="vibrationDuration" value="100" />
-    <boolean name="is_first_launch" value="true" />
-    <boolean name="is_agree" value="false" />
+    <boolean name="isFirstLaunch" value="true" />
+    <boolean name="isAgree" value="false" />
     <boolean name="allowScreenshots" value="true" />
     <boolean name="disableFullscreenInput" value="true" />
     <boolean name="check_notification_permission" value="true" />

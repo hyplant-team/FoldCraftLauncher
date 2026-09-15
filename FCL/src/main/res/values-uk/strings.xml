@@ -6,10 +6,6 @@
     <string name="splash_permission_close">Закрити лаунчер</string>
     <string name="splash_permission_settings">Налаштування</string>
     <string name="splash_permission_settings_msg">Ви обрали Заборонити. Надайте доступ до сховища вручну в налаштуваннях.</string>
-    <string name="splash_loading_renderer">Ініціалізація рендерера...</string>
-    <string name="splash_loading_java">Ініціалізація Java...</string>
-    <string name="splash_loading_config">Завантаження конфігурації та версій...</string>
-    <string name="splash_loading_cache">Очищення кешу...</string>
     <string name="splash_title">Ласкаво просимо до Fold Craft Launcher</string>
     <string name="splash_eula_error">Не вдалося підтвердити наявність ліцензії через проблеми з підключенням.</string>
     <string name="splash_eula_next">Прийняти та продовжити</string>
@@ -271,6 +267,7 @@
     <string name="edit_button_text">Текст на кнопці</string>
     <string name="edit_button_event_follow">Пропускати дотик</string>
     <string name="edit_button_event_movable">Переміщувана кнопка</string>
+    <string name="edit_button_event_swipable">Свайп-ланцюжок</string>
     <string name="edit_button_event_press">Натискання</string>
     <string name="edit_button_event_long_press">Довге натискання</string>
     <string name="edit_button_event_click">Натиснути</string>
@@ -294,6 +291,9 @@
     <string name="edit_direction_event_left">Ліва кнопка</string>
     <string name="edit_direction_event_right">Права кнопка</string>
     <string name="edit_direction_event_follow">Стік</string>
+    <string name="edit_direction_event_dead_zone">Мертва зона</string>
+    <string name="edit_direction_event_can_lock">Фіксація вперед</string>
+    <string name="edit_direction_event_lock_threshold">Поріг фіксації</string>
     <string name="edit_direction_event_follow_fix">Фіксований</string>
     <string name="edit_direction_event_follow_center">Напівдинамічний</string>
     <string name="edit_direction_event_follow_always">Динамічний</string>
@@ -419,6 +419,7 @@
     <string name="menu_controls_current">Поточне керування</string>
     <string name="menu_controls_edit_mode">Режим редагування</string>
     <string name="menu_controls_show_boundary">Показати межі кнопок</string>
+    <string name="menu_controls_edit_hint">Торкніться для вибору, перетягніть для переміщення, потягніть за кутові маркери для зміни розміру</string>
     <string name="menu_controls_hide_all">Приховати всі елементи</string>
     <string name="menu_controls_auto_fit">Автонастройка позиції</string>
     <string name="menu_controls_auto_fit_dist">Автонастройка відстані до позиції</string>
@@ -491,6 +492,7 @@
     <string name="menu_settings_item_bar_scale">Розмір панелі предметів</string>
     <string name="menu_settings_item_bar_scale_width">Розмір панелі предметів (ширина)</string>
     <string name="menu_settings_item_bar_scale_height">Розмір панелі предметів (висота)</string>
+    <string name="menu_settings_controls_opacity">Непрозорість кнопок</string>
     <string name="menu_settings_show_log">Показати лог</string>
     <string name="menu_settings_show_log_auto">Автопоказ логу</string>
     <string name="menu_settings_performance_mode">Режим стабільної продуктивності</string>
@@ -672,8 +674,8 @@
     <string name="settings_fcl_controller">Контролер</string>
     <string name="settings_fcl_vulkan_driver_system">Використання системних драйверів Vulkan</string>
     <string name="settings_fcl_renderer">Реалізація OpenGL (рендерер)</string>
-    <string name="settings_fcl_renderer_vgpu">VGPU (OpenGL 2.1+, тільки 1.17-)</string>
-    <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, тільки для GPU a616-a660)</string>
+    <string name="settings_fcl_renderer_vgpu">VGPU (OpenGL 2.1+)</string>
+    <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, тільки для adreno616-660)</string>
     <string name="settings_fcl_driver">Драйвер Vulkan</string>
     <string name="settings_download_netdisk">Netdisk (рекомендовано для користувачів у Китаї)</string>
     <string name="settings_game">Налаштування гри</string>

@@ -181,7 +181,8 @@ public class FCLauncher {
             }
             a = a.replace("${natives_directory}", libraryPath);
             config.getRenderer();
-            args[i] = a.replace("${gl_lib_name}", config.getRenderer().getGLPath());
+            args[i] = a.replace("${gl_lib_name}", config.getRenderer().getGLPath())
+                    .replace("${egl_lib_name}", config.getRenderer().getEGLPath());
         }
         return args;
     }
@@ -203,6 +204,11 @@ public class FCLauncher {
 
         // Native mod env var
         envMap.put("MOD_ANDROID_RUNTIME", FCLPath.MOD_RUNTIME_DIR == null ? "" : FCLPath.MOD_RUNTIME_DIR);
+
+        // Dalvik(ART) 侧 JavaVM 与 Application 全局引用，供游戏 JVM 侧原生代码
+        // （如 libflite 桥接安卓 TTS）attach 回安卓运行时调用系统 API
+        envMap.put("DALVIK_JAVAVM", String.valueOf(FCLBridge.getJavaVMPointer()));
+        envMap.put("DALVIK_APPLICATION", FCLBridge.jObjectToString(config.getContext().getApplicationContext()));
 
         FFmpegPlugin.discover(config.getContext());
         if (FFmpegPlugin.isAvailable) {

@@ -3,10 +3,14 @@ package com.tungsten.fcl.ui.download.common
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.lifecycleScope
@@ -23,12 +27,17 @@ import com.tungsten.fcl.ui.download.DownloadUI
 import com.tungsten.fcl.util.ModTranslations
 import com.tungsten.fclcore.mod.LocalModFile
 import com.tungsten.fclcore.mod.RemoteMod
+import com.tungsten.fclcore.mod.curse.CurseAddon
 import com.tungsten.fclcore.util.Logging
 import com.tungsten.fclcore.util.StringUtils
 import com.tungsten.fcllibrary.component.theme.ThemeEngine
+import com.tungsten.fcllibrary.component.view.FCLTextView
 import com.tungsten.fcllibrary.util.LocaleUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import java.util.logging.Level
 import java.util.stream.Collectors
 
@@ -39,34 +48,16 @@ class RemoteModListAdapter(
     private val callback: Callback
 ) : RecyclerView.Adapter<ViewHolder>() {
     private val modIdList: MutableList<String?> = ArrayList()
+    private val scanMutex = Mutex()
 
     init {
-        MainActivity.getInstance().lifecycleScope.launch(Dispatchers.Default) {
-            // 后台预热 Mod 翻译数据，避免首次 bind 时在主线程解析大文件造成卡顿
-            ModTranslations.getTranslationsByRepositoryType(downloadPage.repository.getType())
-                .preload()
-            if (downloadPage.pageId == DownloadUI.PAGE_ID_DOWNLOAD_MOD) {
-                // 动态取当前选中的目录/版本（页面存活期间可能被切换）
-                val modManager = Profiles.getSelectedProfile().repository
-                    .getModManager(Profiles.getSelectedVersion())
-                val modFiles = runCatching {
-                    modManager.getMods().parallelStream().collect(Collectors.toList())
-                }.getOrNull() ?: emptyList<LocalModFile>()
-                for (localModFile in modFiles) {
-                    try {
-                        val remoteVersionOptional = downloadPage.getRepository()
-                            .getRemoteVersionByLocalFile(localModFile, localModFile.file)
-                        remoteVersionOptional.ifPresent {
-                            localModFile.remoteVersion = it
-                        }
-                        localModFile.remoteVersion?.let {
-                            modIdList.add(it.modid())
-                        }
-                    } catch (e: Throwable) {
-                        Logging.LOG.log(Level.SEVERE, e.toString())
-                    }
-                }
+        MainActivity.getInstance().lifecycleScope.launch {
+            withContext(Dispatchers.Default) {
+                // 后台预热 Mod 翻译数据，避免首次 bind 时在主线程解析大文件造成卡顿
+                ModTranslations.getTranslationsByRepositoryType(downloadPage.repository.getType())
+                    .preload()
             }
+            refreshInstalledState()
         }
     }
 
@@ -74,7 +65,53 @@ class RemoteModListAdapter(
         fun onItemSelect(mod: RemoteMod?)
     }
 
+    /**
+     * 后台扫描本地已安装模组并反查远程 modid，结果变化时刷新列表的"已安装"标记。
+     * 并发触发时按顺序串行扫描，避免旧的扫描结果覆盖新的。
+     */
+    fun refreshInstalledState() {
+        if (downloadPage.pageId != DownloadUI.PAGE_ID_DOWNLOAD_MOD) return
+        MainActivity.getInstance().lifecycleScope.launch {
+            scanMutex.withLock {
+                val installedIds = withContext(Dispatchers.Default) { loadInstalledModIds() }
+                if (installedIds != modIdList) {
+                    modIdList.clear()
+                    modIdList.addAll(installedIds)
+                    notifyItemRangeChanged(0, itemCount, PAYLOAD_INSTALLED)
+                }
+            }
+        }
+    }
+
+    private fun loadInstalledModIds(): List<String?> {
+        // 动态取当前选中的目录/版本（页面存活期间可能被切换）
+        val modManager = Profiles.getSelectedProfile().repository
+            .getModManager(Profiles.getSelectedVersion())
+        val modFiles = runCatching {
+            modManager.getMods().parallelStream().collect(Collectors.toList())
+        }.getOrNull() ?: emptyList<LocalModFile>()
+        val ids = mutableListOf<String?>()
+        for (localModFile in modFiles) {
+            try {
+                val remoteVersionOptional = downloadPage
+                    .getRemoteVersionByLocalFile(localModFile, localModFile.file)
+                remoteVersionOptional.ifPresent {
+                    localModFile.remoteVersion = it
+                }
+                localModFile.remoteVersion?.let {
+                    ids.add(it.modid())
+                }
+            } catch (e: Throwable) {
+                Logging.LOG.log(Level.SEVERE, e.toString())
+            }
+        }
+        return ids
+    }
+
     companion object {
+        /** payload：仅刷新"已安装"标记，重绑时跳过图片加载与入场动画 */
+        const val PAYLOAD_INSTALLED = 1
+
         /** 缓存占位位图（内容只读，多视图共享安全），避免每次 bind 重新分配与绘制 */
         private var placeholderBitmap: Bitmap? = null
     }
@@ -127,18 +164,23 @@ class RemoteModListAdapter(
             .override(90, 90)
             .error(fixedIconPlaceholder())
             .into(binding.icon)
-        val mod =
-            ModTranslations.getTranslationsByRepositoryType(downloadPage.repository.getType())
-                .getModByCurseForgeId(remoteMod.slug)
-        binding.title.text =
-            if (mod != null && LocaleUtils.isChinese(context)) mod.getDisplayName() else remoteMod.title
+        binding.title.text = buildTitle(remoteMod)
         val categories = remoteMod.categories.stream()
-            .map { downloadPage.getLocalizedCategory(it) }
+            .map { downloadPage.getLocalizedCategory(remoteMod, it) }
             .collect(
                 Collectors.toList()
             ).joinToString("   ")
-        val tag = StringUtils.removeSuffix(categories, "   ")
-        binding.tag.text = tag
+        binding.tag.text = StringUtils.removeSuffix(categories, "   ")
+        // 聚合模式在标题行末尾显示来源徽标（平台 LOGO + 平台名的主题次色胶囊），单源模式隐藏
+        val sourceLabel = downloadPage.getSourceLabel(remoteMod)
+        binding.sourceBadge.visibility = if (sourceLabel.isEmpty()) View.GONE else View.VISIBLE
+        if (sourceLabel.isNotEmpty()) {
+            binding.sourceBadge.text = sourceLabel
+            // 注册换肤回调：主题（含次要色）修改后已加载的条目同步变色；
+            // 同一 view 重复注册会覆盖旧回调，复用绑定不同条目时以最后一次为准
+            ThemeEngine.getInstance()
+                .registerEvent(binding.sourceBadge) { applySourceBadgeStyle(binding.sourceBadge, remoteMod) }
+        }
         binding.description.text = remoteMod.description
         binding.downloadCount.text = remoteMod.downloadCount.format(context)
         playTranslationX(
@@ -147,18 +189,55 @@ class RemoteModListAdapter(
             -100f,
             0f
         ).start()
-        if (downloadPage.pageId == DownloadUI.PAGE_ID_DOWNLOAD_MOD) {
-            if (modIdList.isNotEmpty() && modIdList.contains(remoteMod.modID)) {
-                val text = binding.title.getText().toString()
-                if (!text.startsWith(context.getString(R.string.installed))) {
-                    binding.title.text = String.format(
-                        "[%s] %s",
-                        context.getString(R.string.installed),
-                        text
-                    )
-                }
-            }
+    }
+
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+            return
         }
+        // 已安装标记刷新：只更新标题，不重播入场动画、不重载图片
+        val binding = ItemRemoteModBinding.bind(holder.itemView)
+        binding.title.text = buildTitle(list[position])
+    }
+
+    private fun buildTitle(remoteMod: RemoteMod): String {
+        val mod =
+            ModTranslations.getTranslationsByRepositoryType(downloadPage.repository.getType())
+                .getModByCurseForgeId(remoteMod.slug)
+        val title =
+            if (mod != null && LocaleUtils.isChinese(context)) mod.getDisplayName() else remoteMod.title
+        return if (downloadPage.pageId == DownloadUI.PAGE_ID_DOWNLOAD_MOD && modIdList.contains(remoteMod.modID)) {
+            "[${context.getString(R.string.installed)}] $title"
+        } else {
+            title
+        }
+    }
+
+    /** 来源徽标配色：主题次色实底 + 亮度对比色文字与平台 LOGO（换肤回调与首次 bind 共用） */
+    private fun applySourceBadgeStyle(badge: FCLTextView, remoteMod: RemoteMod) {
+        val color = ThemeEngine.getInstance().getTheme().getColor2()
+        val contentColor =
+            if (ColorUtils.calculateLuminance(color) >= 0.5f) Color.BLACK else Color.WHITE
+        val background = GradientDrawable()
+        background.shape = GradientDrawable.RECTANGLE
+        background.cornerRadius = context.resources.displayMetrics.density * 16
+        background.setColor(color)
+        val logo = ContextCompat.getDrawable(
+            context,
+            if (remoteMod.data is CurseAddon) R.drawable.img_platform_curseforge else R.drawable.img_platform_modrinth
+        )!!
+        logo.mutate().setTint(contentColor)
+        // PNG 原图 102×102，compound drawable 不缩放，须显式 bounds（与 Zalith 的 iconSize 12dp 一致）
+        val logoSize = (context.resources.displayMetrics.density * 12).toInt()
+        logo.setBounds(0, 0, logoSize, logoSize)
+        badge.background = background
+        badge.setTextColor(contentColor)
+        badge.setCompoundDrawablesRelative(logo, null, null, null)
     }
 
     override fun getItemCount(): Int {

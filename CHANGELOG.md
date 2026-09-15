@@ -1,5 +1,173 @@
 # Changelog
 
+## [1.3.3.2] - 2026-09-13
+
+### 中文
+
+#### ✨ 新功能
+
+1. **游戏内复述功能恢复（TTS）**：libflite 桥接安卓系统 TTS，游戏复述改走系统语音引擎
+2. **原生 JSound**：原生 libjsound.so 桥接 OpenAL，一套源码服务 jre8/17/21/25，修复 Forge 加载器下 Java Sound 失效
+3. **控制布局编辑与运行时增强**：控件双角手柄缩放、悬浮操作栏、控件组管理面板与控件组复制、滑动链、摇杆死区与前进锁、全局控件不透明度
+4. **控件编辑器重构为 Kotlin**：全面对齐游戏菜单视觉，修复吸附与编辑条问题，新增控件组复制
+5. **游戏内右菜单重构**：顶部图标 Tab 直接显示分类内容；物品栏缩放移入手势页、控件不透明度移入左菜单、锁定/隐藏控件移入调试页
+6. **渲染器版本上限调整**：判断/展示双轨版本号与 26.3 版本目录，修正各渲染器版本适配情况
+
+#### ⚡ 优化
+
+1. **解除帧率锁定**：游戏帧率不再锁定屏幕刷新率，启动时向系统投票设备最高刷新率；关闭垂直同步时交换间隔强制置 0 并切入 BufferQueue 异步模式
+2. **JNA natives 分架构打包**：去 zip 化，改为分架构 natives 目录并随 APK 架构裁剪打包
+3. **FCLNumberSeekBar 重构为 Kotlin**：轨道加粗为胶囊条、数值文本去除底衬，修复两端点击热区与显示位置不一致
+4. **皮肤模型细节**：缩小腰部接缝间隙
+5. **下载管理面板样式调整**
+
+#### 🐛 修复
+
+1. 修复游戏内无法解析 SRV 记录的问题
+2. 修复使用 zink 启动 26.3+ 时无法自动回退 Vulkan
+3. 修复 lwjgl-sdl 并入合并产物后与 Forge 模块解析的 split package 冲突
+4. 修复插件卸载缺少 REQUEST_DELETE_PACKAGES 权限导致系统卸载器立即退出
+5. 修复模组更新保留旧版本时切换后崩溃
+6. 修复熄屏状态下打开启动器可能崩溃
+7. 修复主题色带透明度时 ltColor/dkColor 透明度不跟随
+8. 修复 ViewPager2 布局时误清输入框焦点导致的输入异常（FCLEditText 增加焦点恢复守卫）
+9. 修复下载模组列表已安装标记不实时刷新：扫描完成后通知列表、下载成功回调触发重检、payload 局部绑定避免动画重播
+
+#### 🔧 其他
+
+1. 更新多语言翻译
+
+### English
+
+#### ✨ New Features
+
+1. **In-game narration restored (TTS)**: libflite now bridges Android system TTS, so game narration uses the system speech engine
+2. **Native JSound**: Native libjsound.so bridging OpenAL, one set of sources serving jre8/17/21/25, fixing Java Sound failures under the Forge loader
+3. **Control layout editing and runtime enhancements**: Dual-corner handle scaling, floating action bar, control group management panel with group duplication, sliding chains, joystick dead zone and forward lock, global control opacity
+4. **Control editor rewritten in Kotlin**: Fully aligned with the in-game menu visuals, fixed snapping and editing bar issues, added control group duplication
+5. **In-game right menu rework**: Top icon tabs now show category content directly; hotbar scale moved to the gestures page, control opacity to the left menu, and lock/hide controls to the debug page
+6. **Renderer version limits adjusted**: Dual-track version numbers for checking/display plus a 26.3 version catalog, with renderer compatibility corrected
+
+#### ⚡ Improvements
+
+1. **Frame rate unlocked**: The game frame rate is no longer locked to the screen refresh rate — the launcher votes for the device's maximum refresh rate at startup; with vsync off the swap interval is forced to 0 and the BufferQueue switches to async mode
+2. **Per-ABI JNA natives packaging**: De-zipped, switched to per-ABI natives directories pruned together with the APK architecture
+3. **FCLNumberSeekBar rewritten in Kotlin**: Track thickened into a capsule bar, value text background removed, and mismatched edge click hotspots/display positions fixed
+4. **Skin model detail**: Narrowed the waist seam gap
+5. **Download manager panel style refresh**
+
+#### 🐛 Bug Fixes
+
+1. Fixed SRV record resolution failing in game
+2. Fixed failing to fall back to Vulkan when launching 26.3+ with zink
+3. Fixed the split package conflict between the merged lwjgl-sdl artifact and Forge module resolution
+4. Fixed plugin uninstall exiting immediately due to the missing REQUEST_DELETE_PACKAGES permission
+5. Fixed a crash when switching mods kept as old versions after an update
+6. Fixed a possible crash when opening the launcher while the screen is off
+7. Fixed ltColor/dkColor alpha not following when the theme color has transparency
+8. Fixed input anomalies caused by ViewPager2 layout clearing EditText focus (FCLEditText now guards focus restoration)
+9. Fixed installed badges in the mod download list not refreshing in real time: the list is notified after scanning, download success callbacks trigger a re-check, and payload-based partial binding avoids animation replays
+
+#### 🔧 Other
+
+1. Updated translations
+
+## [1.3.3.1] - 2026-09-08
+
+### 中文
+
+#### ✨ 新功能
+
+1. **SDL3 集成**：集成 SDL3 输入/渲染，支持启动 Minecraft 26.3+；SDL 直通输入不再落入按键映射层
+2. **插件管理功能**：设置页新增「插件管理」，统一扫描管理渲染器/驱动/native 库插件，支持禁用持久化；新增 RendererPlugin V2 支持与插件环境变量配置；插件管理页置顶 MioLibPatcher 管理项，支持启用/禁用与功能开关（配置对话框改 v2 风格，Sable Rapier 默认开启）
+3. **皮肤 3D 预览重构**：改用 GLTF 模型 + 烘焙动画 + 体素化第二层
+4. **手柄输入对齐**：首次手柄输入弹窗选择模式；「禁用手柄映射」改为「手柄控制」总开关（持久化，关闭时禁用模式选择）
+5. **JSound 集成**：javax.sound → OpenAL 桥接集成到 lwjgl 共享源码，提升游戏音频兼容性
+6. **控件转换器**：改用纯 Kotlin 实现并支持导入 ZL2 布局
+7. **待机动画随机插播变体**：基础待机 8~15 秒后插播一个变体（避开上一次，播完回待机）
+8. **游戏内菜单卡片化**：左右菜单条目卡片化，抽公共 MenuUi 卡片背景与间距
+9. **下载页分类 tab 图标**：分类 tab 添加图标，并调整下载管理面板样式
+10. **FCLSpinner 重写为自定义 View**：修复滑动页面指示器错乱与 listener 伪回调；文字随主题色着色（浅底对话框场景可关闭）；展开时箭头旋转 180° 过渡，选项弹窗增加下落淡入/上滑淡出动画
+11. **语言切换新增**：日语、土耳其语、繁体中文（台湾）
+
+#### ⚡ 优化
+
+1. **Fabric 下载列表加载速度**：优化列表构建性能，缩短加载等待
+2. **控制数据序列化改手写 JSON**：全面消除 Gson 递归解析；控制器保存任务合并，避免序列化任务风暴
+3. **版本列表分类指示器**：改为 TabLayout 并自适应铺满
+4. **选择类弹窗统一**：统一为 ItemSelectionDialog 卡片式风格；渲染器选择对话框改用卡片 item，统一行高并新增来源显示（内置/插件名），无版本范围时显示未知
+5. **统一游戏日志分享逻辑**：附带 hs_err 崩溃日志并脱敏 accessToken
+6. **IO 线程池扩容**：Schedulers.io() 线程数 4 调整为 8
+7. **Turnip 驱动加载重写**：改为命名空间方案，提升驱动加载兼容性
+
+#### 🐛 修复
+
+1. 修复 SDL 函数经 dlsym 解析绕过 hook 导致的窗口复用不生效（解析出口改用代理）
+2. 修复 SDL_EGL_LIBRARY 对系统 EGL 错误拼接启动器 native 路径
+3. 修复导出 MCBBS 整合包因文件过多导致的 Out Of Memory
+4. 修复皮肤预览渲染线程退出时 Choreographer 死线程崩溃
+5. 修复联机对话框节点列表阻塞点击响应（改独立线程获取）
+6. 修复插件 v2 环境变量配置不持久的问题
+7. 修复崩溃页背景不随亮暗模式切换，暗色模式下背景与文字同色无法看清
+8. 修复 RendererEnvDialog 的 FCLSpinner 深色模式文字与对话框背景同色
+9. 修复检查更新时间戳比较精度不一致导致的首次误报（统一秒级精度）
+
+#### 🔧 其他
+
+1. 新增控制数据序列化回归测试
+2. 接入 checkstyle 静态检查与 PR 自动评论机器人（规则适配现状）
+3. 启用 core library desugaring，兼容 Java 9+ stdlib API
+4. 删除「强制渲染器在大核上运行」功能
+5. 更新 MioLibPatcher
+6. 更新多语言翻译
+
+### English
+
+#### ✨ New Features
+
+1. **SDL3 integration**: Integrated SDL3 input/rendering to support launching Minecraft 26.3+; SDL direct input no longer falls into the key-mapping layer
+2. **Plugin manager**: New "Plugin management" in settings, scanning and managing renderer/driver/native plugins in one place with persisted enable/disable state; RendererPlugin V2 and per-plugin environment variable support; MioLibPatcher pinned to the top of the plugin page with enable/disable and feature toggles (config dialog restyled to v2, Sable Rapier enabled by default)
+3. **Skin 3D preview rebuilt**: GLTF model + baked animations + voxelized overlay layer
+4. **Gamepad input alignment**: Mode-selection prompt on first gamepad input; "disable gamepad mapping" replaced by a "gamepad control" master switch (persisted, disables mode selection when off)
+5. **JSound integration**: javax.sound → OpenAL bridge integrated into the lwjgl shared sources for better in-game audio compatibility
+6. **Control converter**: Rewritten in pure Kotlin with support for importing ZL2 layouts
+7. **Idle animation variants**: A random variant is inserted after 8–15 seconds of base idle (avoiding the previous one, returning to idle when finished)
+8. **In-game menu cards**: Left/right menu items are now card-styled, with a shared MenuUi card background and spacing
+9. **Download page category tab icons**: Category tabs now show icons, and the download manager panel style is refreshed
+10. **FCLSpinner rewritten as a custom view**: Fixed sliding indicator glitches and fake listener callbacks; text now tints with the theme (can be disabled on light-background dialogs); 180° arrow rotation when expanded, plus drop/fade window transition animations for the option popup
+11. **New languages**: Japanese, Turkish and Traditional Chinese (Taiwan)
+
+#### ⚡ Improvements
+
+1. **Fabric download list speed**: Optimized list building for shorter waits
+2. **Hand-written JSON for control data serialization**: Gson recursive parsing fully removed; controller save tasks merged to avoid serialization task storms
+3. **Version list category indicator**: Migrated to TabLayout, filling the width adaptively
+4. **Unified selection dialogs**: ItemSelectionDialog card-based style; the renderer selection dialog now uses card items with unified row height and a source column (built-in/plugin name), showing "unknown" when no version range exists
+5. **Unified game log sharing**: hs_err crash logs are attached and access tokens are sanitized
+6. **IO thread pool expanded**: Schedulers.io() thread count raised from 4 to 8
+7. **Turnip driver loading rewritten**: Namespace-based scheme for better driver loading compatibility
+
+#### 🐛 Bug Fixes
+
+1. Fixed SDL window reuse not taking effect because dlsym-resolved functions bypassed hooks (proxy at the resolution exit)
+2. Fixed SDL_EGL_LIBRARY wrongly appending the launcher native path to the system EGL
+3. Fixed Out Of Memory when exporting MCBBS modpacks with too many files
+4. Fixed a Choreographer dead-thread crash when the skin preview render thread exits
+5. Fixed the multiplayer dialog node list blocking click response (now fetched on a dedicated thread)
+6. Fixed plugin v2 environment variable configuration not persisting
+7. Fixed the crash page background not following light/dark mode, leaving text unreadable in dark mode
+8. Fixed FCLSpinner text in RendererEnvDialog matching the dialog background in dark mode
+9. Fixed false update prompts caused by inconsistent timestamp precision (now compared at second precision)
+
+#### 🔧 Other
+
+1. Added regression tests for control data serialization
+2. Introduced checkstyle static checks with a PR auto-comment bot (rules adapted to the current codebase)
+3. Enabled core library desugaring for Java 9+ stdlib API compatibility
+4. Removed the "force renderer onto big cores" feature
+5. Updated MioLibPatcher
+6. Updated translations
+
 ## [1.3.3.0] - 2026-09-02
 
 ### 中文

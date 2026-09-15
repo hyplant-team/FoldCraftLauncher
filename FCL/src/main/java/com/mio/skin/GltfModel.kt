@@ -16,7 +16,7 @@ import java.nio.ByteOrder
  * 模型为刚体层级（部件挂点旋转带动子网格），与逐部件矩阵渲染同构：
  * 绘制时按节点树深度优先遍历，世界矩阵 = 父世界 × 节点局部（T·R·S）。
  * 加载时统一预缩放（模型单位 = 1/16 MC 像素 → 像素单位）并把模型平移到
- * 以原点为中心（对齐相机的固定距离公式），非腿部部件整体抬高 1 像素
+ * 以原点为中心（对齐相机的固定距离公式），非腿部部件整体抬高
  * （复刻 3D Skin Layers 的偏移校正，同 Axolotl）。
  *
  * 烘焙动画（[GltfClip]）按 GLTF 规范以 LINEAR 插值绝对覆写节点局部平移/旋转，
@@ -201,17 +201,36 @@ class GltfModel private constructor() {
     private var currentClip: GltfClip? = null
     private var time = 0f
 
+    /** 当前 clip 的累计经过时间（不取模，用于检测循环回绕） */
+    private var elapsed = 0f
+
     private val tempMatrix = FloatArray(16)
 
     // ---- 对外 API ----
 
     fun findClip(id: String): GltfClip? = clips.firstOrNull { it.name == id }
 
+    /** 当前 clip 的播放时间（无 clip 时为 0） */
+    fun clipTime(): Float = time
+
+    /**
+     * 判断当前 clip 是否已完整播放过一轮：循环播放 time 对 duration 取模会回绕到 0，
+     * 用累计经过时间与播放时间比较检测回绕（首次调用时经过时间尚未积累，恒为 false）。
+     */
+    fun clipElapsedAtLeast(clipId: String): Boolean {
+        val clip = currentClip ?: return false
+        if (clip.name != clipId || clip.duration <= 0f) {
+            return false
+        }
+        return elapsed >= clip.duration
+    }
+
     /** 切换动画：全部节点恢复 rest 后由新 clip 驱动；未知 id 返回 false */
     fun playAnimation(id: String): Boolean {
         val clip = findClip(id) ?: return false
         currentClip = clip
         time = 0f
+        elapsed = 0f
         nodes.forEach { it.resetPose() }
         return true
     }
@@ -219,6 +238,7 @@ class GltfModel private constructor() {
     fun update(deltaSeconds: Float) {
         val clip = currentClip
         if (clip != null) {
+            elapsed += deltaSeconds
             time = (time + deltaSeconds) % clip.duration
             for (channel in clip.channels) {
                 channel.apply(time)
@@ -376,7 +396,7 @@ class GltfModel private constructor() {
         nodes.forEach { it.rebuildLocalMatrix() }
         nodes.forEach { node ->
             if (node.name in LIFT_NODES) {
-                node.restTranslation[1] += 1f
+                node.restTranslation[1] += UPPER_BODY_LIFT
             }
         }
         collectDrawOrder(rootNodes)
@@ -411,7 +431,7 @@ class GltfModel private constructor() {
                 readIndices(accessors, prim.getInt("indices"), buffer, views)
             )
             if (mesh.name?.endsWith("_Layer") == true) {
-                mesh.layerDefinition = layerDefinition(mesh.name!!, isSlim)
+                mesh.layerDefinition = layerDefinition(mesh.name, isSlim)
             }
             for (k in 0 until 3) {
                 var axisMin = Float.MAX_VALUE
@@ -528,7 +548,14 @@ class GltfModel private constructor() {
         private const val CAPE_MATERIAL = "cape"
         private const val COMPONENT_FLOAT = 5126
 
-        /** 整体抬高 1 像素的非腿部部件节点（复刻 Axolotl 对该模型的校正） */
+        /**
+         * 非腿部部件相对腿部的抬高量（像素）：抬高用于分隔腰部共面接缝防闪烁，
+         * 但待机动画躯干下沉 0.64px、变体腿部前缘抬升 0.17px，取值过小会在动画中
+         * 重新贴面——该值保证基础待机全程不接触，变体仅余瞬时擦过。
+         */
+        private const val UPPER_BODY_LIFT = 0.75f
+
+        /** 整体抬高的非腿部部件节点（复刻 Axolotl 对该模型的校正） */
         private val LIFT_NODES = setOf("Head", "Right_Arm", "Left_Arm", "Body_2", "Body_Layer", "Cape")
 
         private val IDENTITY_MATRIX = FloatArray(16).also { Matrix.setIdentityM(it, 0) }

@@ -28,8 +28,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.mio.ui.adapter.SpacingItemDecoration;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.activity.MainActivity;
-import com.tungsten.fcl.databinding.PageSettingLauncherBinding;
-import com.tungsten.fcl.setting.DownloadProviders;
+import com.tungsten.fcl.databinding.PageSettingListBinding;
+import com.tungsten.fcl.setting.DownloadSource;
 import com.tungsten.fcl.upgrade.UpdateChecker;
 import com.tungsten.fcl.util.RuntimeUtils;
 import com.tungsten.fclcore.mod.RemoteModCache;
@@ -66,7 +66,7 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
     private SharedPreferences sharedPreferences;
 
     public LauncherSettingPage(Context context, int id) {
-        super(context, id, R.layout.page_setting_launcher);
+        super(context, id, R.layout.page_setting_list);
     }
 
     public void clearCacheDirs() {
@@ -80,7 +80,7 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
     public void onCreate() {
         super.onCreate();
         sharedPreferences = getActivity().getSharedPreferences("launcher", MODE_PRIVATE);
-        PageSettingLauncherBinding binding = PageSettingLauncherBinding.bind(getContentView());
+        PageSettingListBinding binding = PageSettingListBinding.bind(getContentView());
         LauncherSettingAdapter adapter = new LauncherSettingAdapter(getContext(), this);
         binding.settingList.setLayoutManager(new LinearLayoutManager(getContext()));
         // 行间用间距分隔（ItemDecoration），最后一行不加；同组相邻行留 1dp 缝并绘制次要色分割线
@@ -91,6 +91,7 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
         binding.settingList.addItemDecoration(new SpacingItemDecoration(rowSpacing,
                 (parent, position) -> ((LauncherSettingAdapter) parent.getAdapter()).isNextInSameGroup(position)
                         ? finalGroupDivider : finalRowSpacing,
+                true,
                 () -> ThemeEngine.getInstance().getTheme().getColor()));
         // 主题切换时重绘分割线颜色
         ThemeEngine.getInstance().registerEvent(
@@ -112,7 +113,7 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("ignore_update", -1);
                 editor.putInt("ignore_announcement", -1);
-                editor.putBoolean("is_first_launch", true);
+                editor.putBoolean("isFirstLaunch", true);
                 editor.apply();
                 if (!UpdateChecker.getInstance().isChecking()) {
                     UpdateChecker.getInstance().checkManually(getContext()).whenComplete(Schedulers.androidUIThread(), e -> {
@@ -364,7 +365,9 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
         }
     }
 
-    /** 从指定背景提取主要主题色（muted；与当前色相同时换 lightVibrant 保证可见变化） */
+    /**
+     * 从指定背景提取主要主题色（muted；与当前色相同时换 lightVibrant 保证可见变化）
+     */
     private void fetchPrimaryColor(BitmapDrawable background, int currentColor, IntConsumer applyAndSave) {
         Bitmap bitmap = background.getBitmap();
         if (bitmap == null) return;
@@ -377,7 +380,9 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
         applyAndSave.accept(color);
     }
 
-    /** 从指定背景提取次要主题色（vibrant） */
+    /**
+     * 从指定背景提取次要主题色（vibrant）
+     */
     private void fetchSecondaryColor(BitmapDrawable background, IntConsumer applyAndSave) {
         Bitmap bitmap = background.getBitmap();
         if (bitmap == null) return;
@@ -462,11 +467,11 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
                 // 亮暗切换需显式刷新主题控件与背景（ThemeEngine.isNightMode 读 themeMode 设置）
                 ThemeEngine.getInstance().refreshTheme();
                 break;
-            case SPINNER_SOURCE_AUTO:
-                config().versionListSourceProperty().set(new ArrayList<>(DownloadProviders.providersById.keySet()).get(position));
+            case SPINNER_VERSION_LIST_SOURCE:
+                config().setVersionListSource(toDownloadSourceName(position));
                 break;
-            case SPINNER_SOURCE:
-                config().downloadTypeProperty().set(new ArrayList<>(DownloadProviders.rawProviders.keySet()).get(position));
+            case SPINNER_FILE_DOWNLOAD_SOURCE:
+                config().setFileDownloadSource(toDownloadSourceName(position));
                 break;
             default:
                 break;
@@ -495,12 +500,17 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
         }
     }
 
+    private static String toDownloadSourceName(int position) {
+        return switch (position) {
+            case 1 -> DownloadSource.OFFICIAL.name();
+            case 2 -> DownloadSource.MIRROR.name();
+            default -> DownloadSource.DEFAULT.name();
+        };
+    }
+
     @Override
     public void onCheckToggle(LauncherSettingTag tag, boolean checked) {
         switch (tag) {
-            case CHECK_AUTO_SOURCE:
-                config().autoChooseDownloadTypeProperty().set(checked);
-                break;
             case CHECK_AUTO_THREADS:
                 config().autoDownloadThreadsProperty().set(checked);
                 if (checked) {

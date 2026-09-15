@@ -8,10 +8,6 @@
     <string name="splash_permission_settings">Настройки</string>
     <string name="splash_permission_settings_msg">Вы выбрали Запретить. Разрешите доступ к хранилищу в настройках вручную.</string>
     <string name="notification_permission">FCL требуется разрешение на отправку уведомлений, чтобы избежать проблем с установкой и запуском игры.</string>
-    <string name="splash_loading_renderer">Инициализация рендерера...</string>
-    <string name="splash_loading_java">Инициализация Java...</string>
-    <string name="splash_loading_config">Загрузка конфигурации и версий...</string>
-    <string name="splash_loading_cache">Очистка кэша...</string>
     <string name="splash_title">Добро пожаловать в Fold Craft Launcher</string>
     <string name="splash_eula_error">Не удалось подтвердить наличие лицензии из-за проблем с соединением.</string>
     <string name="splash_eula_next">Принять и продолжить</string>
@@ -276,6 +272,7 @@
     <string name="edit_button_text">Текст на кнопке</string>
     <string name="edit_button_event_follow">Пропускать касание</string>
     <string name="edit_button_event_movable">Перемещаемая кнопка</string>
+    <string name="edit_button_event_swipable">Свайп-цепочка</string>
     <string name="edit_button_event_press">Нажать</string>
     <string name="edit_button_event_long_press">Долгое нажатие</string>
     <string name="edit_button_event_click">Нажмите</string>
@@ -299,6 +296,9 @@
     <string name="edit_direction_event_left">Левая кнопка</string>
     <string name="edit_direction_event_right">Правая кнопка</string>
     <string name="edit_direction_event_follow">Стик</string>
+    <string name="edit_direction_event_dead_zone">Мертвая зона</string>
+    <string name="edit_direction_event_can_lock">Фиксация вперёд</string>
+    <string name="edit_direction_event_lock_threshold">Порог фиксации</string>
     <string name="edit_direction_event_follow_fix">Фиксированный</string>
     <string name="edit_direction_event_follow_center">Полудинамичный</string>
     <string name="edit_direction_event_follow_always">Динамический</string>
@@ -424,6 +424,7 @@
     <string name="menu_controls_current">Текущее управление</string>
     <string name="menu_controls_edit_mode">Режим редактирования</string>
     <string name="menu_controls_show_boundary">Показать границы кнопок</string>
+    <string name="menu_controls_edit_hint">Коснитесь для выбора, перетащите для перемещения, потяните за угловые маркеры для изменения размера</string>
     <string name="menu_controls_hide_all">Скрыть все элементы</string>
     <string name="menu_controls_auto_fit">Автонастройки позиции</string>
     <string name="menu_controls_auto_fit_dist">Автонастройка расстояния до позиции</string>
@@ -496,6 +497,7 @@
     <string name="menu_settings_item_bar_scale">Размер панели предметов</string>
     <string name="menu_settings_item_bar_scale_width">Размер панели предметов (ширина)</string>
     <string name="menu_settings_item_bar_scale_height">Размер панели предметов (высота)</string>
+    <string name="menu_settings_controls_opacity">Непрозрачность кнопок</string>
     <string name="menu_settings_show_log">Показать лог</string>
     <string name="menu_settings_show_log_auto">Автопоказ лога</string>
     <string name="menu_settings_performance_mode">Режим стабильной производительности</string>
@@ -709,8 +711,8 @@
     <string name="settings_fcl_controller">Контроллер</string>
     <string name="settings_fcl_vulkan_driver_system">Использовать системные драйверы Vulkan</string>
     <string name="settings_fcl_renderer">Реализация OpenGL (рендерер)</string>
-    <string name="settings_fcl_renderer_vgpu">VGPU (OpenGL 2.1+, только 1.17-)</string>
-    <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, только для GPU a616-a660)</string>
+    <string name="settings_fcl_renderer_vgpu">VGPU (OpenGL 2.1+)</string>
+    <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, только для adreno616-660)</string>
     <string name="settings_fcl_driver">Драйвер Vulkan</string>
     <string name="settings_download_netdisk">NetDisk (рекомендуется для пользователей в Китае)</string>
     <string name="settings_game">Настройки игры</string>
