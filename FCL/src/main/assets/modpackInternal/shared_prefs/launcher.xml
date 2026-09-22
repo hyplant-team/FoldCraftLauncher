@@ -11,7 +11,7 @@
     <boolean name="allowScreenshots" value="true" />
     <boolean name="disableFullscreenInput" value="true" />
     <boolean name="check_notification_permission" value="true" />
-    <boolean name="show_jarExecutor_warn_dialog" value="true" />
+    <boolean name="showJarExecutorWarnDialog" value="true" />
     <string name="custom_launcher_name" value="" />
     <string name="env" value="" />
 </map>

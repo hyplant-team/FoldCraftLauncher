@@ -216,8 +216,6 @@ object Profiles {
 
     @JvmStatic
     fun registerVersionsListener(listener: Consumer<Profile>) {
-        val profile = getSelectedProfile()
-        if (profile.repository.isLoaded) listener.accept(profile)
         versionsListeners.add(listener)
     }
 

@@ -48,8 +48,6 @@ class VersionSetting : Cloneable {
      * 1. Global settings.
      * 2. Version settings.
      * If a version claims that it uses global settings, its version setting will be disabled.
-     *
-     * Defaults false because if one version uses global first, custom version file will not be generated.
      */
     var isUsesGlobal: Boolean = true
         set(value) {

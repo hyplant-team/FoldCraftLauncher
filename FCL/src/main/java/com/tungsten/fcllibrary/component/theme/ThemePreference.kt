@@ -26,7 +26,8 @@ data class ThemePreference(
     val color2Dark: Int = Color.parseColor(FCLPath.Prop.getProperty("default-theme-second-color-dark", "#FFFFFF")),
     val fullscreen: Boolean = FCLPath.Prop.getProperty("default-fullscreen", "false").equals("true"),
     val closeSkinModel: Boolean = FCLPath.Prop.getProperty("default-close-skin-model", "false").equals("true"),
-    val animationSpeed: Int = ConvertUtils.getIntFromStr(FCLPath.Prop.getProperty("default-animation-speed", "0"))
+    val animationSpeed: Int = ConvertUtils.getIntFromStr(FCLPath.Prop.getProperty("default-animation-speed", "0")),
+    val colorAlpha: Int = ConvertUtils.getIntFromStr(FCLPath.Prop.getProperty("default-color-alpha", "255"))
 )
 
 val Context.themeDataStore: DataStore<ThemePreference> by dataStore(

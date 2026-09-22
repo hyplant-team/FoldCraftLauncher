@@ -24,6 +24,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
     id("checkstyle")
 }
 
@@ -77,8 +78,8 @@ android {
         applicationId = pkgName
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1332
-        versionName = "1.3.3.2"
+        versionCode = 1333
+        versionName = "1.3.3.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
@@ -262,6 +263,11 @@ kotlin {
     }
 }
 
+// Room schema 导出（收藏库用，为将来迁移留底）
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
@@ -298,6 +304,9 @@ dependencies {
     implementation(libs.segmented.button)
     implementation(libs.datastore)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation(libs.androidx.test.runner)

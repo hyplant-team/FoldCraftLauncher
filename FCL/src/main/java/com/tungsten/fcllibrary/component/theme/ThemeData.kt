@@ -38,6 +38,8 @@ data class ThemeData(
     @get:JvmName("isCloseSkinModel")
     val closeSkinModel: Boolean,
     val animationSpeed: Int,
+    /** 派生色（ltColor/dkColor）透明度，独立于主色 alpha */
+    val colorAlpha: Int,
     val backgroundLt: BitmapDrawable,
     val backgroundDk: BitmapDrawable
 ) {
@@ -85,7 +87,7 @@ data class ThemeData(
             hsv[1] += (1 - hsv[1]) * 0.3f
             hsv[2] -= (1 - hsv[2]) * 0.3f
         }
-        return Color.HSVToColor(Color.alpha(base), hsv)
+        return Color.HSVToColor(colorAlpha, hsv)
     }
 
     companion object {
@@ -105,6 +107,7 @@ data class ThemeData(
             return ThemeData(
                 effective.color, effective.colorDark, effective.color2, effective.color2Dark,
                 effective.fullscreen, effective.closeSkinModel, effective.animationSpeed,
+                effective.colorAlpha,
                 BitmapDrawable(context.resources, lt),
                 BitmapDrawable(context.resources, dk)
             )
@@ -146,7 +149,8 @@ data class ThemeData(
                             color2Dark = theme.color2Dark,
                             fullscreen = theme.fullscreen,
                             closeSkinModel = theme.closeSkinModel,
-                            animationSpeed = theme.animationSpeed
+                            animationSpeed = theme.animationSpeed,
+                            colorAlpha = theme.colorAlpha
                         )
                     }
                 }

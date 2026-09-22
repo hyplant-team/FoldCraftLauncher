@@ -16,6 +16,8 @@ import android.opengl.EGLConfig
 import android.opengl.GLES20
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.PowerManager
 import android.provider.OpenableColumns
 import android.view.MotionEvent
