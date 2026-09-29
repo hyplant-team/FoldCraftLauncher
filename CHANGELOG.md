@@ -1,5 +1,95 @@
 # Changelog
 
+## [1.3.3.5] - 2026-09-25
+
+### 中文
+
+#### ✨ 新功能
+
+1. **兼容 lwjgl3ify，开箱即玩 GT New Horizons**：自动检测 mods 目录中的 lwjgl3ify 并合并内嵌 relauncher 配置（RetroFuturaBootstrap 主类、Java 版本要求、全套 --add-opens 参数与依赖闭包），合并幂等、lwjgl3ify 升级后自动重新合并，首次合并前自动备份原版本 JSON；内嵌库按来源重写 Maven 下载地址，forgePatches 构件从 jar 内离线还原；自动关闭桌面快捷方式生成，避免在 Android 上静默退出；版本设置强制 jre8 时提示切换 Auto 并建议 ≥4GB 内存
+2. **Legacy Fabric 加载器安装**：同步上游 HMCL，安装页新增 Legacy Fabric / Legacy Fabric API 条目，与 Fabric 按是否存在 net.legacyfabric 库互斥区分，兼容矩阵、依赖绑定与版本区间对齐上游；启动链路将 legacyfabric 归入 fabric 体系
+3. **世界存档能力同步上游**：世界列表条目新增世界图标与复制世界入口；支持 26.1 新存档格式（世界生成设置与玩家数据外置文件、难度设置等新字段）；新增 session.lock 锁检测，世界被占用时给出提示；NBT 读取支持 GZip / LZ4 Block 压缩自动检测
+4. **光影管理 tab**：管理页新增光影管理，扫描版本 shaderpacks 目录的 zip 与文件夹形式光影包，支持导入、搜索过滤、多选删除、长按重命名与详情弹窗，可跳转下载页光影 tab；启停由游戏内光影模组（Iris/OptiFine 等）完成
+5. **版本图标识别同步上游**：快照与预发布版显示命令方块图标
+
+#### ⚡ 优化
+
+1. **主题色透明度百分比显示**：透明度设置改以百分比呈现，更直观；FCLMenuView 选中色不再受主题透明度影响
+2. 精简资源包页属性初始化与世界列表过滤判空
+
+#### 🐛 修复
+
+1. 修复 jre25 下 AWT 回退 headless：cacio17 更新至 jdk25 修复版构建，依赖 java.awt.Font 的模组不再启动即崩
+2. 修复外接物理键盘输入重复：物理键盘字符随按键一次性下发
+3. 修复定制 ROM 上控制器仓库搜索框回车崩溃：补 imeOptions 搜索动作
+
+### English
+
+#### ✨ New Features
+
+1. **lwjgl3ify compatibility — GT New Horizons out of the box**: lwjgl3ify jars in the mods folder are detected automatically and their embedded relauncher config (RetroFuturaBootstrap main class, Java version requirement, the full --add-opens set and dependency closure) is merged into the instance version idempotently — re-merged after lwjgl3ify upgrades, with the original version JSON backed up before the first merge; embedded libraries get rewritten Maven sources, and the forgePatches artifact is restored offline from the jar; desktop-entry creation is disabled automatically to prevent silent exits on Android; a hint to switch to Auto (with ≥4GB RAM recommended) is shown when jre8 is forced
+2. **Legacy Fabric loader installation**: Synced from upstream HMCL — the install page gained Legacy Fabric / Legacy Fabric API entries, mutually exclusive with Fabric by the presence of net.legacyfabric libraries, with the compatibility matrix, dependency bindings and version ranges aligned upstream; the launch chain routes legacyfabric through the fabric system
+3. **World save capabilities synced from upstream**: World list entries now show world icons and a copy-world action; the new 26.1 save format is supported (external world-gen settings and player data files, new fields such as difficulty settings); session.lock detection warns when a world is in use; NBT reading auto-detects GZip / LZ4 Block compression
+4. **Shader pack management tab**: The manage page gained a shader tab that scans the version's shaderpacks folder (zip files and folders), supporting import, search filtering, multi-select deletion, long-press rename and a detail dialog, with a shortcut to the download page's shader tab; enabling/disabling is left to in-game shader mods (Iris/OptiFine, etc.)
+5. **Version icon recognition synced from upstream**: Snapshots and pre-release versions now show a command block icon
+
+#### ⚡ Improvements
+
+1. **Theme color transparency shown as a percentage**: More intuitive than raw values; the FCLMenuView selection color is no longer affected by theme transparency
+2. Simplified resource pack page property initialization and world list filtering null checks
+
+#### 🐛 Bug Fixes
+
+1. Fixed AWT falling back to headless on jre25: cacio17 updated to a JDK 25 fixed build, so mods depending on java.awt.Font no longer crash on launch
+2. Fixed duplicated input with external physical keyboards: physical keyboard characters are now sent together with key events in one pass
+3. Fixed a crash when pressing enter in the controller repository search box on custom ROMs: an imeOptions search action was added
+
+## [1.3.3.4] - 2026-09-23
+
+### 中文
+
+#### ✨ 新功能
+
+1. **下载页资源收藏与分组**：下载列表左滑即可收藏资源，支持自定义分组（管理入口为分组区扳手图标）、分组筛选、多选与批量一键下载
+2. **资源包管理页**：管理页新增资源包 tab，支持启用/禁用（写 options.txt）、导入、重命名、多选删除与搜索
+3. **版本卡片快速切换**：长按主界面版本卡片弹出版本快速切换菜单（右侧启动按钮可直接切换并启动），数据与版本列表页共享会话快照；另新增首次使用的点击卡片引导提示（仅显示一次）
+4. **皮肤模型开关**：新增 3D 皮肤层开关，禁用时第二层回落原版面片，状态随动画一起持久化；新增身体与腿部分离开关，关闭后上身贴合腿部
+
+#### ⚡ 优化
+
+1. **管理页与设置页 tab 图标化**：tab 标题旁显示对应图标，视觉更直观
+2. **FCLTabLayout 滑动指示箭头**：tab 栏可左右滑动时在对应边缘显示指示箭头，提示还有未展示的内容
+3. **控件转换器字段同步**：滑动联动与摇杆死区/前进锁字段支持双向映射
+
+#### 🐛 修复
+
+1. 修复 Cleanroom 字母键与聊天输入失效：补齐按键与字符事件成对发送
+2. 修复导入含 null 的控制器 JSON 保存时崩溃：控件数据反序列化全链空安全加固
+3. 修复新建控件组后因数据未标记加载完成而无法添加按键
+4. 修复下载与收藏列表标题过长时来源徽标被挤出可视区：标题行改用 ConstraintLayout 保证徽标固定行尾
+
+### English
+
+#### ✨ New Features
+
+1. **Download page favorites and groups**: Swipe left on download list items to favorite resources, with custom groups (manage via the wrench icon in the group area), group filtering, multi-select and one-tap batch download
+2. **Resource pack management page**: A new resource pack tab in the manage page supports enabling/disabling (writes options.txt), importing, renaming, multi-select deletion and search
+3. **Quick version switch on the version card**: Long-press the version card on the main screen to open a quick version switch menu (the button on the right switches and launches directly); the data shares a session snapshot with the version list page. A one-time guide hint for tapping the card was also added
+4. **Skin model toggles**: A new 3D skin layer toggle — disabling it falls the second layer back to vanilla faces, with the state persisted alongside animations; a new body/leg separation toggle — when off, the upper body fits onto the legs
+
+#### ⚡ Improvements
+
+1. **Icons on manage and setting page tabs**: Tabs now show an icon next to the title for quicker recognition
+2. **FCLTabLayout scroll indicator arrows**: When the tab bar can scroll left/right, indicator arrows appear at the corresponding edge to hint at hidden content
+3. **Control converter field sync**: Swipe-chain linkage and joystick dead zone / forward-lock fields now support two-way mapping
+
+#### 🐛 Bug Fixes
+
+1. Fixed Cleanroom letter keys and chat input not working: key and character events are now sent in pairs
+2. Fixed crashes when saving imported controller JSON containing nulls: null-safety hardening across the whole control-data deserialization chain
+3. Fixed being unable to add keys after creating a new control group (the data was not marked as loaded)
+4. Fixed the source badge being squeezed out of view on long download/favorite list titles: the title row now uses ConstraintLayout to keep the badge pinned to the end of the line
+
 ## [1.3.3.3] - 2026-09-18
 
 ### 中文

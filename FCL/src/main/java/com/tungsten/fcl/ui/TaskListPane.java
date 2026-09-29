@@ -19,6 +19,8 @@ import com.tungsten.fclcore.download.forge.ForgeNewInstallTask;
 import com.tungsten.fclcore.download.forge.ForgeOldInstallTask;
 import com.tungsten.fclcore.download.game.GameAssetDownloadTask;
 import com.tungsten.fclcore.download.game.GameInstallTask;
+import com.tungsten.fclcore.download.legacyfabric.LegacyFabricAPIInstallTask;
+import com.tungsten.fclcore.download.legacyfabric.LegacyFabricInstallTask;
 import com.tungsten.fclcore.download.liteloader.LiteLoaderInstallTask;
 import com.tungsten.fclcore.download.neoforge.NeoForgeInstallTask;
 import com.tungsten.fclcore.download.neoforge.NeoForgeOldInstallTask;
@@ -27,10 +29,12 @@ import com.tungsten.fclcore.mod.MinecraftInstanceTask;
 import com.tungsten.fclcore.mod.ModpackInstallTask;
 import com.tungsten.fclcore.mod.ModpackUpdateTask;
 import com.tungsten.fclcore.mod.curse.CurseCompletionTask;
+import com.tungsten.fclcore.mod.curse.CurseForgeModpackExportTask;
 import com.tungsten.fclcore.mod.curse.CurseInstallTask;
 import com.tungsten.fclcore.mod.mcbbs.McbbsModpackCompletionTask;
 import com.tungsten.fclcore.mod.mcbbs.McbbsModpackExportTask;
 import com.tungsten.fclcore.mod.modrinth.ModrinthCompletionTask;
+import com.tungsten.fclcore.mod.modrinth.ModrinthModpackExportTask;
 import com.tungsten.fclcore.mod.modrinth.ModrinthInstallTask;
 import com.tungsten.fclcore.mod.multimc.MultiMCModpackExportTask;
 import com.tungsten.fclcore.mod.multimc.MultiMCModpackInstallTask;
@@ -140,6 +144,10 @@ public final class TaskListPane extends FCLAdapter {
                     task.setName(getContext().getString(R.string.install_installer_install, getContext().getString(R.string.install_installer_fabric)));
                 } else if (task instanceof FabricAPIInstallTask) {
                     task.setName(getContext().getString(R.string.install_installer_install, getContext().getString(R.string.install_installer_fabric_api)));
+                } else if (task instanceof LegacyFabricInstallTask) {
+                    task.setName(getContext().getString(R.string.install_installer_install, getContext().getString(R.string.install_installer_legacyfabric)));
+                } else if (task instanceof LegacyFabricAPIInstallTask) {
+                    task.setName(getContext().getString(R.string.install_installer_install, getContext().getString(R.string.install_installer_legacyfabric_api)));
                 } else if (task instanceof CurseCompletionTask || task instanceof ModrinthCompletionTask || task instanceof ServerModpackCompletionTask || task instanceof McbbsModpackCompletionTask) {
                     task.setName(getContext().getString(R.string.modpack_completion));
                 } else if (task instanceof ModpackInstallTask) {
@@ -156,7 +164,8 @@ public final class TaskListPane extends FCLAdapter {
                     task.setName(getContext().getString(R.string.modpack_install, getContext().getString(R.string.modpack_type_server)));
                 } else if (task instanceof HMCLModpackInstallTask) {
                     task.setName(getContext().getString(R.string.modpack_install, getContext().getString(R.string.modpack_type_hmcl)));
-                } else if (task instanceof McbbsModpackExportTask || task instanceof MultiMCModpackExportTask || task instanceof ServerModpackExportTask) {
+                } else if (task instanceof McbbsModpackExportTask || task instanceof MultiMCModpackExportTask || task instanceof ServerModpackExportTask
+                        || task instanceof CurseForgeModpackExportTask || task instanceof ModrinthModpackExportTask) {
                     task.setName(getContext().getString(R.string.modpack_export));
                 } else if (task instanceof MinecraftInstanceTask) {
                     task.setName(getContext().getString(R.string.modpack_scan));

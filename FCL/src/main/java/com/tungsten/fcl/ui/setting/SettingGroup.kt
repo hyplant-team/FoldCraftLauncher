@@ -11,6 +11,7 @@ sealed class SettingGroup {
     object Launcher : SettingGroup()
     object TouchController : SettingGroup()
     object Download : SettingGroup()
+    object Debug : SettingGroup()
 
     // 版本设置分组
     object Render : SettingGroup()

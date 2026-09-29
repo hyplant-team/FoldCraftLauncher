@@ -40,8 +40,9 @@ import com.mio.util.AnimUtil
 import com.mio.util.AnimUtil.Companion.interpolator
 import com.mio.util.AnimUtil.Companion.startAfter
 import com.mio.util.DisplayUtil
+import com.mio.util.GuideStep
+import com.mio.util.GuideTag
 import com.mio.util.GuideUtil
-import com.mio.util.GuideUtil.Companion.guideTarget
 import com.mio.util.ImageUtil
 import com.mio.util.getLocalizedText
 import com.mio.util.hasStringId
@@ -335,11 +336,28 @@ class MainActivity : FCLActivity(), OnSelectListener, View.OnClickListener {
                 setupAccountDisplay()
                 setupVersionDisplay()
                 playAnim()
-                uiLayout.postDelayed(1500) {
+                // 引导在入场动画播完后弹出；动画时长随 animationSpeed 缩放，最末组延迟 700ms。
+                // 顺序按视觉动线：右侧（账户/版本卡片/启动）→ 左侧菜单自上而下；
+                // account 步骤仅在没有账户时展示（添加过账户的用户无需引导）
+                val animationSpeed = ThemeEngine.getInstance().getTheme().animationSpeed
+                uiLayout.postDelayed((animationSpeed + 7) * 100L) {
                     GuideUtil.show(
                         activity = this@MainActivity,
-                        GuideUtil.TAG_GUIDE_THEME_2 to setting.guideTarget(title = getString(R.string.guide_theme2)),
-                        GuideUtil.TAG_GUIDE_SHARE_LOG to viewLogs.guideTarget(title = getString(R.string.guide_share_log))
+                        *buildList {
+                            add(GuideStep(GuideTag.Account, account, getString(R.string.guide_account)))
+                            add(GuideStep(GuideTag.VersionCard, versionCard, getString(R.string.guide_version_card)))
+                            add(GuideStep(GuideTag.Start, start, getString(R.string.guide_start)))
+                            add(GuideStep(GuideTag.Manage, manage, getString(R.string.guide_manage)))
+                            add(GuideStep(GuideTag.Download, download, getString(R.string.guide_download)))
+                            add(GuideStep(GuideTag.Multiplayer, multiplayer, getString(R.string.guide_multiplayer)))
+                            add(GuideStep(GuideTag.Theme2, setting, getString(R.string.guide_theme2)))
+                            add(GuideStep(GuideTag.Controller, controller, getString(R.string.guide_controller)))
+                            add(GuideStep(GuideTag.ShareLog, viewLogs, getString(R.string.guide_share_log)))
+                            add(GuideStep(GuideTag.Terminal, fclShell, getString(R.string.guide_terminal)))
+                            add(GuideStep(GuideTag.ExecJar, setting, getString(R.string.guide_exec_jar)))
+                            add(GuideStep(GuideTag.JvmCrashTest, home, getString(R.string.guide_jvm_crash_test)))
+                            add(GuideStep(GuideTag.CrashTest, back, getString(R.string.guide_crash_test)))
+                        }.toTypedArray()
                     )
                 }
             }

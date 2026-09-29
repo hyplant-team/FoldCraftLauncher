@@ -1,5 +1,6 @@
 package com.tungsten.fcl.control.data;
 
+import static com.tungsten.fcl.control.data.JsonElements.get;
 import static com.tungsten.fcl.util.FXUtils.onInvalidating;
 
 import com.google.gson.JsonDeserializationContext;
@@ -163,8 +164,9 @@ public class ControlButtonData implements Cloneable, Observable, CustomControl {
     @Override
     public CustomControl cloneView() {
         ControlButtonData clone = clone();
-        clone.getBaseInfo().setXPosition(0);
-        clone.getBaseInfo().setYPosition(0);
+        // 副本贴近原控件（偏移 2%），不与原控件完全重叠，也不落回左上角
+        clone.getBaseInfo().setXPosition(Math.min(1000, clone.getBaseInfo().getXPosition() + 20));
+        clone.getBaseInfo().setYPosition(Math.min(1000, clone.getBaseInfo().getYPosition() + 20));
         return clone;
     }
 
@@ -189,20 +191,21 @@ public class ControlButtonData implements Cloneable, Observable, CustomControl {
                 return null;
             JsonObject obj = (JsonObject) json;
 
-            ControlButtonData data = new ControlButtonData(Optional.ofNullable(obj.get("id")).map(JsonElement::getAsString).orElse(UUID.randomUUID().toString()));
+            ControlButtonData data = new ControlButtonData(Optional.ofNullable(get(obj, "id")).map(JsonElement::getAsString).orElse(UUID.randomUUID().toString()));
 
-            data.setText(Optional.ofNullable(obj.get("text")).map(JsonElement::getAsString).orElse(""));
+            data.setText(Optional.ofNullable(get(obj, "text")).map(JsonElement::getAsString).orElse(""));
             if (!ButtonStyles.isInitialized()) {
                 ButtonStyles.init();
             }
-            if (obj.get("style").toString().contains("\"name\"")) {
-                data.setStyle(new ControlButtonStyle.Serializer().deserialize(obj.get("style"), null, null));
+            JsonElement style = get(obj, "style");
+            if (style != null && style.toString().contains("\"name\"")) {
+                data.setStyle(new ControlButtonStyle.Serializer().deserialize(style, null, null));
                 ButtonStyles.addStyle(data.getStyle());
             } else {
-                data.setStyle(ButtonStyles.findStyleByName(obj.get("style").getAsString()));
+                data.setStyle(ButtonStyles.findStyleByName(style != null && style.isJsonPrimitive() ? style.getAsString() : ""));
             }
-            data.setBaseInfo(Optional.ofNullable(obj.get("baseInfo")).map(JsonElement::getAsJsonObject).map(baseInfo -> new BaseInfoData.Serializer().deserialize(baseInfo, null, null)).orElseGet(BaseInfoData::new));
-            data.setEvent(Optional.ofNullable(obj.get("event")).map(JsonElement::getAsJsonObject).map(event -> new ButtonEventData.Serializer().deserialize(event, null, null)).orElseGet(ButtonEventData::new));
+            data.setBaseInfo(Optional.ofNullable(get(obj, "baseInfo")).map(JsonElement::getAsJsonObject).map(baseInfo -> new BaseInfoData.Serializer().deserialize(baseInfo, null, null)).orElseGet(BaseInfoData::new));
+            data.setEvent(Optional.ofNullable(get(obj, "event")).map(JsonElement::getAsJsonObject).map(event -> new ButtonEventData.Serializer().deserialize(event, null, null)).orElseGet(ButtonEventData::new));
 
             return data;
         }

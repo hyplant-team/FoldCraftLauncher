@@ -1,0 +1,340 @@
+package com.tungsten.fcl.game;
+
+import static com.tungsten.fclcore.util.Logging.LOG;
+
+import com.google.gson.JsonObject;
+import com.tungsten.fclcore.download.MaintainTask;
+import com.tungsten.fclcore.game.Arguments;
+import com.tungsten.fclcore.game.Library;
+import com.tungsten.fclcore.game.Version;
+import com.tungsten.fclcore.mod.LocalModFile;
+import com.tungsten.fclcore.util.io.FileUtils;
+import com.tungsten.fclcore.util.io.IOUtils;
+import com.tungsten.fclcore.util.gson.JsonUtils;
+import com.tungsten.fclcore.util.versioning.VersionNumber;
+import com.tungsten.fclauncher.utils.FCLPath;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * GTNH(GT New Horizons) / lwjgl3ify 兼容层（参考 Amethyst-Android 的 LWJGL3ify 支持）。
+ * <p>
+ * lwjgl3ify 3.x 的 jar 内嵌了一份完整的 version.json（RetroFuturaBootstrap 主类、
+ * Java 17+ 的 --add-opens JVM 参数以及 Forge 1.7.10 全量依赖库）。
+ * 启动前检测实例 mods 目录中的 lwjgl3ify，将这份 version.json 合并进内存中的启动版本，
+ * 使其以 RFB 入口 + Java 17+ 启动，而不是原有的纯净 1.7.10 / Forge 版本。
+ * 合并结果不落盘：磁盘版本 JSON 始终保持纯净，补丁随 mods 目录自动生效或失效，
+ * 补丁依赖库的下载与校验由启动链现有的 checkGameCompletionAsync 按内存版本闭包完成。
+ * 代价是其他启动器无法直接启动打过补丁的实例（磁盘上没有 RFB 入口）。
+ * <p>
+ * 3.x 的内嵌 version.json 已为各库自带正确的下载地址；仅当个别库缺地址
+ * （旧版 lwjgl3ify）时按 groupId 重写 Maven 源兜底，并优先从 jar 内嵌的
+ * forgePatches.zip 还原 com.github.GTNewHorizons:lwjgl3ify:*:forgePatches（离线可用）。
+ * <p>
+ * 历史版本曾把合并结果落盘（并备份原 JSON 为 *.before-lwjgl3ify）；对这类存量实例，
+ * 移除 lwjgl3ify 后仍会从备份还原磁盘 JSON（见 {@link #restoreIfNeeded}）。
+ */
+public final class Lwjgl3ifyPatcher {
+
+    public static final String GTNH_MAVEN = FCLPath.Prop.getProperty("lwjgl3ify-gtnh-url","null://");
+    public static final String FORGE_MAVEN = FCLPath.Prop.getProperty("lwjgl3ify-forge-url","null://");
+
+    public static final String RFB_MAIN_CLASS_PREFIX = "com.gtnewhorizons.retrofuturabootstrap";
+    private static final String EMBEDDED_VERSION_JSON = "me/eigenraven/lwjgl3ify/relauncher/version.json";
+    private static final String EMBEDDED_FORGE_PATCHES = "me/eigenraven/lwjgl3ify/relauncher/forgePatches.zip";
+
+    private Lwjgl3ifyPatcher() {
+    }
+
+    /**
+     * 在启动流程最早处调用（MaintainTask 之后、Java 选择与依赖补全之前）。
+     * 仅改写内存版本对象，不修改磁盘版本 JSON。
+     * mods 为启动链已扫描的 mod 列表，null 时自行扫描。
+     */
+    public static void patchIfNeeded(@NotNull FCLGameRepository repository,
+                                     @NotNull String versionId,
+                                     @Nullable List<LocalModFile> mods,
+                                     @NotNull AtomicReference<Version> versionRef) {
+        try {
+            Version current = versionRef.get();
+            LocalModFile lwjgl3ifyMod = findLwjgl3ifyMod(repository, versionId, mods);
+            if (lwjgl3ifyMod == null) {
+                // 历史落盘补丁的存量实例：RFB 入口残留会让实例无法启动，从备份还原
+                restoreIfNeeded(repository, versionId, versionRef);
+                return;
+            }
+            File lwjgl3ifyJar = lwjgl3ifyMod.getFile().toFile();
+            LOG.log(Level.INFO, "Detected lwjgl3ify " + lwjgl3ifyMod.getVersion() + " in mods folder");
+
+            Version embedded;
+            try (ZipFile zip = new ZipFile(lwjgl3ifyJar)) {
+                embedded = readEmbeddedVersionJson(zip);
+                if (embedded == null) {
+                    LOG.log(Level.WARNING, lwjgl3ifyJar.getName() + " does not contain a valid lwjgl3ify relauncher version.json, skipping");
+                    return;
+                }
+                ensureForgePatchesFile(repository, embedded, current, zip);
+            }
+            ensureLwjgl3ifyConfig(new File(repository.getRunDirectory(versionId), "config"));
+
+            Version patched = patchVersion(current, embedded);
+            if (patched == null) return;
+
+            versionRef.set(patched);
+            LOG.log(Level.INFO, "Merged lwjgl3ify from " + lwjgl3ifyJar.getName() + " into in-memory version " + versionId
+                    + ", mainClass=" + patched.getMainClass()
+                    + ", java=" + (patched.getJavaVersion() == null ? null : patched.getJavaVersion().getMajorVersion()));
+        } catch (Throwable e) {
+            // 兼容失败不应阻断正常启动流程
+            LOG.log(Level.WARNING, "Failed to apply lwjgl3ify patch", e);
+        }
+    }
+
+    /**
+     * 历史落盘补丁的存量实例：版本仍为 RFB 入口且备份存在时，从备份还原版本 JSON。
+     * 还原后按启动链原有流程（resolve + MaintainTask.maintain）重建内存版本对象。
+     */
+    private static void restoreIfNeeded(FCLGameRepository repository, String versionId, AtomicReference<Version> versionRef) {
+        try {
+            File json = repository.getVersionJson(versionId);
+            File backup = new File(json.getParentFile(), json.getName() + ".before-lwjgl3ify");
+            if (!json.isFile() || !backup.isFile()) return;
+            Version disk = JsonUtils.fromNonNullJson(FileUtils.readText(json), Version.class);
+            if (disk.getMainClass() == null || !disk.getMainClass().startsWith(RFB_MAIN_CLASS_PREFIX)) return;
+            Files.copy(backup.toPath(), json.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            repository.reloadVersionFromDisk(versionId);
+            versionRef.set(MaintainTask.maintain(repository, repository.getResolvedVersion(versionId)));
+            LOG.log(Level.INFO, "lwjgl3ify no longer present, restored version " + versionId + " from " + backup.getName());
+        } catch (Throwable e) {
+            LOG.log(Level.WARNING, "Failed to restore version json from lwjgl3ify backup", e);
+        }
+    }
+
+    /**
+     * 从 mod 列表中取启用且版本最高的 lwjgl3ify（按 mcmod.info 的 modid 识别，改名不影响）。
+     * mods 为 null 时回退自行扫描。
+     */
+    @Nullable
+    private static LocalModFile findLwjgl3ifyMod(FCLGameRepository repository, String versionId,
+                                                 @Nullable List<LocalModFile> mods) throws IOException {
+        if (mods == null) mods = repository.getModManager(versionId).getMods();
+        LocalModFile result = null;
+        for (LocalModFile mod : mods) {
+            if (!"lwjgl3ify".equals(mod.getId()) || !mod.isActive()) continue;
+            if (result == null || VersionNumber.asVersion(mod.getVersion())
+                    .compareTo(VersionNumber.asVersion(result.getVersion())) > 0) {
+                result = mod;
+            }
+        }
+        return result;
+    }
+
+    /** Angelica 与 lwjgl3ify 同时启用时跳过渲染器版本警告（1.7.10 走 LWJGL3 渲染路径） */
+    public static boolean shouldSkipRendererCheck(@Nullable List<LocalModFile> mods) {
+        if (mods == null) return false;
+        boolean hasAngelica = false, hasLwjgl3ify = false;
+        for (LocalModFile mod : mods) {
+            if (!mod.isActive()) continue;
+            String id = mod.getId();
+            if ("angelica".equals(id)) hasAngelica = true;
+            else if ("lwjgl3ify".equals(id)) hasLwjgl3ify = true;
+        }
+        return hasAngelica && hasLwjgl3ify;
+    }
+
+    @Nullable
+    private static Version patchVersion(Version current, Version embedded) {
+        String mainClass = embedded.getMainClass();
+        // 仅处理 RFB 入口的 version.json（lwjgl3ify 2.x/3.x 的现代格式）
+        if (mainClass == null || !mainClass.startsWith(RFB_MAIN_CLASS_PREFIX)) return null;
+        Arguments arguments = embedded.getArguments().orElse(null);
+        if (arguments == null || arguments.getJvm() == null || arguments.getJvm().isEmpty()) return null;
+
+        Version result = current
+                .setMinecraftArguments(null)
+                .setArguments(arguments)
+                .setMainClass(mainClass);
+        if (embedded.getJavaVersion() != null) {
+            result = result.setJavaVersion(embedded.getJavaVersion());
+        }
+        // 内嵌 version.json 的库列表即 1.7.10-Forge-lwjgl3ify 的完整闭包，整体替换
+        result = result.setLibraries(patchLibraryUrls(embedded.getLibraries()));
+        return result;
+    }
+
+    /**
+     * 为缺下载地址的库（旧版 lwjgl3ify）重写 Maven 源，
+     * 3.x 内嵌 json 已自带正确地址，此分支基本不触发。
+     */
+    private static List<Library> patchLibraryUrls(List<Library> libraries) {
+        List<Library> result = new ArrayList<>(libraries.size());
+        for (Library library : libraries) {
+            if (library.hasDownloadURL()) {
+                result.add(library);
+                continue;
+            }
+            String base = resolveLibraryBase(library);
+            if (base == null) {
+                result.add(library);
+            } else {
+                result.add(withUrl(library, base));
+            }
+        }
+        return result;
+    }
+
+    @Nullable
+    private static String resolveLibraryBase(Library library) {
+        String groupId = library.getGroupId();
+        if (groupId.startsWith("com.github.GTNewHorizons")) {
+            return GTNH_MAVEN;
+        }
+        // 1.7.10 Forge 传递依赖（Forge/Scala/Akka）托管在 Forge Maven
+        if (groupId.startsWith("net.minecraftforge")
+                || groupId.startsWith("org.scala-lang")
+                || groupId.startsWith("com.typesafe")) {
+            return FORGE_MAVEN;
+        }
+        return null; // 其余库 libraries.minecraft.net 均可命中
+    }
+
+    private static Library withUrl(Library library, String url) {
+        JsonObject obj = JsonUtils.GSON.toJsonTree(library).getAsJsonObject();
+        obj.addProperty("url", url);
+        return JsonUtils.GSON.fromJson(obj, Library.class);
+    }
+
+    /**
+     * 优先从内嵌 forgePatches.zip 还原库文件，避免依赖 GTNH Nexus。
+     * 写临时文件后原子替换，中断不会留下截断的 jar 遮蔽重解压。
+     */
+    private static void ensureForgePatchesFile(FCLGameRepository repository, Version embedded, Version version, ZipFile zip) {
+        findForgePatchesLibrary(embedded).ifPresent(library -> {
+            File target = repository.getLibraryFile(version, library);
+            if (target.isFile()) return;
+            ZipEntry entry = zip.getEntry(EMBEDDED_FORGE_PATCHES);
+            if (entry == null) {
+                LOG.log(Level.WARNING, EMBEDDED_FORGE_PATCHES + " not found in " + zip.getName());
+                return;
+            }
+            File parent = target.getParentFile();
+            File temp = null;
+            try {
+                if (parent != null && !parent.isDirectory() && !parent.mkdirs()) {
+                    throw new IOException("Cannot create directory " + parent);
+                }
+                temp = File.createTempFile(target.getName(), ".tmp", parent);
+                try (InputStream is = zip.getInputStream(entry); OutputStream os = new FileOutputStream(temp)) {
+                    IOUtils.copyTo(is, os);
+                }
+                Files.move(temp.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                temp = null;
+                LOG.log(Level.INFO, "Extracted embedded forgePatches to " + target);
+            } catch (IOException e) {
+                LOG.log(Level.WARNING, "Failed to extract embedded forgePatches, will download from " + GTNH_MAVEN, e);
+            } finally {
+                if (temp != null && temp.isFile() && !temp.delete()) {
+                    LOG.log(Level.WARNING, "Cannot delete temp file " + temp);
+                }
+            }
+        });
+    }
+
+    private static Optional<Library> findForgePatchesLibrary(Version version) {
+        if (version.getLibraries() == null) return Optional.empty();
+        return version.getLibraries().stream()
+                .filter(library -> "com.github.GTNewHorizons".equals(library.getGroupId())
+                        && "lwjgl3ify".equals(library.getArtifactId())
+                        && "forgePatches".equals(library.getClassifier()))
+                .findFirst();
+    }
+
+    /**
+     * 确保实例 config/lwjgl3ify.cfg 关闭 linuxCreateAppDesktopEntry：
+     * lwjgl3ify 默认会在首次初始化时向 XDG_DATA_HOME（或 ~/.local/share）写入桌面快捷方式，
+     * Android 上两者均不存在，会抛 RuntimeException 杀死 RFB 主线程导致游戏静默退出
+     * （GTNH 官方包自带此配置，自组包需要补上）。
+     * 已有 cfg 但缺该键时优先插入已有 window 段内，无该段才在文件尾追加。
+     */
+    private static void ensureLwjgl3ifyConfig(File configDir) {
+        try {
+            if (!configDir.isDirectory() && !configDir.mkdirs()) return;
+            File cfg = new File(configDir, "lwjgl3ify.cfg");
+            final String entry = "B:linuxCreateAppDesktopEntry=false";
+            if (!cfg.isFile()) {
+                FileUtils.writeText(cfg, "# Configuration file\n\nwindow {\n    " + entry + "\n}\n");
+                LOG.log(Level.INFO, "Created lwjgl3ify.cfg with linuxCreateAppDesktopEntry=false");
+                return;
+            }
+            String text = FileUtils.readText(cfg);
+            if (containsActiveLine(text, "linuxCreateAppDesktopEntry")) return;
+            int insertAt = -1;
+            Matcher window = Pattern.compile("(?m)^[ \t]*window\\s*\\{").matcher(text);
+            if (window.find()) {
+                int lineEnd = text.indexOf('\n', window.end());
+                if (lineEnd >= 0) insertAt = lineEnd;
+            }
+            if (insertAt >= 0) {
+                FileUtils.writeText(cfg, text.substring(0, insertAt) + "\n    " + entry + text.substring(insertAt));
+                LOG.log(Level.INFO, "Inserted linuxCreateAppDesktopEntry=false into existing window section of lwjgl3ify.cfg");
+            } else {
+                FileUtils.writeText(cfg, text + "\nwindow {\n    " + entry + "\n}\n");
+                LOG.log(Level.INFO, "Appended window section with linuxCreateAppDesktopEntry=false to lwjgl3ify.cfg");
+            }
+        } catch (IOException e) {
+            LOG.log(Level.WARNING, "Failed to ensure lwjgl3ify.cfg", e);
+        }
+    }
+
+    /** 跳过 # 与 // 注释行后，文本中是否存在含 key 的行 */
+    private static boolean containsActiveLine(String text, String key) {
+        for (String line : text.split("\n", -1)) {
+            String trimmed = line.trim();
+            if (!trimmed.startsWith("#") && !trimmed.startsWith("//") && trimmed.contains(key)) return true;
+        }
+        return false;
+    }
+
+    @Nullable
+    private static Version readEmbeddedVersionJson(ZipFile zip) {
+        try {
+            ZipEntry entry = zip.getEntry(EMBEDDED_VERSION_JSON);
+            if (entry == null) return null;
+            String text = readText(zip.getInputStream(entry));
+            return JsonUtils.fromNonNullJson(text, Version.class);
+        } catch (IOException e) {
+            LOG.log(Level.WARNING, "Cannot read lwjgl3ify relauncher version.json from " + zip.getName(), e);
+            return null;
+        }
+    }
+
+    private static String readText(InputStream is) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        byte[] buffer = new byte[8192];
+        int length;
+        while ((length = is.read(buffer)) != -1) {
+            bos.write(buffer, 0, length);
+        }
+        is.close();
+        return bos.toString("UTF-8");
+    }
+}

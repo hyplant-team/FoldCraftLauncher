@@ -31,6 +31,7 @@ import com.tungsten.fcllibrary.util.LocaleUtils
 enum class LauncherSettingTag {
     // 按钮行
     CHECK_UPDATE,
+    SHOW_CHANGELOG,
     CLEAR_CACHE,
     EXPORT_LOG,
     REQUEST_AUDIO,
@@ -149,18 +150,27 @@ class LauncherSettingAdapter(
             ),
             Row.ButtonRow(
                 R.string.settings_launcher_upgrade,
-                listOf(Triple(0, R.string.settings_launcher_upgrade_check, LauncherSettingTag.CHECK_UPDATE)),
+                listOf(Triple(0, R.string.settings_launcher_upgrade_check, LauncherSettingTag.CHECK_UPDATE),
+                    Triple(0, R.string.settings_launcher_update_changelog, LauncherSettingTag.SHOW_CHANGELOG)),
                 R.string.settings_launcher_upgrade_desc,
-            ),
-            Row.ButtonRow(
-                R.string.settings_launcher_cache,
-                listOf(Triple(0, R.string.settings_launcher_clear_cache, LauncherSettingTag.CLEAR_CACHE)),
-                R.string.settings_launcher_cache_desc
             ),
             Row.ButtonRow(
                 R.string.settings_launcher_debug,
                 listOf(Triple(0, R.string.settings_launcher_launcher_log_export, LauncherSettingTag.EXPORT_LOG)),
                 R.string.settings_launcher_debug_desc,
+                group = SettingGroup.Debug
+            ),
+            Row.ButtonRow(
+                R.string.settings_launcher_cache,
+                listOf(Triple(0, R.string.settings_launcher_clear_cache, LauncherSettingTag.CLEAR_CACHE)),
+                R.string.settings_launcher_cache_desc,
+                group = SettingGroup.Debug
+            ),
+            Row.ButtonRow(
+                R.string.settings_launcher_mod_cache,
+                listOf(Triple(0, R.string.settings_launcher_mod_cache_clear, LauncherSettingTag.CLEAR_MOD_CACHE)),
+                R.string.settings_launcher_mod_cache_desc,
+                group = SettingGroup.Debug
             ),
             Row.ButtonRow(
                 R.string.settings_launcher_request_recording_permission,
@@ -220,9 +230,10 @@ class LauncherSettingAdapter(
                 group = SettingGroup.Theme
             ),
             Row.SeekBarRow(
-                R.string.settings_launcher_color_alpha, 255, 0,
-                { ThemeEngine.getInstance().getTheme().colorAlpha },
-                LauncherSettingTag.SEEKBAR_COLOR_ALPHA,
+                R.string.settings_launcher_color_alpha, 100, 0,
+                // 内部存 0-255 alpha，界面按百分比显示
+                { (ThemeEngine.getInstance().getTheme().colorAlpha * 100 + 127) / 255 },
+                LauncherSettingTag.SEEKBAR_COLOR_ALPHA, "%",
                 descriptionRes = R.string.settings_launcher_color_alpha_desc,
                 group = SettingGroup.Theme
             ),
@@ -350,12 +361,6 @@ class LauncherSettingAdapter(
                 { config.autoDownloadThreads },
                 { config.downloadThreads },
                 R.string.settings_launcher_download_threads_desc,
-                group = SettingGroup.Download
-            ),
-            Row.ButtonRow(
-                R.string.settings_launcher_mod_cache,
-                listOf(Triple(0, R.string.settings_launcher_mod_cache_clear, LauncherSettingTag.CLEAR_MOD_CACHE)),
-                R.string.settings_launcher_mod_cache_desc,
                 group = SettingGroup.Download
             )
         )

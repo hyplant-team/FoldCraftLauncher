@@ -184,6 +184,7 @@
     <string name="button_mouse_left">Mouse Left</string>
     <string name="button_mouse_right">Mouse Right</string>
     <string name="button_next">Next</string>
+    <string name="button_done">Done</string>
     <string name="button_paste">Paste</string>
     <string name="button_prev">Prev</string>
     <string name="button_remove">Remove</string>
@@ -548,6 +549,9 @@
     <string name="install_installer_game" translatable="false">Minecraft</string>
     <string name="install_installer_incompatible">Incompatible with %s</string>
     <string name="install_installer_install">Install %s</string>
+    <string name="install_installer_legacyfabric" translatable="false">Legacy Fabric</string>
+    <string name="install_installer_legacyfabric_api" translatable="false">Legacy Fabric API</string>
+    <string name="install_installer_legacyfabric_api_warning">Warning: Legacy Fabric API is a mod, and will be installed into the mod directory of the game instance. Please do not change the working directory of the game, or the Legacy Fabric API will not work. If you do want to change these settings, you should reinstall it.</string>
     <string name="install_installer_install_offline">Install/Update from Local File</string>
     <string name="install_installer_install_offline_extension">Forge/OptiFine installer</string>
     <string name="installer_running_processor">Running installer (Java %s)…</string>
@@ -587,6 +591,8 @@
     <string name="launch_failed">Unable to launch</string>
     <string name="launch_failed_download_library">Unable to download library %s.</string>
 
+    <string name="launch_state_version">Parsing version</string>
+    <string name="launch_state_mods">Scanning mods</string>
     <string name="launch_state_dependencies">Resolving dependencies</string>
     <string name="launch_state_modpack">Downloading dependencies</string>
     <string name="launch_state_java">Checking Java version</string>
@@ -602,6 +608,7 @@
     <string name="menu_controls_hide_all">Hide All Views</string>
     <string name="menu_controls_auto_fit">Auto Fit Position</string>
     <string name="menu_controls_auto_fit_dist">Auto Fit Position Distance</string>
+    <string name="menu_controls_snap_adjacent">Snap to Adjacent Controls Only</string>
     <string name="menu_controls_groups">View Groups</string>
     <string name="menu_controls_manage">Manage</string>
     <string name="menu_controls_current_view_group">Current View Group</string>
@@ -763,6 +770,10 @@
     <string name="modpack_type_hmcl">HMCL Type</string>
     <string name="modpack_type_mcbbs_export">Can be imported by FCL, HMCL and MultiMC</string>
     <string name="modpack_type_modrinth">Modrinth</string>
+    <string name="modpack_type_modrinth_export">Can be imported by the Modrinth App and most launchers</string>
+    <string name="modpack_export_pack_curseforge">Include CurseForge remote resources in the pack</string>
+    <string name="modpack_type_curseforge">CurseForge</string>
+    <string name="modpack_type_curseforge_export">Can be imported by the CurseForge app and most launchers</string>
     <string name="modpack_type_multimc">MultiMC</string>
     <string name="modpack_type_multimc_export">Can be imported by FCL, HMCL and MultiMC</string>
     <string name="modpack_type_server">Auto-Update Modpack from Server</string>
@@ -972,6 +983,17 @@
     <string name="resourcepack_info_file_name">File name: %s</string>
     <string name="resourcepack_info_file_size">Size: %s</string>
     <string name="resourcepack_info_format">Pack format: %s</string>
+    <string name="shaderpack_manage">Shader Packs</string>
+    <string name="shaderpack_add">Import shader pack</string>
+    <string name="shaderpack_invalid">Invalid shader pack</string>
+    <string name="shaderpack_rename_exists">A shader pack with the same name already exists</string>
+    <string name="shaderpack_add_success">Imported shader pack %s.</string>
+    <string name="shaderpack_add_failed">Failed to import shader pack %s.</string>
+    <string name="shaderpack_info_type">Type: %s</string>
+    <string name="shaderpack_info_type_folder">Folder</string>
+    <string name="shaderpack_info_type_zip">Zip archive</string>
+    <string name="shaderpack_info_file_name">File name: %s</string>
+    <string name="shaderpack_info_file_size">Size: %s</string>
 
     <string name="search">Search</string>
     <string name="search_hint_chinese">Search queries support both Chinese and English</string>
@@ -1053,6 +1075,9 @@
     <string name="settings_launcher_cache">Cache Directory</string>
     <string name="settings_launcher_cache_desc">Clear the launcher cache files.</string>
     <string name="settings_launcher_clear_cache">Clear cache</string>
+    <string name="settings_launcher_update_changelog">Notes</string>
+    <string name="update_changelog">What\'s New</string>
+    <string name="update_changelog_not_found">Update notes are not available for this version.</string>
     <string name="settings_launcher_download">Download</string>
     <string name="settings_launcher_download_threads">Threads</string>
     <string name="settings_launcher_download_threads_desc">Set the number of concurrent download threads.</string>
@@ -1101,7 +1126,7 @@
     <string name="settings_launcher_theme2_dark">Secondary Theme Color</string>
     <string name="settings_launcher_theme2_dark_desc">Customize the secondary color (dark theme).</string>
     <string name="settings_launcher_color_alpha">Color Opacity</string>
-    <string name="settings_launcher_color_alpha_desc">Opacity of theme-derived colors (cards, pressed states, etc.), independent of the main color. 0 = fully transparent, 255 = fully opaque.</string>
+    <string name="settings_launcher_color_alpha_desc" formatted="false">Opacity of theme-derived colors (cards, pressed states, etc.), independent of the main color. 0% = fully transparent, 100% = fully opaque.</string>
     <string name="settings_launcher_theme_fetch_background">Extract from background image</string>
     <string name="settings_launcher_background_lt">Light Mode Launcher Background</string>
     <string name="settings_launcher_background_lt_desc">Customize the background image of the light theme. Maximum resolution: 5120x5120.</string>
@@ -1321,6 +1346,7 @@
     <string name="world_datapack_1_13">Only Minecraft 1.13 or newer supports datapacks.</string>
     <string name="world_description">%s. Last played on %s. Game Version: %s.</string>
     <string name="world_download">Download a World</string>
+    <string name="world_duplicate">Copy World</string>
     <string name="world_export">Export World</string>
     <string name="world_export_title">Select a directory for this exported world</string>
     <string name="world_export_location">Export to</string>
@@ -1331,6 +1357,7 @@
     <string name="world_import_choose">Select the save archive you want to import</string>
     <string name="world_import_failed">Unable to import this world: %s</string>
     <string name="world_import_invalid">Unable to parse the save.</string>
+    <string name="world_locked_failed">This world is locked by the game or another launcher.</string>
     <string name="world_info_title">World %s - Information</string>
     <string name="world_info_basic">Basic Information</string>
     <string name="world_info_allow_cheats">Allow Cheats</string>
@@ -1349,6 +1376,7 @@
     <string name="world_info_player_game_type">Game Mode</string>
     <string name="world_info_player_game_type_adventure">Adventure</string>
     <string name="world_info_player_game_type_creative">Creative</string>
+    <string name="world_info_player_game_type_hardcore">Hardcore</string>
     <string name="world_info_player_game_type_spectator">Spectator</string>
     <string name="world_info_player_game_type_survival">Survival</string>
     <string name="world_info_player_health">Health</string>
@@ -1372,7 +1400,18 @@
     <string name="view_incompatible">View incompatible mods</string>
     <string name="view_incompatible_online">Online Details</string>
     <string name="guide_theme2">If you find the color of the text on the right side is not clear, you can click here, then click \"Launcher Settings\", and select \"Secondary Theme Color\"</string>
-    <string name="guide_share_log">Long press here to share the game log (latest_game.log).</string>
+    <string name="guide_share_log">Press to browse logs. Long press here to share the game log (latest_game.log).</string>
+    <string name="guide_version_card">Tap the version card to open the version list and manage your versions. Long press to quickly select a version.</string>
+    <string name="guide_account">No account yet? Tap here to add one.</string>
+    <string name="guide_start">Tap to launch the selected version, long-press to pick a renderer and launch directly.</string>
+    <string name="guide_manage">Adjust game settings, and manage game files, mods, saves, resource packs and more.</string>
+    <string name="guide_download">Download game versions, mods, modpacks, resource packs and more.</string>
+    <string name="guide_controller">Configure or download on-screen button layouts.</string>
+    <string name="guide_multiplayer">Play remotely with friends via Terracotta.</string>
+    <string name="guide_terminal">Access FCL Shell (only for professional users! Unless you know what you are doing, only use it under the guidance of the developer).</string>
+    <string name="guide_exec_jar">The function of executing the Jar mod environment installer has been moved to the JAVA management page in the settings.\nNote! This feature is not for installing mods. If you are installing mods, please use the launcher\'s download function or add them in "Manage Mods".</string>
+    <string name="guide_crash_test">Long press here to trigger a launcher debug crash, which can be used to get system environment information.</string>
+    <string name="guide_jvm_crash_test">Long press here to trigger the JVM crash page (will not start the JVM, using the previous game log).</string>
     <string name="joystick_l">Left joystick</string>
     <string name="gamepad_dpad">DPAD</string>
     <string name="gamepad_button_binding">Gamepad button binding</string>

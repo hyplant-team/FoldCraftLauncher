@@ -180,11 +180,17 @@ public class FCLauncher {
                 a = "-Djava.library.path=${natives_directory}";
             }
             a = a.replace("${natives_directory}", libraryPath);
-            config.getRenderer();
             args[i] = a.replace("${gl_lib_name}", config.getRenderer().getGLPath())
                     .replace("${egl_lib_name}", config.getRenderer().getEGLPath());
         }
         return args;
+    }
+
+    /**
+     * 实例是否运行 lwjgl3ify：以 config/lwjgl3ify.cfg 存在为准
+     */
+    private static boolean hasLwjgl3ify(File gameDir) {
+        return new File(gameDir, "config/lwjgl3ify.cfg").isFile();
     }
 
     private static void addCommonEnv(FCLConfig config, HashMap<String, String> envMap) {
@@ -204,6 +210,17 @@ public class FCLauncher {
 
         // Native mod env var
         envMap.put("MOD_ANDROID_RUNTIME", FCLPath.MOD_RUNTIME_DIR == null ? "" : FCLPath.MOD_RUNTIME_DIR);
+
+        // XDG 数据目录兜底（仅 lwjgl3ify 实例注入；workingDir 即 ${game_directory} 指向的实例目录）
+        File gameDir = new File(config.getWorkingDir());
+        if (hasLwjgl3ify(gameDir)) {
+            File xdgDataHome = new File(gameDir, ".local/share");
+            if (!xdgDataHome.isDirectory()) {
+                //noinspection ResultOfMethodCallIgnored
+                xdgDataHome.mkdirs();
+            }
+            envMap.put("XDG_DATA_HOME", xdgDataHome.getAbsolutePath());
+        }
 
         // Dalvik(ART) 侧 JavaVM 与 Application 全局引用，供游戏 JVM 侧原生代码
         // （如 libflite 桥接安卓 TTS）attach 回安卓运行时调用系统 API

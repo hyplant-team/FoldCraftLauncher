@@ -130,6 +130,17 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
                 break;
             case CLEAR_CACHE:
                 clearCacheDirs();
+            case SHOW_CHANGELOG:
+                UpdateChecker.getInstance().showCurrentChangelog(getContext()).whenComplete(Schedulers.androidUIThread(), e -> {
+                    if (e != null) {
+                        FCLAlertDialog.Builder builder = new FCLAlertDialog.Builder(getContext());
+                        builder.setCancelable(false);
+                        builder.setAlertLevel(FCLAlertDialog.AlertLevel.ALERT);
+                        builder.setMessage(getContext().getString(R.string.update_check_failed) + "\n" + e);
+                        builder.setNegativeButton(getContext().getString(com.tungsten.fcl.R.string.dialog_positive), null);
+                        builder.create().show();
+                    }
+                }).start();
                 break;
             case EXPORT_LOG:
                 exportLog();
@@ -490,7 +501,8 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
                 ThemeData.saveTheme(getContext(), ThemeEngine.getInstance().getTheme());
                 break;
             case SEEKBAR_COLOR_ALPHA:
-                ThemeEngine.getInstance().applyColorAlpha(progress);
+                // 界面按百分比显示，内部存 0-255 alpha
+                ThemeEngine.getInstance().applyColorAlpha(Math.round(progress * 2.55f));
                 ThemeData.saveTheme(getContext(), ThemeEngine.getInstance().getTheme());
                 break;
             case SEEKBAR_VIBRATION:
