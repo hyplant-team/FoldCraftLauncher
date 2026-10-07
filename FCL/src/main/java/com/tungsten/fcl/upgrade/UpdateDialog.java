@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,10 +100,7 @@ public class UpdateDialog extends FCLDialog implements View.OnClickListener {
 
     private void checkHeight() {
         parent.post(() -> layout.post(() -> {
-            WindowManager wm = getWindow().getWindowManager();
-            Point point = new Point();
-            wm.getDefaultDisplay().getSize(point);
-            int maxHeight = point.y - ConvertUtils.dip2px(getContext(), 30);
+            int maxHeight = AndroidUtilKt.getScreenHeight() - ConvertUtils.dip2px(getContext(), 30);
             if (parent.getMeasuredHeight() < maxHeight) {
                 ViewGroup.LayoutParams layoutParams = scrollView.getLayoutParams();
                 layoutParams.height = layout.getMeasuredHeight();

@@ -208,7 +208,8 @@ class VersionSetting : Cloneable {
             changed()
         }
 
-    var isForceResolution: Boolean = VersionSettingDefault.getForceResolution()
+    /** 禁用启动前的 Vulkan 兼容性检测，开启后直接启动游戏 */
+    var isNotCheckVulkan: Boolean = VersionSettingDefault.getNotCheckVulkan()
         set(value) {
             if (field == value) return
             field = value
@@ -261,8 +262,8 @@ class VersionSetting : Cloneable {
             it.controller = controller
             it.renderer = renderer
             it.driver = driver
+            it.isNotCheckVulkan = isNotCheckVulkan
             it.isDebugLog = isDebugLog
-            it.isForceResolution = isForceResolution
         }
     }
 
@@ -294,8 +295,8 @@ class VersionSetting : Cloneable {
                 addProperty("renderer", src.renderer)
                 addProperty("driver", src.driver)
                 addProperty("isolateGameDir", src.isIsolateGameDir)
+                addProperty("notCheckVulkan", src.isNotCheckVulkan)
                 addProperty("debugLog", src.isDebugLog)
-                addProperty("forceResolution", src.isForceResolution)
             }
         }
 
@@ -333,8 +334,8 @@ class VersionSetting : Cloneable {
                     json["renderer"]?.asString ?: VersionSettingDefault.getRenderer()
                 vs.driver = json["driver"]?.asString ?: VersionSettingDefault.getDriver()
                 vs.isIsolateGameDir = json["isolateGameDir"]?.asBoolean ?: VersionSettingDefault.getIsolateGameDir()
+                vs.isNotCheckVulkan = json["notCheckVulkan"]?.asBoolean ?: VersionSettingDefault.getNotCheckVulkan()
                 vs.isDebugLog = json["debugLog"]?.asBoolean ?: VersionSettingDefault.getDebugLog()
-                vs.isForceResolution = json["forceResolution"]?.asBoolean ?: VersionSettingDefault.getForceResolution()
             }
         }
 

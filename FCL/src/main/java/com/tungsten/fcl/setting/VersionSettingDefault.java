@@ -22,6 +22,7 @@ public class VersionSettingDefault {
     private static String java = "Auto";
     private static boolean notCheckGame = false;
     private static boolean notCheckJVM = true;
+    private static boolean notCheckVulkan = false;
     private static boolean touchMod = false;
     private static String graphicsBackend = "default";
     private static boolean vulkanDriverSystem = false;
@@ -30,7 +31,6 @@ public class VersionSettingDefault {
     private static String driver = "Turnip";
     private static boolean isolateGameDir = false;
     private static boolean debugLog = false;
-    private static boolean forceResolution = false;
 
     static {
         loadDefaultConfig();
@@ -60,6 +60,9 @@ public class VersionSettingDefault {
     public static boolean getNotCheckJVM() {
         return notCheckJVM;
     }
+    public static boolean getNotCheckVulkan() {
+        return notCheckVulkan;
+    }
     public static boolean getTouchMod() {
         return touchMod;
     }
@@ -84,9 +87,6 @@ public class VersionSettingDefault {
     public static boolean getDebugLog() {
         return debugLog;
     }
-    public static boolean getForceResolution() {
-        return forceResolution;
-    }
 
     private static void loadDefaultConfig() {
         File configFile = new File(FCLPath.FILES_DIR + "/default_config.json");
@@ -101,6 +101,7 @@ public class VersionSettingDefault {
             java = defaultConfig.has("java") ? defaultConfig.get("java").getAsString() : java;
             notCheckGame = defaultConfig.has("notCheckGame") ? defaultConfig.get("notCheckGame").getAsBoolean() : notCheckGame;
             notCheckJVM = defaultConfig.has("notCheckJVM") ? defaultConfig.get("notCheckJVM").getAsBoolean() : notCheckJVM;
+            notCheckJVM = defaultConfig.has("notCheckVulkan") ? defaultConfig.get("notCheckVulkan").getAsBoolean() : notCheckVulkan;
             touchMod = defaultConfig.has("enableTouchMod") ? defaultConfig.get("enableTouchMod").getAsBoolean() : touchMod;
             graphicsBackend = defaultConfig.has("graphicsBackend") ? defaultConfig.get("graphicsBackend").getAsString() : graphicsBackend;
             vulkanDriverSystem = defaultConfig.has("vulkanDriverSystem") ? defaultConfig.get("vulkanDriverSystem").getAsBoolean() : vulkanDriverSystem;
@@ -109,7 +110,6 @@ public class VersionSettingDefault {
             driver = defaultConfig.has("driver") ? defaultConfig.get("driver").getAsString() : driver;
             isolateGameDir = defaultConfig.has("isolateGameDir") ? defaultConfig.get("isolateGameDir").getAsBoolean() : isolateGameDir;
             debugLog = defaultConfig.has("debugLog") ? defaultConfig.get("debugLog").getAsBoolean() : debugLog;
-            forceResolution = defaultConfig.has("forceResolution") ? defaultConfig.get("forceResolution").getAsBoolean() : forceResolution;
         } catch (Exception e) {
             Logging.LOG.log(Level.SEVERE, "Failed to load default_config.json", e);
         }

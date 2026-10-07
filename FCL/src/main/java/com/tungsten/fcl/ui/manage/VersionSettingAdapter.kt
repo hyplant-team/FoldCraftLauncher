@@ -31,7 +31,6 @@ enum class VersionSettingTag {
     // 特殊开关行
     SPECIAL,
     VULKAN,
-    FORCE_RESOLUTION,
 
     // 按钮行
     EDIT_ICON,
@@ -45,6 +44,7 @@ enum class VersionSettingTag {
     INSTALL_RENDERER,
     EDIT_DRIVER,
     INSTALL_DRIVER,
+    EDIT_VULKAN_CHECK,
     EDIT_ENV,
 
     // 编辑行
@@ -83,6 +83,9 @@ class VersionSettingAdapter(
     private var usedMemory = 0
     private var iconDrawable: Drawable? = null
     private var rows: List<Row> = emptyList()
+
+    /** 检测入口行展示的缓存摘要（Vulkan 版本或"未检测"），由页面按需更新 */
+    var vulkanCheckSummary: String = ""
 
     /** 版本/状态变化时全量重建行列表 */
     fun update(
@@ -204,6 +207,21 @@ class VersionSettingAdapter(
                     group = SettingGroup.Render,
                 )
             }
+            result += Row.ValueRow(
+                R.string.settings_fcl_vulkan_check,
+                { vulkanCheckSummary },
+                VersionSettingTag.EDIT_VULKAN_CHECK,
+                null,
+                descriptionRes = R.string.settings_fcl_vulkan_check_desc,
+                group = SettingGroup.Render,
+            )
+            result += Row.SwitchRow(
+                R.string.settings_fcl_vulkan_check_disable,
+                { versionSetting.isNotCheckVulkan },
+                { versionSetting.isNotCheckVulkan = it },
+                descriptionRes = R.string.settings_fcl_vulkan_check_disable_desc,
+                group = SettingGroup.Render,
+            )
             result += Row.SwitchRow(
                 R.string.settings_advanced_dont_check_game_completeness,
                 { versionSetting.isNotCheckGame },
@@ -251,14 +269,6 @@ class VersionSettingAdapter(
                 null,
                 descriptionRes = R.string.settings_advanced_env_desc,
                 group = SettingGroup.Argument
-            )
-            result += Row.SwitchRow(
-                R.string.settings_advanced_force_resolution,
-                { versionSetting.isForceResolution },
-                { listener.onSpecialSwitch(VersionSettingTag.FORCE_RESOLUTION, it) },
-                longClick = true,
-                rowTag = VersionSettingTag.FORCE_RESOLUTION,
-                descriptionRes = R.string.settings_advanced_force_resolution_desc,
             )
         }
         return result

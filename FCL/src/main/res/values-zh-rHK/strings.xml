@@ -442,6 +442,7 @@
     <string name="install_installer_install_offline">從本地文件安裝/升級</string>
     <string name="install_installer_install_offline_extension">Forge/OptiFine 安裝器</string>
     <string name="installer_running_processor">正在運行安裝器（Java %s）…</string>
+    <string name="installer_running_processor_step">正在運行安裝器 %1$d/%2$d：%3$s（Java %4$s）…</string>
     <string name="installer_recent_logs">最近日誌：</string>
     <string name="installer_process_retrying">安裝器進程超時，正在重試（%1$d/%2$d）…</string>
     <string name="installer_process_start_error">無法啟動安裝器進程</string>
@@ -521,7 +522,6 @@
     <string name="menu_settings_gesture_mode_fight">戰鬥模式</string>
     <string name="menu_settings_gesture_current">當前模式為 %s</string>
     <string name="menu_settings_gyro">陀螺儀</string>
-    <string name="menu_settings_gyro_sensitivity">陀螺儀靈敏度</string>
     <string name="menu_settings_lock_view">鎖定菜單鍵</string>
     <string name="menu_settings_hide_view">隱藏菜單鍵</string>
     <string name="menu_settings_show_fps">顯示FPS</string>
@@ -551,6 +551,10 @@
     <string name="menu_settings_show_log">顯示日誌</string>
     <string name="menu_settings_show_log_auto">自動顯示日誌</string>
     <string name="menu_settings_performance_mode">持續性能模式</string>
+    <string name="menu_settings_max_refresh_rate">請求最高刷新率</string>
+    <string name="menu_settings_force_resolution_size">強制分辨率大小</string>
+    <string name="menu_settings_force_resolution_edit">設置</string>
+    <string name="menu_settings_force_resolution_invalid">分辨率無效，請按 寬x高 輸入（如 1920x1080）。</string>
     <string name="message_cancelled">操作已取消</string>
     <string name="message_copy">複製成功！</string>
     <string name="message_doing">請耐心等待</string>

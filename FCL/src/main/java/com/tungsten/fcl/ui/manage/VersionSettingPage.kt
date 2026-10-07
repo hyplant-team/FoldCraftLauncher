@@ -7,11 +7,13 @@ import android.widget.Toast
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mio.device.VulkanCheckManager
 import com.mio.plugin.DriverPlugin.driverList
 import com.mio.plugin.DriverPlugin.selected
 import com.mio.ui.adapter.SpacingItemDecoration
 import com.mio.ui.dialog.JavaManageDialog
 import com.mio.ui.dialog.RendererSelectDialog
+import com.mio.ui.dialog.VulkanCheckDialog
 import com.mio.util.isAdrenoGPU
 import com.mio.util.openLink
 import com.mio.util.showErrorDialog
@@ -42,7 +44,6 @@ import com.tungsten.fclcore.task.Task
 import com.tungsten.fclcore.util.Logging
 import com.tungsten.fclcore.util.io.FileUtils
 import com.tungsten.fclcore.util.platform.MemoryUtils
-import com.tungsten.fcllibrary.component.dialog.EditDialog
 import com.tungsten.fcllibrary.component.dialog.FCLAlertDialog
 import com.tungsten.fcllibrary.component.dialog.FullEditDialog
 import com.tungsten.fcllibrary.component.theme.ThemeEngine
@@ -51,7 +52,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
-import java.util.Locale
 import java.util.logging.Level
 
 /**
@@ -136,34 +136,6 @@ class VersionSettingPage(
                 settingsChangeListener = null
             }
         })
-    }
-
-    private fun editForceResolution() {
-        if (lastVersionSetting.isForceResolution) {
-            val preferences = context.getSharedPreferences("launcher", MODE_PRIVATE)
-            val dialog = EditDialog(context) { str ->
-                try {
-                    val split =
-                        str.lowercase(Locale.getDefault()).split("x".toRegex())
-                            .dropLastWhile { it.isEmpty() }.toTypedArray()
-                    if (split.size == 2) {
-                        val w = split[0].toInt()
-                        val h = split[1].toInt()
-                        preferences.edit {
-                            putString("force_resolution", w.toString() + "x" + h)
-                        }
-                    }
-                } catch (e: Exception) {
-                    showErrorDialog(context, e.toString())
-                }
-            }
-            dialog.getEditText().setText(preferences.getString("force_resolution", "1920x1080"))
-            dialog.onCancelListener = {
-                lastVersionSetting.isForceResolution = false
-                adapter.refreshRow(VersionSettingTag.FORCE_RESOLUTION)
-            }
-            dialog.show()
-        }
     }
 
     /** 安装插件 **/
@@ -261,6 +233,41 @@ class VersionSettingPage(
             adapter.refreshRow(VersionSettingTag.EDIT_CONTROLLER)
         }
         loadIcon()
+        loadVulkanCheckSummary()
+    }
+
+    /** 读取检测缓存，刷新「检测 Vulkan」行的摘要展示 */
+    private fun loadVulkanCheckSummary() {
+        activity.lifecycleScope.launch {
+            val apiVersion = VulkanCheckManager.loadRecord()?.apiVersion.orEmpty()
+            adapter.vulkanCheckSummary = apiVersion.ifEmpty {
+                context.getString(R.string.settings_fcl_vulkan_check_not_checked)
+            }
+            Schedulers.androidUIThread().execute {
+                adapter.refreshRow(VersionSettingTag.EDIT_VULKAN_CHECK)
+            }
+        }
+    }
+
+    /** 按当前版本设置的驱动状态执行 Vulkan 检测并展示结果 */
+    private fun checkVulkan() {
+        Toast.makeText(context, R.string.vulkan_check_running, Toast.LENGTH_SHORT).show()
+        activity.lifecycleScope.launch {
+            val useTurnip = !lastVersionSetting.isVKDriverSystem
+            val driver = driverList.find { it.driver == lastVersionSetting.driver } ?: driverList.first()
+            val capabilities = VulkanCheckManager.check(useTurnip, driver.path)
+            adapter.vulkanCheckSummary = capabilities?.versionString
+                ?: context.getString(R.string.vulkan_check_profile_unsupport)
+            // 对话框展示实际生效的驱动：Turnip 加载失败回落系统加载器时显示系统驱动
+            val usedCustomDriver = capabilities?.usedCustomDriver == true
+            Schedulers.androidUIThread().execute {
+                adapter.refreshRow(VersionSettingTag.EDIT_VULKAN_CHECK)
+                VulkanCheckDialog(
+                    context, capabilities, usedCustomDriver,
+                    if (usedCustomDriver) driver.driver else null
+                ).show()
+            }
+        }
     }
 
     private fun onExploreIcon() {
@@ -398,6 +405,8 @@ class VersionSettingPage(
                 FCLPath.Prop.getProperty("driver-plugin-url","null://")
             )
 
+            VersionSettingTag.EDIT_VULKAN_CHECK -> checkVulkan()
+
             VersionSettingTag.EDIT_ENV -> {
                 val preferences = context.getSharedPreferences("launcher", MODE_PRIVATE)
                 val dialog = FullEditDialog(context, true) {
@@ -447,19 +456,11 @@ class VersionSettingPage(
                 )
             }
 
-            VersionSettingTag.FORCE_RESOLUTION -> {
-                lastVersionSetting.isForceResolution = checked
-                if (checked) editForceResolution()
-            }
-
             else -> {}
         }
     }
 
     override fun onSwitchLongClick(tag: VersionSettingTag) {
-        if (tag == VersionSettingTag.FORCE_RESOLUTION && lastVersionSetting.isForceResolution) {
-            editForceResolution()
-        }
     }
 
     override fun onLongPressEdit(tag: VersionSettingTag) {

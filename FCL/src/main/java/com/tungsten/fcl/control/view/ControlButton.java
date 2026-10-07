@@ -49,6 +49,7 @@ import com.tungsten.fcllibrary.util.ConvertUtils;
 import java.util.Objects;
 import java.util.UUID;
 
+
 /**
  * Custom game control button.
  */
@@ -308,8 +309,11 @@ public class ControlButton extends AppCompatButton implements CustomView {
 
     private float downX;
     private float downY;
-    private int initialX;
-    private int initialY;
+    private float initialX;
+    private float initialY;
+    // 指针跟随：上一 MOVE 事件触点位置，用于计算逐帧视角增量
+    private float lastLookX;
+    private float lastLookY;
     private float positionX;
     private float positionY;
     private long downTime;
@@ -458,6 +462,8 @@ public class ControlButton extends AppCompatButton implements CustomView {
                     setPressedStyle();
                     downX = event.getX();
                     downY = event.getY();
+                    lastLookX = event.getX();
+                    lastLookY = event.getY();
                     setInitialPosition();
                     positionX = getX();
                     positionY = getY();
@@ -471,6 +477,8 @@ public class ControlButton extends AppCompatButton implements CustomView {
                     if (cursorMode != menu.getCursorMode()) {
                         cursorMode = menu.getCursorMode();
                         setInitialPosition();
+                        lastLookX = event.getX();
+                        lastLookY = event.getY();
                     }
                     // 滑动链与指针跟随/可移动并存：链式切换只改变按住的按钮，指针移动照常
                     if (getData().getEvent().isSwipable()) {
@@ -601,21 +609,24 @@ public class ControlButton extends AppCompatButton implements CustomView {
 
     private void handleMoveEvent(MotionEvent event) {
         if (getData().getEvent().isPointerFollow()) {
-            int deltaX = (int) ((event.getX() - downX) * menu.getMenuSetting().getMouseSensitivity());
-            int deltaY = (int) ((event.getY() - downY) * menu.getMenuSetting().getMouseSensitivity());
+            float deltaX = (event.getX() - downX) * (float) menu.getMenuSetting().getMouseSensitivity();
+            float deltaY = (event.getY() - downY) * (float) menu.getMenuSetting().getMouseSensitivity();
             if (menu.getCursorMode() == FCLBridge.CursorEnabled) {
-                int targetX = Math.max(0, Math.min(screenWidth, initialX + deltaX));
-                int targetY = Math.max(0, Math.min(screenHeight, initialY + deltaY));
+                float targetX = Math.max(0, Math.min(screenWidth, initialX + deltaX));
+                float targetY = Math.max(0, Math.min(screenHeight, initialY + deltaY));
                 menu.getInput().setPointerId(getData().getId());
                 menu.getInput().setPointer(targetX, targetY, getData().getId());
-            } else {
-                if (menu.getMenuSetting().isEnableGyroscope()) {
-                    menu.setPointerX(initialX + deltaX);
-                    menu.setPointerY(initialY + deltaY);
-                } else {
-                    menu.getInput().setPointerId(getData().getId());
-                    menu.getInput().setPointer(initialX + deltaX, initialY + deltaY, getData().getId());
-                }
+            } else if (menu.getBridge() != null) {
+                // 捕获态统一走相对增量流，与触控/陀螺仪等来源的增量叠加互不干扰
+                float frameDX = event.getX() - lastLookX;
+                float frameDY = event.getY() - lastLookY;
+                lastLookX = event.getX();
+                lastLookY = event.getY();
+                double sensitivity = menu.getMenuSetting().getMouseSensitivity();
+                // 强制分辨率下游戏窗口与 windowScale 无关，增量按 1:1 下发，由 pushEventLookDelta 统一除拉伸系数
+                float scaleFactor = FCLBridge.FORCE_RESOLUTION ? 1f : (float) menu.getBridge().getScaleFactor();
+                FCLBridge.pushEventLookDelta((float) (frameDX * sensitivity * scaleFactor),
+                        (float) (frameDY * sensitivity * scaleFactor));
             }
         }
         if (getData().getEvent().isMovable()) {
