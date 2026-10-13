@@ -422,6 +422,11 @@ public class FCLGameRepository extends DefaultGameRepository {
     public LaunchOptions getLaunchOptions(String version, JavaVersion javaVersion, File gameDir, double scaleFactor, double cursorOffset) {
         VersionSetting vs = getVersionSetting(version);
         String profileName = (gameDir.getParentFile() != null) ? gameDir.getParentFile().getName() : "Minecraft";
+        int maxMemory = (int) (getAllocatedMemory(
+                vs.getMaxMemory() * 1024L * 1024L,
+                MemoryUtils.getFreeDeviceMemory(FCLApp.getAppContext()) * 1024L * 1024L,
+                vs.isAutoMemory()
+        ) / 1024 / 1024);
         LaunchOptions.Builder builder = new LaunchOptions.Builder()
                 .setGameDir(gameDir)
                 .setJava(javaVersion)
@@ -430,12 +435,9 @@ public class FCLGameRepository extends DefaultGameRepository {
                 .setProfileName(profileName)
                 .setGameArguments(StringUtils.tokenize(vs.getMinecraftArgs()))
                 .setJavaArguments(StringUtils.tokenize(vs.getJavaArgs()))
-                .setMaxMemory((int) (getAllocatedMemory(
-                        vs.getMaxMemory() * 1024L * 1024L,
-                        MemoryUtils.getFreeDeviceMemory(FCLApp.getAppContext()) * 1024L * 1024L,
-                        vs.isAutoMemory()
-                ) / 1024 / 1024))
-                .setMinMemory(vs.getMaxMemory())
+                .setMaxMemory(maxMemory)
+                // Xms=Xmx 会让 G1 按峰值全量提交物理内存且不收缩堆，白占内存易触发系统杀进程与温控，故 Xms 取小值让堆按需增长
+                .setMinMemory(Math.min(512, maxMemory))
                 // 口径与 JVMActivity surface 回调、GameMenu.refreshWindowsSize 一致：宽度含 cursorOffset
                 .setWidth(FCLBridge.FORCE_RESOLUTION ? FCLBridge.FORCE_RESOLUTION_WIDTH : (int) ((AndroidUtilKt.getScreenWidth() + cursorOffset) * scaleFactor))
                 .setHeight(FCLBridge.FORCE_RESOLUTION ? FCLBridge.FORCE_RESOLUTION_HEIGHT : (int) (AndroidUtilKt.getScreenHeight() * scaleFactor))

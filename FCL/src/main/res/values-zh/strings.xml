@@ -166,6 +166,7 @@
     <string name="button_set">设置</string>
     <string name="button_reset">重置</string>
     <string name="button_overwrite">覆盖</string>
+    <string name="control_copy">复制布局</string>
     <string name="control_create">创建新布局</string>
     <string name="control_delete">你确定要删除该布局吗？</string>
     <string name="control_download">下载布局</string>
@@ -562,7 +563,8 @@
     <string name="menu_control_view_group_add">添加控件组</string>
     <string name="menu_control_view_group_copy">复制控件组</string>
     <string name="menu_control_view_group_copy_suffix"> - 副本</string>
-    <string name="menu_control_view_group_copy_failed">复制控件组失败</string>    <string name="menu_control_view_group_delete">你确定要删除该控件组吗？</string>
+    <string name="menu_control_view_group_copy_failed">复制控件组失败</string>
+    <string name="menu_control_view_group_delete">你确定要删除该控件组吗？</string>
     <string name="menu_control_view_group_name">名称</string>
     <string name="menu_control_view_group_visibility">初始可见性</string>
     <string name="menu_control_view_group_exist">该控件组已存在</string>
@@ -602,6 +604,7 @@
     <string name="menu_settings_physical_mouse_mode">实体鼠标控制</string>
     <string name="menu_settings_slide_acceleration">滑动加速</string>
     <string name="menu_settings_distance_acceleration">距离加速</string>
+    <string name="menu_settings_simultaneous_view_control">同时控制视角</string>
     <string name="menu_settings_capture_pointer_key">指针捕获切换键</string>
     <string name="menu_settings_ime_toggle_key">输入法切换键</string>
     <string name="menu_settings_key_modifier">修饰键</string>
@@ -656,6 +659,9 @@
     <string name="mods_installed_skipped_note">%1$d 个前置模组本地已安装，已跳过</string>
     <string name="mods_dependency_resolving">正在解析前置模组…</string>
     <string name="download_manager">下载管理</string>
+    <string name="game_service_channel">游戏运行</string>
+    <string name="game_service_notification_title">游戏运行中</string>
+    <string name="game_service_notification_text">点击返回游戏</string>
     <string name="message_error">错误</string>
     <string name="message_failed">操作失败</string>
     <string name="message_file_exist">文件已存在</string>
@@ -795,6 +801,7 @@
     <string name="modrinth_category_screenshot">极高</string>
     <string name="modrinth_category_semi_realistic">半写实</string>
     <string name="modrinth_category_shadows">阴影</string>
+    <string name="modrinth_category_vanilla">原版</string>
     <string name="modrinth_category_vanilla_like">原版风格</string>
     <!--  resource pack  -->
     <string name="modrinth_category_audio">声音</string>
@@ -871,6 +878,7 @@
     <string name="favorite_batch_parsing">正在解析可下载的模组...</string>
     <string name="favorite_batch_download">下载</string>
     <string name="favorite_batch_queued">已加入下载队列 %d 个文件</string>
+    <string name="favorite_operation_in_progress">有操作尚未结束，请稍候</string>
     <string name="favorite_group">分组</string>
     <string name="favorite_group_select">选择分组</string>
     <string name="favorite_group_edit">修改分组</string>
@@ -947,7 +955,7 @@
     <string name="settings_advanced_env">环境变量</string>
     <string name="settings_advanced_env_desc">设置游戏进程的环境变量（每行 KEY=VALUE）</string>
     <string name="settings_advanced_minecraft_arguments">游戏参数</string>
-    <string name="settings_advanced_minecraft_arguments_desc">附加 Minecraft 启动参数</string>
+    <string name="settings_advanced_minecraft_arguments_desc">附加的Minecraft 启动参数。</string>
     <string name="settings_advanced_minecraft_arguments_prompt">默认</string>
     <string name="settings_advanced_server_ip">服务器地址</string>
     <string name="settings_advanced_server_ip_desc">启动游戏后自动加入指定服务器（IP:端口）</string>
@@ -965,7 +973,7 @@
     <string name="settings_fcl_renderer">OpenGL实现方式</string>
     <string name="settings_fcl_renderer_desc">选择 OpenGL 渲染器实现</string>
     <string name="settings_fcl_renderer_vgpu">VGPU (OpenGL 2.1+)</string>
-    <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, 仅支持 adreno616-660)</string>
+    <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, 仅支持 adreno616-a660)</string>
     <string name="settings_fcl_renderer_nggl4es">Krypton Wrapper (OpenGL 3.1+)</string>
     <string name="settings_fcl_driver">Vulkan驱动</string>
     <string name="settings_fcl_driver_desc">选择 Vulkan 驱动实现</string>
@@ -1204,6 +1212,8 @@
     <string name="version_empty_launch">没有版本，请先安装一个版本。</string>
     <string name="version_launch">启动游戏</string>
     <string name="version_no_version">没有版本</string>
+    <string name="version_pin">置顶</string>
+    <string name="version_unpin">取消置顶</string>
     <string name="version_manage">点击管理</string>
     <string name="version_manage_clean">清理游戏日志</string>
     <string name="version_manage_duplicate">复制游戏实例</string>
@@ -1333,7 +1343,6 @@
     <string name="joystick_r">右摇杆</string>
     <string name="message_vulkan_driver_system">警告：使用系统Vulkan驱动可能获得更好的性能，但也可能因兼容性问题导致崩溃！</string>
     <string name="message_loading_controllers">正在加载自定义按键，请等待...</string>
-
     <string name="settings_fcl_vulkan_check">检测 Vulkan</string>
     <string name="settings_fcl_vulkan_check_desc">检测设备是否支持 Minecraft 26.2 及以后版本所需的 Vulkan 渲染后端。</string>
     <string name="settings_fcl_vulkan_check_not_checked">未检测</string>

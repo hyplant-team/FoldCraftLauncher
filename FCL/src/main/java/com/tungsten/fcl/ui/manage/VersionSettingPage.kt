@@ -155,9 +155,6 @@ class VersionSettingPage(
         builder.create().show()
     }
 
-    override fun refresh(vararg param: Any?): Task<*>? {
-        return null
-    }
 
     override fun loadVersion(profile: Profile, versionId: String?) {
         this.profile = profile

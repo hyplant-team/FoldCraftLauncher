@@ -1,7 +1,5 @@
 package com.tungsten.fcl.control.view;
 
-import static com.tungsten.fclauncher.keycodes.MinecraftKeyBindingMapper.BINDING_CHAT;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -23,6 +21,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.control.GameMenu;
+import com.tungsten.fcl.control.GameTextSender;
 import com.tungsten.fcl.control.GestureMode;
 import com.tungsten.fcl.control.MouseMoveMode;
 import com.tungsten.fcl.control.data.BaseInfoData;
@@ -30,10 +29,8 @@ import com.tungsten.fcl.control.data.ButtonEventData;
 import com.tungsten.fcl.control.data.ControlButtonData;
 import com.tungsten.fcl.control.data.ControlViewGroup;
 import com.tungsten.fcl.control.data.CustomControl;
-import com.tungsten.fcl.setting.GameOption;
 import com.mio.util.AndroidUtilKt;
 import com.tungsten.fclauncher.bridge.FCLBridge;
-import com.tungsten.fclauncher.keycodes.FCLKeycodes;
 import com.tungsten.fclcore.fakefx.beans.InvalidationListener;
 import com.tungsten.fclcore.fakefx.beans.binding.Bindings;
 import com.tungsten.fclcore.fakefx.beans.property.BooleanProperty;
@@ -491,6 +488,7 @@ public class ControlButton extends AppCompatButton implements CustomView {
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
+                    menu.getInput().releaseLookOwner(getData().getId());
                     if (swipeEngaged) {
                         // 滑动链结束：释放链上被按住的按钮（滑回自己时是自己），不触发单击/双击
                         if (swipePressed != null) {
@@ -592,6 +590,7 @@ public class ControlButton extends AppCompatButton implements CustomView {
     }
 
     private void cancelAllEvent() {
+        menu.getInput().releaseLookOwner(getData().getId());
         handleUpAfterPressEvent();
         handleUpAfterLongPressEvent();
         cancelTickEvent(getData().getEvent().getPressEvent());
@@ -622,11 +621,14 @@ public class ControlButton extends AppCompatButton implements CustomView {
                 float frameDY = event.getY() - lastLookY;
                 lastLookX = event.getX();
                 lastLookY = event.getY();
-                double sensitivity = menu.getMenuSetting().getMouseSensitivity();
-                // 强制分辨率下游戏窗口与 windowScale 无关，增量按 1:1 下发，由 pushEventLookDelta 统一除拉伸系数
-                float scaleFactor = FCLBridge.FORCE_RESOLUTION ? 1f : (float) menu.getBridge().getScaleFactor();
-                FCLBridge.pushEventLookDelta((float) (frameDX * sensitivity * scaleFactor),
-                        (float) (frameDY * sensitivity * scaleFactor));
+                // 非同时控制模式下先开始拖动的一方独占视角，被占用时丢弃增量；锚点已推进，不累积位移
+                if (menu.getInput().acquireLookOwner(getData().getId())) {
+                    double sensitivity = menu.getMenuSetting().getMouseSensitivity();
+                    // 强制分辨率下游戏窗口与 windowScale 无关，增量按 1:1 下发，由 pushEventLookDelta 统一除拉伸系数
+                    float scaleFactor = FCLBridge.FORCE_RESOLUTION ? 1f : (float) menu.getBridge().getScaleFactor();
+                    FCLBridge.pushEventLookDelta((float) (frameDX * sensitivity * scaleFactor),
+                            (float) (frameDY * sensitivity * scaleFactor));
+                }
             }
         }
         if (getData().getEvent().isMovable()) {
@@ -834,22 +836,7 @@ public class ControlButton extends AppCompatButton implements CustomView {
             menu.openQuickInput();
         }
         if (StringUtils.isNotBlank(event.getOutputText())) {
-            if (menu.getCursorMode() == FCLBridge.CursorEnabled) {
-                for (int i = 0; i < event.getOutputText().length(); i++) {
-                    menu.getInput().sendChar(event.getOutputText().charAt(i));
-                }
-            } else {
-                GameOption gameOption = menu.getGameOption();
-                menu.getInput().sendBoundKeyEvent(gameOption, BINDING_CHAT, FCLKeycodes.KEY_T, true);
-                menu.getInput().sendBoundKeyEvent(gameOption, BINDING_CHAT, FCLKeycodes.KEY_T, false);
-                new Handler().postDelayed(() -> {
-                    for (int i = 0; i < event.getOutputText().length(); i++) {
-                        menu.getInput().sendChar(event.getOutputText().charAt(i));
-                    }
-                    menu.getInput().sendKeyEvent(FCLKeycodes.KEY_ENTER, true);
-                    menu.getInput().sendKeyEvent(FCLKeycodes.KEY_ENTER, false);
-                }, 150);
-            }
+            GameTextSender.send(menu, event.getOutputText());
         }
         for (String id : event.bindViewGroupList()) {
             if (menu.getController().viewGroups().stream().anyMatch(it -> it.getId().equals(id))) {

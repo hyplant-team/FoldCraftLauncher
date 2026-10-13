@@ -56,9 +56,6 @@ class AboutPage(context: Context?, id: Int) : FCLPage(context, id, R.layout.page
         binding.settingList.adapter = AboutAdapter { openLinkAt(it) }
     }
 
-    override fun refresh(vararg param: Any?): Task<*>? {
-        return null
-    }
 
     private fun openLinkAt(linkIndex: Int) {
         val link = LINKS[linkIndex].link
@@ -125,7 +122,6 @@ class AboutPage(context: Context?, id: Int) : FCLPage(context, id, R.layout.page
     companion object {
         private const val TYPE_DESC = 0
         private const val TYPE_LINK = 1
-        private const val QQ_GROUP_KEY = "9_Mnxe5x1l6L7giLuRYQyBh0iWBgCUbw"
 
         private val LINKS = listOf(
             LinkItem(R.string.about_link_a, FCLPath.Prop.getProperty("about-link-a","null://")),

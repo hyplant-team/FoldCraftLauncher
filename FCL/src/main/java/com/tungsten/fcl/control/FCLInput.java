@@ -176,8 +176,7 @@ public class FCLInput implements View.OnCapturedPointerListener {
     }
 
     /**
-     * 光标模式切换或切后台时复位：丢弃悬停触摸的按键快照，并把仍视为按下的鼠标键补发释放，
-     * 防止事件来源在切换中丢失（捕获抢走触摸、窗口失焦吞掉 UP）造成卡键
+     * 切后台、窗口失焦时复位：此时来源确实丢失，把仍视为按下的鼠标键补发释放防卡键
      */
     public void resetExternalMouseState() {
         if (menu.getBridge() != null) {
@@ -189,6 +188,17 @@ public class FCLInput implements View.OnCapturedPointerListener {
         }
         mouseButtonState.clear();
         lastExternalMouseButtons = 0;
+    }
+
+    /**
+     * 光标模式切换后的来源重对齐：刻意不补发释放。模式切换不等于来源丢失——手指或鼠标键仍按住时
+     * UP 会照常到达，抢先补发释放会把「按住某键」的交互（如机械动力数值设置界面：右键松开才确认）
+     * 在界面刚打开的一瞬间结束；按下状态与外部按键快照保留原值，来源事件据此继续对齐，
+     * 真正失去来源的场景（切后台、窗口失焦）走 {@link #resetExternalMouseState()}
+     */
+    public void onCursorModeChanged() {
+        // 切换点悬停坐标会跳变，作废快照避免下一次悬停派生出整段位移
+        lastHoverValid = false;
     }
 
     public void sendBoundKeyEvent(GameOption option, String binding, int defaultKeycode, boolean press) {
@@ -389,6 +399,37 @@ public class FCLInput implements View.OnCapturedPointerListener {
         // 强制分辨率下游戏窗口与 windowScale 无关，外置鼠标增量按 1:1 下发，由 pushEventLookDelta 统一除拉伸系数
         float scaleFactor = FCLBridge.FORCE_RESOLUTION ? 1f : (float) menu.getBridge().getScaleFactor();
         FCLBridge.pushEventLookDelta(deltaX * scaleFactor, deltaY * scaleFactor);
+    }
+
+    /**
+     * 视角增量占用者（触控板/按键 id）。非同时控制时先开始拖动的一方独占视角，
+     * 另一方增量被忽略，抬起后释放
+     */
+    private String lookOwner;
+
+    /**
+     * 申请视角控制权并判断本次增量是否可下发：允许同时控制时全部放行，
+     * 否则先到者独占（本次调用即占用）
+     */
+    public boolean acquireLookOwner(String owner) {
+        if (menu.getMenuSetting().isSimultaneousViewControl()) {
+            return true;
+        }
+        if (lookOwner == null) {
+            lookOwner = owner;
+        }
+        return owner.equals(lookOwner);
+    }
+
+    public void releaseLookOwner(String owner) {
+        if (owner.equals(lookOwner)) {
+            lookOwner = null;
+        }
+    }
+
+    /** 同时控制开关切换后清空占用，避免上一模式遗留的占用者阻塞另一来源 */
+    public void resetLookOwner() {
+        lookOwner = null;
     }
 
     /** 悬停降级路径的增量应用：菜单态移动光标，捕获态转发视角增量 */

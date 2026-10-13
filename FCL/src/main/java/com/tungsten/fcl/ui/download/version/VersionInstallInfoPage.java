@@ -240,12 +240,6 @@ public class VersionInstallInfoPage extends FCLPage implements View.OnClickListe
         return null;
     }
 
-    @Override
-    public Task<?> refresh(Object... param) {
-        return Task.runAsync(() -> {
-
-        });
-    }
 
     @Override
     public void onClick(View view) {
