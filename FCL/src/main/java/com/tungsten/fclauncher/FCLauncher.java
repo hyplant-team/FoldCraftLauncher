@@ -203,6 +203,10 @@ public class FCLauncher {
         envMap.put("FCL_NATIVEDIR", config.getContext().getApplicationInfo().nativeLibraryDir);
         envMap.put("POJAV_NATIVEDIR", config.getContext().getApplicationInfo().nativeLibraryDir);
         envMap.put("DRIVER_PATH", DriverPlugin.getSelected().getPath());
+        // 自定义驱动加载参数：linkerhook 按 DRIVER_LIB 加载驱动库（Turnip/panvk 等），
+        // GPU 门控按 DRIVER_GPU 判定家族（adreno/mali/any）
+        envMap.put("DRIVER_LIB", DriverPlugin.getSelected().getLib());
+        envMap.put("DRIVER_GPU", DriverPlugin.getSelected().getGpu());
         envMap.put("TMPDIR", config.getContext().getCacheDir().getAbsolutePath());
         envMap.put("PATH", config.getJavaPath() + "/bin:" + Os.getenv("PATH"));
         envMap.put("LD_LIBRARY_PATH", getLibraryPath(config.getContext(), config.getRenderer().getPath(), config.getLwjglVersion()));
@@ -291,10 +295,18 @@ public class FCLauncher {
         }
         String gl = renderer.getGlName();
         if (!gl.isEmpty()) {
-            if (!gl.startsWith("/")) {
+            // v1 插件约定：glName 以 / 开头表示相对插件 nativeLibraryDir（与 eglName 一致），须拼上插件目录
+            if (gl.startsWith("/")) {
+                if (!renderer.getPath().isEmpty()) {
+                    gl = renderer.getPath() + gl;
+                }
+            } else {
                 gl = rendererLibPath(renderer) + "/" + gl;
             }
-            envMap.put("SDL_OPENGL_LIBRARY", gl);
+            // 与 SDL_EGL_LIBRARY 同策略：路径不存在时不设置，交给 SDL 按自身默认解析
+            if (new File(gl).isFile()) {
+                envMap.put("SDL_OPENGL_LIBRARY", gl);
+            }
         }
     }
 
