@@ -101,20 +101,20 @@ class RuntimeFragment : FCLFragment(), View.OnClickListener {
 
     private fun check() {
         if (!isLatest) return
-        if (others) {
-            if (!installing) {
-                (activity as SplashActivity).enterLauncher()
+        if (installing) {
+            if (!others) {
+                installOthers()
             } else {
                 (activity as SplashActivity).finish()
                 System.exit(0)
             }
-        } else if (installing) {
-            checkOthers()
+        } else if (others) {
+            (activity as SplashActivity).enterLauncher()
         }
     }
 
     private var installingOthers = false
-    private fun checkOthers() {
+    private fun installOthers() {
         if (installingOthers) return
         installingOthers = true
         bind.apply {

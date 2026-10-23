@@ -20,12 +20,14 @@ package com.tungsten.fcl.terracotta;
 import static com.tungsten.fclcore.util.Logging.LOG;
 
 import com.google.gson.JsonParseException;
+import com.tungsten.fcl.util.RegionUtils;
 import com.tungsten.fclcore.util.StringUtils;
 import com.tungsten.fclcore.util.gson.JsonUtils;
 import com.tungsten.fclcore.util.gson.TolerableValidationException;
 import com.tungsten.fclcore.util.gson.Validation;
 import com.tungsten.fclcore.util.io.HttpRequest;
-import com.tungsten.fcllibrary.util.LocaleUtils;
+
+import com.tungsten.fclauncher.utils.FCLPath;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +39,7 @@ import java.util.stream.Collectors;
 
 /// @author Glavo
 public final class TerracottaNodeList {
-    private static final String NODE_LIST_URL = "https://terracotta.glavo.site/nodes";
+    private static final String NODE_LIST_URL = FCLPath.Prop.getProperty("terracotta-nodes-url", "null://");
 
     private static final class TerracottaNode implements Validation {
         private final String url;
@@ -103,9 +105,7 @@ public final class TerracottaNodeList {
                                     return false;
                                 }
 
-                                return StringUtils.isBlank(node.region())
-                                        || (LocaleUtils.IS_CHINA_MAINLAND
-                                        == "CN".equalsIgnoreCase(node.region()));
+                                return true;
                             })
                             .map(node -> URI.create(node.url()))
                             .collect(Collectors.toList());

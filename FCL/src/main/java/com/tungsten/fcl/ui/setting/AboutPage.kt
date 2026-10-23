@@ -16,9 +16,16 @@ import com.tungsten.fclauncher.utils.FCLPath;
 import com.tungsten.fcl.databinding.ItemAboutBinding
 import com.tungsten.fcl.databinding.ItemAboutDescBinding
 import com.tungsten.fcl.databinding.PageSettingListBinding
+import com.tungsten.fcl.util.LegalAgreement
+import com.tungsten.fclcore.task.Schedulers
 import com.tungsten.fclcore.task.Task
+import com.tungsten.fclcore.util.Logging
+import com.tungsten.fcllibrary.component.dialog.FCLAlertDialog
 import com.tungsten.fcllibrary.component.theme.ThemeEngine
 import com.tungsten.fcllibrary.component.ui.FCLPage
+import java.io.IOException
+import java.util.logging.Level
+import kotlin.system.exitProcess
 
 /**
  * 关于页：说明置顶，下方链接行合成一组（组内绘制分割线），
@@ -58,14 +65,57 @@ class AboutPage(context: Context?, id: Int) : FCLPage(context, id, R.layout.page
 
 
     private fun openLinkAt(linkIndex: Int) {
-        val link = LINKS[linkIndex].link
-        if (link != null) {
-            openLink(context, link)
+        val item = LINKS[linkIndex]
+        when {
+            item.document != null -> showLegalDocument(item.document)
+            item.link != null -> openLink(context, item.link)
         }
     }
 
-    /** 链接行：标题资源与跳转链接，条目顺序即显示顺序 */
-    private data class LinkItem(val titleRes: Int, val link: String?)
+    /** 查看随安装包分发的用户协议 / 隐私政策；隐私政策提供撤回同意的入口 */
+    private fun showLegalDocument(document: LegalAgreement.Document) {
+        val ctx = context
+        Schedulers.io().execute {
+            val text = try {
+                LegalAgreement.load(ctx, document)
+            } catch (e: IOException) {
+                Logging.LOG.log(Level.WARNING, "Failed to load legal document $document", e)
+                ctx.getString(R.string.legal_load_failed)
+            }
+            Schedulers.androidUIThread().execute {
+                FCLAlertDialog.Builder(ctx).apply {
+                    setAlertLevel(FCLAlertDialog.AlertLevel.INFO)
+                    setTitle(ctx.getString(document.titleRes))
+                    setMessage(text)
+                    useAutoLink()
+                    setPositiveButton(null)
+                    if (document == LegalAgreement.Document.PRIVACY_POLICY) {
+                        setNeutralButton(ctx.getString(R.string.legal_withdraw)) { confirmWithdraw() }
+                    }
+                    create().show()
+                }
+            }
+        }
+    }
+
+    /** 撤回同意：清除同意记录后立即退出，下次启动重新走确认页；不删除本机数据 */
+    private fun confirmWithdraw() {
+        val ctx = context
+        FCLAlertDialog.Builder(ctx).apply {
+            setAlertLevel(FCLAlertDialog.AlertLevel.ALERT)
+            setMessage(ctx.getString(R.string.legal_withdraw_confirm))
+            setPositiveButton(ctx.getString(R.string.legal_withdraw_positive)) {
+                LegalAgreement.withdraw(ctx)
+                activity?.finishAffinity()
+                exitProcess(0)
+            }
+            setNegativeButton(null)
+            create().show()
+        }
+    }
+
+    /** 链接行：标题资源与跳转链接，document 非空时改为查看协议文档；条目顺序即显示顺序 */
+    private data class LinkItem(val titleRes: Int, val link: String?, val document: LegalAgreement.Document? = null)
 
     private class AboutAdapter(
         private val onLinkClick: (Int) -> Unit
@@ -128,7 +178,9 @@ class AboutPage(context: Context?, id: Int) : FCLPage(context, id, R.layout.page
             LinkItem(R.string.about_link_b, FCLPath.Prop.getProperty("about-link-b","null://")),
             LinkItem(R.string.about_link_c, FCLPath.Prop.getProperty("about-link-c","null://")),
             LinkItem(R.string.about_link_d, FCLPath.Prop.getProperty("about-link-d","null://")),
-            LinkItem(R.string.about_link_e, FCLPath.Prop.getProperty("about-link-e","null://"))
+            LinkItem(R.string.about_link_e, FCLPath.Prop.getProperty("about-link-e","null://")),
+            LinkItem(R.string.legal_eula, null, LegalAgreement.Document.EULA),
+            LinkItem(R.string.legal_privacy, null, LegalAgreement.Document.PRIVACY_POLICY)
         )
     }
 }

@@ -109,7 +109,7 @@ public class LauncherSettingPage extends FCLPage implements LauncherSettingAdapt
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("ignore_update", -1);
                 editor.putInt("ignore_announcement", -1);
-                editor.putBoolean("isFirstLaunch", true);
+                editor.putInt("legal_agreement_version", 0);
                 editor.apply();
                 if (!UpdateChecker.getInstance().isChecking()) {
                     UpdateChecker.getInstance().checkManually(getContext()).whenComplete(Schedulers.androidUIThread(), e -> {

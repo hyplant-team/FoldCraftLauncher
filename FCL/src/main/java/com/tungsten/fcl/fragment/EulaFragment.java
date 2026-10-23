@@ -1,45 +1,51 @@
 package com.tungsten.fcl.fragment;
 
-import static android.content.Context.MODE_PRIVATE;
+import static com.tungsten.fclcore.util.Logging.LOG;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.text.method.LinkMovementMethodCompat;
 
+import com.google.android.material.tabs.TabLayout;
 import com.tungsten.fcl.R;
 import com.tungsten.fcl.activity.SplashActivity;
-import com.tungsten.fcl.util.ReadTools;
-import com.tungsten.fclauncher.utils.FCLPath;
-import com.tungsten.fclcore.util.io.IOUtils;
-import com.tungsten.fclcore.util.io.NetworkUtils;
+import com.tungsten.fcl.util.LegalAgreement;
 import com.tungsten.fcllibrary.component.FCLFragment;
-import com.tungsten.fcllibrary.component.theme.ThemeData;
 import com.tungsten.fcllibrary.component.theme.ThemeEngine;
 import com.tungsten.fcllibrary.component.view.FCLButton;
 import com.tungsten.fcllibrary.component.view.FCLProgressBar;
+import com.tungsten.fcllibrary.component.view.FCLTabLayout;
 import com.tungsten.fcllibrary.component.view.FCLTextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
+/**
+ * 用户协议与隐私政策确认页：启动流程的第一步（首次启动或协议版本更新后显示）。
+ * 同意前不申请权限、不联网；同意后交回 {@link SplashActivity} 继续权限申请与初始化，不同意则退出。
+ */
 public class EulaFragment extends FCLFragment implements View.OnClickListener {
 
-    public static final String EULA_URL = FCLPath.Prop.getProperty("eula-url","null://");
+    private final LegalAgreement.Document[] documents = LegalAgreement.Document.values();
+    /** 与 documents 一一对应的文档内容，加载完成前为 null */
+    private final String[] contents = new String[documents.length];
 
     private FCLProgressBar progressBar;
-    private FCLTextView eula;
-    private FCLTextView eulaTitle;
-
-    private FCLButton next;
+    private FCLTabLayout tabLayout;
+    private ScrollView scrollView;
+    private FCLTextView content;
+    private FCLButton agree;
+    private FCLButton disagree;
 
     private boolean load = false;
     private boolean online = false;
@@ -50,67 +56,82 @@ public class EulaFragment extends FCLFragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_eula, container, false);
 
         progressBar = findViewById(view, R.id.progress);
-        eula = findViewById(view, R.id.eula);
-        eulaTitle = findViewById(view, R.id.eula_title);
+        tabLayout = findViewById(view, R.id.tab_layout);
+        scrollView = findViewById(view, R.id.eula_parent);
+        content = findViewById(view, R.id.eula);
+        agree = findViewById(view, R.id.next);
+        disagree = findViewById(view, R.id.disagree);
 
-        int textColor = ThemeEngine.getInstance().getTheme().getColor2();
-        eula.setTextColor(textColor);
-        eulaTitle.setTextColor(textColor);
+        agree.setOnClickListener(this);
+        disagree.setOnClickListener(this);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                showDocument(tab.getPosition());
+            }
 
-        next = findViewById(view, R.id.next);
-        next.setOnClickListener(this);
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-        loadEula();
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        loadDocuments();
 
         return view;
     }
 
-    private void loadEula() {
+    private void loadDocuments() {
+        Context context = requireContext();
         new Thread(() -> {
-            String str = getString(R.string.splash_eula_error);
-            try {
-                String local_eula = FCLPath.FILES_DIR + "/debug/eula.txt";
-                if (new File(local_eula).exists()) {
-                    str = ReadTools.readFileTxt(local_eula);
-                } else {
-                    str = NetworkUtils.doGet(NetworkUtils.toURL(EULA_URL));
-                }
-                online = true;
-                load = true;
-            } catch (IOException | IllegalArgumentException e) {
-                str = e.toString();
-            }
-            if (!load) {
+            String[] loaded = new String[documents.length];
+            for (int i = 0; i < documents.length; i++) {
                 try {
-                    str = IOUtils.readFullyAsString(requireActivity().getAssets().open( "local_eula.txt"));
-                    load = true;
+                    loaded[i] = LegalAgreement.load(context, documents[i]);
                 } catch (IOException e) {
-                    str = e.toString();
+                    LOG.log(Level.WARNING, "Failed to load legal document " + documents[i], e);
+                    loaded[i] = context.getString(R.string.legal_load_failed);
                 }
             }
-            final String s = str;
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(() -> {
+            Activity activity = getActivity();
+            if (activity != null) {
+                activity.runOnUiThread(() -> {
+                    if (getView() == null)
+                        return;
+                    System.arraycopy(loaded, 0, contents, 0, contents.length);
                     progressBar.setVisibility(View.GONE);
-                    eula.setText(s);
+                    agree.setEnabled(true);
+                    showDocument(tabLayout.getSelectedTabPosition());
                 });
             }
-        }).start();
+        }, "Legal Document Loader").start();
+    }
+
+    private void showDocument(int position) {
+        if (position < 0 || position >= contents.length || contents[position] == null)
+            return;
+        content.setText(contents[position]);
+        Linkify.addLinks(content, Linkify.WEB_URLS);
+        content.setMovementMethod(LinkMovementMethodCompat.getInstance());
+        content.setLinkTextColor(ThemeEngine.getInstance().getTheme().getColor());
+        scrollView.scrollTo(0, 0);
     }
 
     @Override
     public void onClick(View view) {
-        if (view == next) {
-            if (getActivity() != null) {
-                if (!load) return;
-                if (online) {
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("launcher", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("isFirstLaunch", false);
-                    editor.apply();
-                }
-                ((SplashActivity) getActivity()).checkRuntime();
-            }
+        if (!(getActivity() instanceof SplashActivity))
+            return;
+        SplashActivity activity = (SplashActivity) getActivity();
+        if (view == agree) {
+            LegalAgreement.accept(activity);
+            activity.onLegalAgreementAccepted();
+        } else if (view == disagree) {
+            activity.finish();
         }
     }
 }
