@@ -496,6 +496,7 @@
     <string name="installer_recent_logs">最近日志：</string>
     <string name="installer_process_retrying">安装器进程超时，正在重试（%1$d/%2$d）…</string>
     <string name="installer_process_start_error">无法启动安装器进程</string>
+    <string name="installer_process_bad_state">安装器进程多次崩溃，已被系统暂时禁止启动，请稍候或重启应用后重试</string>
     <string name="installer_process_no_exit_code">安装器进程未返回退出码，可能已异常退出</string>
     <string name="installer_process_no_response">安装器进程无响应，已强制结束</string>
     <string name="installer_process_failed_to_start">安装器进程未能启动</string>
@@ -1495,8 +1496,4 @@
     <string name="animation_hands_up_running">举手奔跑</string>
     <string name="animation_hands_up_jumping">举手蹦跳</string>
     <string name="animation_spin_jump">邦友的酒</string>
-    <string name="quark_promo_title">支持 FCL</string>
-    <string name="quark_promo_message">这是你第 %1$d 次启动游戏！\n\n如果 FCL 对你有帮助，欢迎动动手指打开夸克网盘，注册或登录后点击保存到网盘（不用下载），就是对我们最大的支持，十分感谢～</string>
-    <string name="quark_promo_open">打开夸克网盘</string>
-    <string name="quark_promo_start">开始游戏</string>
 </resources>

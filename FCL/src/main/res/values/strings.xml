@@ -559,6 +559,7 @@
     <string name="installer_recent_logs">Recent logs:</string>
     <string name="installer_process_retrying">Installer process timed out, retrying (%1$d/%2$d)…</string>
     <string name="installer_process_start_error">Failed to start installer process</string>
+    <string name="installer_process_bad_state">The installer process has crashed repeatedly and is temporarily blocked by the system. Wait a moment or restart the app, then try again</string>
     <string name="installer_process_no_exit_code">Installer process did not return an exit code, it may have exited abnormally</string>
     <string name="installer_process_no_response">Installer process is not responding, forcibly terminated</string>
     <string name="installer_process_failed_to_start">Installer process failed to start</string>
@@ -1641,8 +1642,4 @@
     <string name="animation_hands_up_running">Hands-up Running</string>
     <string name="animation_hands_up_jumping">Hands-up Jumping</string>
     <string name="animation_spin_jump">Spin Jump</string>
-    <string name="quark_promo_title">Support FCL</string>
-    <string name="quark_promo_message">This is your %1$dth game launch!\n\nIf FCL has been helpful to you, feel free to take a moment to open Quark Drive, sign up or log in and tap the Save to Drive button (no download needed). It would mean a lot to us. Thank you so much!</string>
-    <string name="quark_promo_open">Open Quark Drive</string>
-    <string name="quark_promo_start">Start Game</string>
 </resources>
