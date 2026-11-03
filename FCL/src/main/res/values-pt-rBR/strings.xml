@@ -586,7 +586,6 @@
     <string name="modpack_type_mcbbs_export">Pode ser importado por FCL, HMCL e MultiMC</string>
     <string name="modpack_type_modrinth">Modrinth</string>
     <string name="modpack_type_multimc">MultiMC</string>
-    <string name="modpack_type_multimc_export">Pode ser importado por FCL, HMCL e MultiMC</string>
     <string name="modpack_type_server">Atualizar automaticamente o modpack do servidor</string>
     <string name="modpack_type_server_export">Permite que o proprietário do servidor atualize a instância do jogo remotamente</string>
     <string name="modpack_type_server_malformed">Manifesto do modpack inválido. Consulte o fabricante do modpack do servidor para corrigir este problema.</string>
@@ -717,7 +716,6 @@
     <string name="settings_fcl_controller">Controle</string>
     <string name="settings_fcl_renderer">Implementação OpenGL (Renderizador)</string>
     <string name="settings_fcl_renderer_vgpu">VGPU (OpenGL 2.1+)</string>
-    <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, suporta GPU Adreno 616-660)</string>
     <string name="settings_download_netdisk">Netdisk (Recomendado para usuários na China)</string>
     <string name="settings_game">Config. do Jogo</string>
     <string name="settings_game_dimension">Resolução</string>

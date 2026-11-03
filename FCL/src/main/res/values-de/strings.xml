@@ -541,7 +541,6 @@
     <string name="modpack_type_mcbbs">MCBBS-Typ</string>
     <string name="modpack_type_hmcl">HMCL-Typ</string>
     <string name="modpack_type_mcbbs_export">Kann von FCL, HMCL und MultiMC importiert werden</string>
-    <string name="modpack_type_multimc_export">Kann von FCL, HMCL und MultiMC importiert werden</string>
     <string name="modpack_type_server">Automatisches Update des Modpacks vom Server</string>
     <string name="modpack_type_server_export">Ermöglicht dem Serverbesitzer, das Spielprofil remote zu aktualisieren</string>
     <string name="modpack_type_server_malformed">Ungültiges Modpack-Manifest. Kontaktieren Sie den Hersteller des Modpack-Servers, um dieses Problem zu beheben.</string>
@@ -654,7 +653,6 @@
     <string name="settings_fcl_vulkan_driver_system">System-Vulkan-Treiber verwenden</string>
     <string name="settings_fcl_renderer">OpenGL-Implementierung (Renderer)</string>
     <string name="settings_fcl_renderer_vgpu">VGPU (OpenGL 2.1+)</string>
-    <string name="settings_fcl_renderer_freedreno">Freedreno (OpenGL 4.6, nur für adreno616-660)</string>
     <string name="settings_fcl_driver">Vulkan-Treiber</string>
     <string name="settings_download_netdisk">Netdisk(Qıtayda qullanğanlar içün tevsiye etile)</string>
     <string name="settings_game">Spieleinstellungen</string>

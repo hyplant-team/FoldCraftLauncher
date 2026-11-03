@@ -84,8 +84,8 @@ android {
         applicationId = pkgName
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1342
-        versionName = "1.3.4.2"
+        versionCode = 1344
+        versionName = "1.3.4.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
