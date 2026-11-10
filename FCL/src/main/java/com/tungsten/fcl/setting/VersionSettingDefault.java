@@ -21,6 +21,7 @@ public class VersionSettingDefault {
     private static String serverIp = "";
     private static String java = "Auto";
     private static boolean notCheckGame = false;
+    private static boolean notRestoreModpack = false;
     private static boolean notCheckJVM = true;
     private static boolean notCheckVulkan = false;
     private static boolean touchMod = false;
@@ -56,6 +57,9 @@ public class VersionSettingDefault {
     }
     public static boolean getNotCheckGame() {
         return notCheckGame;
+    }
+    public static boolean getNotRestoreModpack() {
+        return notRestoreModpack;
     }
     public static boolean getNotCheckJVM() {
         return notCheckJVM;
@@ -100,8 +104,9 @@ public class VersionSettingDefault {
             serverIp = defaultConfig.has("serverIp") ? defaultConfig.get("serverIp").getAsString() : serverIp;
             java = defaultConfig.has("java") ? defaultConfig.get("java").getAsString() : java;
             notCheckGame = defaultConfig.has("notCheckGame") ? defaultConfig.get("notCheckGame").getAsBoolean() : notCheckGame;
+            notRestoreModpack = defaultConfig.has("notRestoreModpack") ? defaultConfig.get("notRestoreModpack").getAsBoolean() : notRestoreModpack;
             notCheckJVM = defaultConfig.has("notCheckJVM") ? defaultConfig.get("notCheckJVM").getAsBoolean() : notCheckJVM;
-            notCheckJVM = defaultConfig.has("notCheckVulkan") ? defaultConfig.get("notCheckVulkan").getAsBoolean() : notCheckVulkan;
+            notCheckVulkan = defaultConfig.has("notCheckVulkan") ? defaultConfig.get("notCheckVulkan").getAsBoolean() : notCheckVulkan;
             touchMod = defaultConfig.has("enableTouchMod") ? defaultConfig.get("enableTouchMod").getAsBoolean() : touchMod;
             graphicsBackend = defaultConfig.has("graphicsBackend") ? defaultConfig.get("graphicsBackend").getAsString() : graphicsBackend;
             vulkanDriverSystem = defaultConfig.has("vulkanDriverSystem") ? defaultConfig.get("vulkanDriverSystem").getAsBoolean() : vulkanDriverSystem;

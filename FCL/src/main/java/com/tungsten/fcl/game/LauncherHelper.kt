@@ -243,8 +243,37 @@ class LauncherHelper(
                 ModpackHelper.readModpackConfiguration(
                     profile.repository.getModpackConfiguration(selectedVersion)
                 )
-            ModpackHelper.getProviderByType(configuration.type)
-                ?.let { tasks.add(it.createCompletionTask(dependencyManager, selectedVersion)) }
+            ModpackHelper.getProviderByType(configuration.type)?.let { provider ->
+                // 用户已关闭整合包自动补全时不创建补全任务；否则探测将恢复的缺失文件，非空先弹窗确认
+                if (setting.isNotRestoreModpack)
+                    return@let
+                val missing =
+                    ModpackHelper.getMissingModpackFiles(profile.repository, selectedVersion, configuration)
+                if (missing.isNotEmpty()) {
+                    // 文件列表超 20 个折叠，避免弹窗过长
+                    val names = if (missing.size > 20)
+                        missing.take(20).joinToString("\n") + "\n..."
+                    else
+                        missing.joinToString("\n")
+                    val proceed = when (awaitChoice(
+                        context.getString(R.string.modpack_completion_confirm, names),
+                        positiveText = context.getString(R.string.modpack_completion_skip),
+                        negativeText = context.getString(R.string.modpack_completion_continue),
+                        neutralText = context.getString(R.string.modpack_completion_disable),
+                    )) {
+                        Choice.NEGATIVE -> true
+                        Choice.NEUTRAL -> {
+                            setting.isNotRestoreModpack = true
+                            false
+                        }
+                        Choice.POSITIVE -> false
+                    }
+                    if (!proceed)
+                        return@let
+                }
+                // HMCL / MultiMC 整合包无补全任务，provider 返回 null 时不加入
+                provider.createCompletionTask(dependencyManager, selectedVersion)?.let { tasks.add(it) }
+            }
         } catch (_: IOException) {
         }
         runTracked(Task.allOf(*tasks.toTypedArray()))
@@ -655,17 +684,6 @@ class LauncherHelper(
                 dialog.show()
             }
         }
-
-    /** 解包内置补丁 jar 到目标路径，失败仅记录警告不阻断启动 */
-    private fun unpackJar(resourcePath: String, targetPath: String, logName: String) {
-        try {
-            LauncherHelper::class.java.getResourceAsStream(resourcePath).use { input ->
-                Files.copy(input, File(targetPath).toPath(), StandardCopyOption.REPLACE_EXISTING)
-            }
-        } catch (e: IOException) {
-            LOG.log(Level.WARNING, "Unable to unpack $logName", e)
-        }
-    }
 
     /** 主线程展示启动失败原因（按异常类型整理文案，兜底分支直接打印堆栈） */
     private fun showLaunchErrorMessage(ex: Throwable) {

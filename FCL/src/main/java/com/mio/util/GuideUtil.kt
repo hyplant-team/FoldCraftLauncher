@@ -30,6 +30,7 @@ sealed interface GuideTag {
     data object ExecJar : GuideTag
     data object CrashTest : GuideTag
     data object JvmCrashTest : GuideTag
+    data object SkinModel : GuideTag
 }
 
 /**

@@ -423,7 +423,11 @@ public class FCLGameRepository extends DefaultGameRepository {
 
     public LaunchOptions getLaunchOptions(String version, JavaVersion javaVersion, File gameDir, double scaleFactor, double cursorOffset) {
         VersionSetting vs = getVersionSetting(version);
-        String profileName = (gameDir.getParentFile() != null) ? gameDir.getParentFile().getName() : "Minecraft";
+        String profileName = (gameDir.getParentFile() != null) ? gameDir.getParentFile().getName() : ".minecraft";
+        // 每版本渲染器覆盖（Profile.rendererOverrides）优先于版本/全局设置中的渲染器；
+        // 覆盖指向的渲染器已卸载/禁用时视同无覆盖，回到版本设置
+        String rendererOverride = profile.getEffectiveRendererOverride(version);
+        String rendererId = rendererOverride != null ? rendererOverride : vs.getRenderer();
         int maxMemory = (int) (getAllocatedMemory(
                 vs.getMaxMemory() * 1024L * 1024L,
                 MemoryUtils.getFreeDeviceMemory(FCLApp.getAppContext()) * 1024L * 1024L,
@@ -445,7 +449,7 @@ public class FCLGameRepository extends DefaultGameRepository {
                 .setHeight(FCLBridge.FORCE_RESOLUTION ? FCLBridge.FORCE_RESOLUTION_HEIGHT : (int) (AndroidUtilKt.getScreenHeight() * scaleFactor))
                 .setServerIp(vs.getServerIp())
                 .setVkDriverSystem(vs.isVKDriverSystem())
-                .setRenderer(RendererManager.getRenderer(vs.getRenderer()))
+                .setRenderer(RendererManager.getRenderer(rendererId))
                 .setDebugLog(vs.isDebugLog());
 
         if (vs.isAutoMemory() && builder.getJavaArguments().stream().anyMatch(it -> it.startsWith("-Xmx"))) {

@@ -84,8 +84,8 @@ android {
         applicationId = pkgName
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1344
-        versionName = "1.3.4.4"
+        versionCode = 1345
+        versionName = "1.3.4.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
@@ -308,7 +308,6 @@ dependencies {
     implementation(libs.touchcontroller)
     implementation(libs.palette.ktx)
     implementation(libs.gamepad.remapper)
-    implementation(libs.segmented.button)
     implementation(libs.datastore)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.room.runtime)
