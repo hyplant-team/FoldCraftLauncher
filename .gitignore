@@ -1,6 +1,9 @@
 # controllerRepo Git Index Backup
 controllerRepo/.git_bak/
 
+# IDE files
+.vscode/
+
 # build output
 build/
 */build/

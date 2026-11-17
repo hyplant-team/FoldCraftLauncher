@@ -8,6 +8,14 @@
   },
   "history": [
     {
+      "versionCode": 7,
+      "versionName": "2.4.1 (v7) - 真v7，微调按键位置防误触"
+    },
+    {
+      "versionCode": 8,
+      "versionName": "2.4.1 (v6.1) - 提升2.4.0的控制器版本"
+    },
+    {
       "versionCode": 6,
       "versionName": "2.4.0 - 全键盘增加更多功能按钮，新增文本编辑十字键，全键盘T不再打开键盘"
     },
