@@ -187,7 +187,8 @@ public class RuntimeUtils {
         }
     }
 
-    public static void copyAssetsDirToLocalDir(Context context, String assetsPath, String savePath){
+    // 用于RuntimeFragment的快速递归资源文件（夹）复制，带详细信息显示
+    public static void installAssets(Context context, String savePath, String assetsPath, InstallListener listener) throws IOException {
         try {
             // 获取assets目录下的所有文件及目录名
             String[] fileNames = context.getAssets().list(assetsPath);
@@ -196,9 +197,15 @@ public class RuntimeUtils {
                 File file = new File(savePath);
                 file.mkdirs();// 如果文件夹不存在，则递归
                 for (String fileName : fileNames) {
-                    copyAssetsDirToLocalDir(context, assetsPath + "/" + fileName, savePath + "/" + fileName);
+                    if (listener != null) {
+                        listener.onUpdate(fileName);
+                    }
+                    installAssets(context, savePath + "/" + fileName, assetsPath + "/" + fileName, listener);
                 }
             } else {// 如果是文件
+                if (listener != null) {
+                    listener.onUpdate(assetsPath);
+                }
                 InputStream is = context.getAssets().open(assetsPath);
                 FileOutputStream fos = new FileOutputStream(new File(savePath));
                 byte[] buffer = new byte[1024];
@@ -213,6 +220,15 @@ public class RuntimeUtils {
                 is.close();
                 fos.close();
             }
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+    }
+
+    // 遗留兼容：旧的不带详细消息快速复制
+    public static void copyAssetsDirToLocalDir(Context context, String assetsPath, String savePath){
+        try {
+            installAssets(context, savePath, assetsPath, null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -247,13 +263,6 @@ public class RuntimeUtils {
         while (tarEntry != null) {
             if (listener != null && !tarEntry.isDirectory()) {
                 listener.onUpdate(tarEntry.getName());
-            }
-            if (tarEntry.getSize() <= 20480) {
-                try {
-                    Thread.sleep(25);
-                } catch (InterruptedException ignored) {
-
-                }
             }
             File destPath = new File(dest, tarEntry.getName());
             if (tarEntry.isSymbolicLink()) {

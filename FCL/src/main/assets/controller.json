@@ -1,11 +1,11 @@
 {
   "id": "f9b80a8f2",
   "name": "Default",
-  "version": "2.4.0",
-  "versionCode": 6,
+  "version": "2.4.1",
+  "versionCode": 7,
   "author": "root-S7",
   "description": "多人游戏基本布局",
-  "controllerVersion": 20,
+  "controllerVersion": 21,
   "buttonStyles": [
     {
       "name": "全键盘-功能键",
@@ -205,6 +205,7 @@
             "event": {
               "pointerFollow": true,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -280,6 +281,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -355,6 +357,7 @@
             "event": {
               "pointerFollow": true,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -430,6 +433,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -505,6 +509,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -580,6 +585,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -655,6 +661,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -730,6 +737,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -805,6 +813,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -880,6 +889,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -957,6 +967,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -1032,6 +1043,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -1106,13 +1118,24 @@
               }
             },
             "event": {
-              "upKeycode": 17,
-              "downKeycode": 31,
-              "leftKeycode": 30,
-              "rightKeycode": 32,
+              "upKeycode": [
+                17
+              ],
+              "downKeycode": [
+                31
+              ],
+              "leftKeycode": [
+                30
+              ],
+              "rightKeycode": [
+                32
+              ],
               "followOption": "CENTER_FOLLOW",
               "sneak": true,
-              "sneakKeycode": 42
+              "sneakKeycode": 42,
+              "deadZone": 0,
+              "canLock": false,
+              "lockThreshold": 30
             }
           },
           {
@@ -1135,13 +1158,24 @@
               }
             },
             "event": {
-              "upKeycode": 103,
-              "downKeycode": 108,
-              "leftKeycode": 105,
-              "rightKeycode": 106,
+              "upKeycode": [
+                103
+              ],
+              "downKeycode": [
+                108
+              ],
+              "leftKeycode": [
+                105
+              ],
+              "rightKeycode": [
+                106
+              ],
               "followOption": "FIXED",
               "sneak": true,
-              "sneakKeycode": 42
+              "sneakKeycode": 42,
+              "deadZone": 0,
+              "canLock": false,
+              "lockThreshold": 30
             }
           }
         ]
@@ -1176,6 +1210,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -1251,6 +1286,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -1324,6 +1360,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -1399,6 +1436,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -1474,6 +1512,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -1551,6 +1590,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -1628,6 +1668,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -1703,6 +1744,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -1776,6 +1818,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": true,
                 "autoClick": false,
@@ -1849,6 +1892,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": true,
                 "autoClick": false,
@@ -1922,6 +1966,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2007,6 +2052,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2082,6 +2128,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2157,6 +2204,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2232,6 +2280,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2307,6 +2356,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2382,6 +2432,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2457,6 +2508,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2532,6 +2584,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2607,6 +2660,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2682,6 +2736,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2757,6 +2812,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2832,6 +2888,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2907,6 +2964,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -2982,6 +3040,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -3057,6 +3116,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -3132,6 +3192,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -3207,6 +3268,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -3282,6 +3344,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -3357,6 +3420,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -3432,6 +3496,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -3507,6 +3572,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -3582,6 +3648,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -3657,6 +3724,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -3732,6 +3800,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -3807,6 +3876,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -3882,6 +3952,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -3957,6 +4028,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -4032,6 +4104,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": true,
                 "autoClick": false,
@@ -4107,6 +4180,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -4182,6 +4256,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -4257,6 +4332,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -4332,6 +4408,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -4407,6 +4484,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -4482,6 +4560,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -4557,6 +4636,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -4632,6 +4712,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -4707,6 +4788,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -4782,6 +4864,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -4857,6 +4940,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": true,
                 "autoClick": false,
@@ -4932,6 +5016,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": true,
                 "autoClick": false,
@@ -5007,6 +5092,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": true,
                 "autoClick": false,
@@ -5082,6 +5168,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -5157,6 +5244,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": true,
                 "autoClick": false,
@@ -5232,6 +5320,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": true,
                 "autoClick": false,
@@ -5307,6 +5396,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -5382,6 +5472,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -5457,6 +5548,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -5532,6 +5624,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -5607,6 +5700,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -5682,6 +5776,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -5757,6 +5852,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -5832,6 +5928,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -5907,6 +6004,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -5982,6 +6080,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -6057,6 +6156,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -6132,6 +6232,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -6207,6 +6308,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -6282,6 +6384,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -6357,6 +6460,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -6434,6 +6538,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -6520,6 +6625,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -6595,6 +6701,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -6670,6 +6777,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -6745,6 +6853,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -6820,6 +6929,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -6895,6 +7005,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -6970,6 +7081,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -7045,6 +7157,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -7120,6 +7233,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -7195,6 +7309,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -7270,6 +7385,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -7346,6 +7462,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -7421,6 +7538,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -7496,6 +7614,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -7571,6 +7690,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -7646,6 +7766,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -7721,6 +7842,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -7796,6 +7918,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -7871,6 +7994,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -7946,6 +8070,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8021,6 +8146,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8096,6 +8222,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8171,6 +8298,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8246,6 +8374,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8321,6 +8450,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8396,6 +8526,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8471,6 +8602,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8546,6 +8678,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8621,6 +8754,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8696,6 +8830,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8771,6 +8906,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8846,6 +8982,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8921,6 +9058,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -8996,6 +9134,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -9071,6 +9210,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -9146,6 +9286,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -9221,6 +9362,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -9296,6 +9438,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -9373,6 +9516,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -9450,6 +9594,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -9527,6 +9672,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
@@ -9604,6 +9750,7 @@
             "event": {
               "pointerFollow": false,
               "Movable": false,
+              "swipable": false,
               "pressEvent": {
                 "autoKeep": false,
                 "autoClick": false,
