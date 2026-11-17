@@ -5,8 +5,8 @@ cd "$(dirname "$ScriptDir")"
 export ResDir="${ScriptDir}/assets"
 export RepoDir="$(pwd)/controllerRepo/repo_json"
 echo -e "\e[96m工作目录：\e[37m$(pwd)\n\e[96m正在读取配置...\e[90m"
-mapfile -d "$(echo -en \"\\n\")" -t iconFiles <"$ScriptDir/listIcon.txt"
-mapfile -d "$(echo -en \"\\n\")" -t screenshotFiles <"$ScriptDir/listScreenshot.txt"
+mapfile -d ""$'\n' -t iconFiles <"$ScriptDir/listIcon.txt"
+mapfile -d ""$'\n' -t screenshotFiles <"$ScriptDir/listScreenshot.txt"
 
 echo -e "\e[93m开始替换图标\e[0m"
 for iconFile in ${iconFiles[@]}; do
